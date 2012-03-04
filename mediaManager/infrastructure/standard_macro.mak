@@ -67,14 +67,14 @@ endif
 #######################
 #### COMMON MACROS ####
 #######################
-OBJ_DIR    = obj
+OBJ_DIR    = obj_$(ARCH)
 INC_DIRS   = -I ../include
 
 GCC_VER = $(shell $(CC)  --version | head -1 | cut -d ' ' -f 3)
 OLD_GCC = undef
 
 ifeq ($(SYSTEM),Linux)
-    OLD_GCC = 4.6.2
+    OLD_GCC = 4.6.1
 endif
 
 ifeq ($(SYSTEM),Darwin)
@@ -86,14 +86,15 @@ ifeq ($(SYSTEM),SunOS)
 endif
 
 
-
 #############################
 #### GOOGLE TEST OPTIONS ####
 #############################
-GTEST_C_FLAGS = -Wall -Wextra -c
-GTEST_L_FLAGS = -Wall -Wextra
-UT_OBJ_DIR    = obj-UT
-UT_DIR        = UnitTests
+GTEST_C_FLAGS  = -Wall -Wextra -c
+GTEST_L_FLAGS  = -Wall -Wextra
+UT_OBJ_DIR     = obj-UT_$(ARCH)
+UT_DIR         = UnitTests
+GTEST_INC_DIRS =
+
 
 ########################
 #### COMPILER FLAGS ####

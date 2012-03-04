@@ -53,7 +53,7 @@ $(UT_OBJ_DIR)/%.o: %.cpp
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
 	@$(MKDIR) $(UT_OBJ_DIR)
-	$(CXX) $(GTEST_C_FLAGS) $(INC_DIRS) -o $@ $<
+	$(CXX) $(GTEST_C_FLAGS) $(INC_DIRS) $(GTEST_INC_DIRS) -o $@ $<
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
 	@$(ECHO) "================================================================================"

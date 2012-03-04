@@ -1,3 +1,3 @@
 #!/bin/sh
 
-operators/source/UnitTests/Addition_UT.exe --gtest_output=xml:test_reports/Addition.xml
+source/UnitTests/String_UT.exe --gtest_output=xml:test_reports/String.xml
