@@ -69,6 +69,7 @@ endif
 #######################
 OBJ_DIR    = obj_$(ARCH)
 INC_DIRS   = -I ../include
+BIN_PATH   =
 
 GCC_VER = $(shell $(CC)  --version | head -1 | cut -d ' ' -f 3)
 OLD_GCC = undef
@@ -92,7 +93,7 @@ endif
 GTEST_C_FLAGS  = -Wall -Wextra -c
 GTEST_L_FLAGS  = -Wall -Wextra
 UT_OBJ_DIR     = obj-UT_$(ARCH)
-UT_DIR         = UnitTests
+UT_DIR         = UnitTest
 GTEST_INC_DIRS =
 
 

@@ -49,16 +49,21 @@ $(OBJ_DIR)/%.o: %.cpp
 	@$(ECHO) "================================================================================"
 	@$(ECHO)
 
-$(UT_OBJ_DIR)/%.o: %.cpp
+
+##############################################
+#### GOOGLE C++ TESTING FRAMEWORK TARGETS ####
+##############################################
+
+
+$(GTEST_OBJ_DIR)/%.o: %.cpp
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
-	@$(MKDIR) $(UT_OBJ_DIR)
-	$(CXX) $(GTEST_C_FLAGS) $(INC_DIRS) $(GTEST_INC_DIRS) -o $@ $<
+	@$(MKDIR) $(GTEST_OBJ_DIR)
+	$(CXX) $(GTEST_C_FLAGS) $(INC_DIRS) -I $(GTEST_DIR)/include -o $@ $<
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
 	@$(ECHO) "================================================================================"
 	@$(ECHO)
-
 
 
 #########################
@@ -67,10 +72,7 @@ $(UT_OBJ_DIR)/%.o: %.cpp
 
 
 clean:
-	@$(RMDIR) $(OBJ_DIR)
-	@$(RMDIR) $(UT_OBJ_DIR)
-	@$(RMDIR) $(UT_DIR)
-	@$(RM) $(LIB)
-	@$(RM) $(EXE)
-	@$(RM) $(TEST_DIR)/*
+	$(RMDIR) $(OBJ_DIR)
+	$(RM) $(LIB)
+	$(RM) $(EXE)
 
