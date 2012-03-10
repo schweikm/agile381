@@ -4,6 +4,9 @@
 using std::istream;
 using std::ostream;
 
+// initialize static members
+bool String::messages_wanted = false;
+
 String::String(const char * in_cstr) {
 
 }

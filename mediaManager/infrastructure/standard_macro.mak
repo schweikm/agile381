@@ -69,7 +69,7 @@ endif
 #######################
 OBJ_DIR    = obj_$(ARCH)
 INC_DIRS   = -I ../include
-BIN_PATH   =
+BIN_DIR    =
 
 GCC_VER = $(shell $(CC)  --version | head -1 | cut -d ' ' -f 3)
 OLD_GCC = undef
@@ -92,7 +92,7 @@ endif
 #############################
 GTEST_C_FLAGS  = -Wall -Wextra -c
 GTEST_L_FLAGS  = -Wall -Wextra
-UT_OBJ_DIR     = obj-UT_$(ARCH)
+GTEST_OBJ_DIR  = obj-UT_$(ARCH)
 UT_DIR         = UnitTest
 GTEST_INC_DIRS =
 
@@ -218,6 +218,8 @@ C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel
 
 ifeq ($(DEBUG),on)
     GENERIC_CFLAGS += -g3 -ggdb3 -DDEBUG
+    GTEST_C_FLAGS  += -g3 -ggdb3 -DDEBUG
+    GTEST_L_FLAGS  += -g3 -ggdb3 -DDEBUG
 endif
 
 
@@ -227,6 +229,8 @@ endif
 
 ifeq ($(RELEASE),on)
     GENERIC_CFLAGS += -O3
+    GTEST_C_FLAGS  += -O3
+    GTEST_L_FLAGS  += -O3
 endif
 
 
