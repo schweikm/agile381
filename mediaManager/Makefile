@@ -4,6 +4,11 @@ include infrastructure/standard_macro.mak
 SUB_DIRS = .
 
 
+#### Module-specific macros ####
+TEST_REP_DIR = test_reports
+BIN_DIR      = bin
+
+
 #### Targets ####
 all:
 	@for dir in $(SUB_DIRS); do \
@@ -14,4 +19,6 @@ clean:
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir/source clean; \
 	done
+	@$(RM) $(TEST_REP_DIR)/*
+	@$(RMDIR) $(BIN_DIR)/$(UT_DIR)
 

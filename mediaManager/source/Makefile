@@ -7,7 +7,6 @@ include ../infrastructure/standard_macro.mak
 
 BIN_DIR      = ../bin
 GTEST_DIR    = ../../gtest-1.6.0
-TEST_REP_DIR = ../test_reports
 
 ############################################################
 ############################################################
@@ -55,5 +54,13 @@ $(GTEST_DIR)/src/gtest-all.o $(GTEST_DIR)/src/gtest_main.o -pthread -o $@
 	@$(ECHO) "Will store \"$(abspath $@)\""
 	@$(ECHO) "================================================================================"
 	@$(ECHO)
+
+
+clean:
+	@$(RMDIR) $(OBJ_DIR)
+	@$(RMDIR) $(GTEST_OBJ_DIR)
+	@$(RM) $(GTEST_STRING_MEMBER)
+	@$(RM) $(GTEST_STRING_NONMEMBER)
+
 
 include ../infrastructure/standard_rules.mak

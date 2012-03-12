@@ -29,6 +29,7 @@ class StringMemberTest : public testing::Test {
 
     // Declares the variables your tests want to use.
     string testMessage;
+    string result;
 };
 
 
@@ -67,18 +68,21 @@ TEST_F(StringMemberTest, Contructor) {
 
     // TEST 1
     testMessage = "Hello, world!";
+    result = "Ctor: \"" + testMessage +  "\"";
     String test1(testMessage.c_str());
-    ASSERT_STREQ(testMessage.c_str(), output.str().c_str());
+    ASSERT_STREQ(result.c_str(), output.str().c_str());
 
     // TEST 2
     testMessage = "Google Test is FuN!";
+    result = "Ctor: \"" + testMessage +  "\"";
     String test2(testMessage.c_str());
-    ASSERT_STREQ(testMessage.c_str(), output.str().c_str());
+    ASSERT_STREQ(result.c_str(), output.str().c_str());
 
     // TEST 3
     testMessage = "The quick brown fox jumped over the lazy dog";
+    result = "Ctor: \"" + testMessage +  "\"";
     String test3(testMessage.c_str());
-    ASSERT_STREQ(testMessage.c_str(), output.str().c_str());
+    ASSERT_STREQ(result.c_str(), output.str().c_str());
 
 
     // ************ //
@@ -88,8 +92,9 @@ TEST_F(StringMemberTest, Contructor) {
 
     // TEST 4
     testMessage = "";
+    result = "Ctor: \"" + testMessage +  "\"";
     String test4(testMessage.c_str());
-    ASSERT_STREQ(testMessage.c_str(), output.str().c_str());
+    ASSERT_STREQ(result.c_str(), output.str().c_str());
 }
 
 // copy constructor

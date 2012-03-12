@@ -90,11 +90,10 @@ endif
 #############################
 #### GOOGLE TEST OPTIONS ####
 #############################
-GTEST_C_FLAGS  = -Wall -Wextra -c
-GTEST_L_FLAGS  = -Wall -Wextra
-GTEST_OBJ_DIR  = obj-UT_$(ARCH)
-UT_DIR         = UnitTest
-GTEST_INC_DIRS =
+GTEST_GENERIC_FLAGS = -Wall -Wextra
+GTEST_OBJ_DIR       = obj-UT_$(ARCH)
+UT_DIR              = UnitTest
+GTEST_INC_DIRS      =
 
 
 ########################
@@ -217,9 +216,8 @@ C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel
 #####################
 
 ifeq ($(DEBUG),on)
-    GENERIC_CFLAGS += -g3 -ggdb3 -DDEBUG
-    GTEST_C_FLAGS  += -g3 -ggdb3 -DDEBUG
-    GTEST_L_FLAGS  += -g3 -ggdb3 -DDEBUG
+    GENERIC_CFLAGS      += -g3 -ggdb3 -DDEBUG
+    GTEST_GENERIC_FLAGS += -g3 -ggdb3 -DDEBUG
 endif
 
 
@@ -228,9 +226,8 @@ endif
 #######################
 
 ifeq ($(RELEASE),on)
-    GENERIC_CFLAGS += -O3
-    GTEST_C_FLAGS  += -O3
-    GTEST_L_FLAGS  += -O3
+    GENERIC_CFLAGS      += -O3
+    GTEST_GENERIC_FLAGS += -O3
 endif
 
 
@@ -264,6 +261,9 @@ BASE_C++FLAGS = $(GENERIC_CFLAGS) $(C++_WARN_FLAGS) $(PLATFORM_C_C++FLAGS)
 
 CFLAGS   = -c $(BASE_CFLAGS)
 C++FLAGS = -c $(BASE_C++FLAGS)
+
+GTEST_C_FLAGS = $(GTEST_GENERIC_FLAGS) -c
+GTEST_L_FLAGS = $(GTEST_GENERIC_FLAGS)
 
 
 #######################

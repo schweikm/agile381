@@ -65,17 +65,3 @@ $(GTEST_OBJ_DIR)/%.o: %.cpp
 	@$(ECHO) "================================================================================"
 	@$(ECHO)
 
-
-#########################
-#### GENERIC TARGETS ####
-#########################
-
-
-clean:
-	@$(RMDIR) $(OBJ_DIR)
-	@$(RMDIR) $(GTEST_OBJ_DIR)
-	@$(RM) $(LIB)
-	@$(RM) $(EXE)
-	@$(RM) $(TEST_REP_DIR)/*
-	@$(RMDIR) $(BIN_DIR)/$(UT_DIR)
-
