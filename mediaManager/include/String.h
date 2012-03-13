@@ -47,6 +47,7 @@ being output, but only because they call a Constructor, Destructor, or Assignmen
 */
 
 #include <iosfwd>
+#include <cstddef>
 
 // Simple exception class for reporting String errors
 struct String_exception {
@@ -152,14 +153,17 @@ public:
         {messages_wanted = messages_wanted_;}
 
 private:
-    /* *** your choice for private members */
+    // internal C string
+    char* myInternalCStr;
+
+    // size of internal C string
+    size_t myInternalCStrSize;
 
     /* Variables for monitoring functions - not part of a normal implementation. */
     /* But used here for demonstration and testing purposes. */
     static int number;              // counts number of String objects in existence
     static int total_allocation;    // counts total amount of memory allocated
     static bool messages_wanted;    // whether to output ctor/dtor/operator= messages, initially false
-
 };
 
 // non-member overloaded operators

@@ -1,6 +1,7 @@
 #include <String.h>
 #include <gtest/gtest.h>
 
+#include <cstddef>
 #include <iostream>
 #include <string>
 
@@ -28,8 +29,6 @@ class StringMemberTest : public testing::Test {
     }
 
     // Declares the variables your tests want to use.
-    string testMessage;
-    string result;
 };
 
 
@@ -58,8 +57,11 @@ TEST_F(StringMemberTest, Contructor) {
     String::set_messages_wanted(true);
 
     // capture stdout
-    ostringstream output; 
-    StreamSwapper swapper(cout, output); 
+    string testMessage;
+    string result;
+    size_t runningLength = 0;
+    char newline = '\n';
+
 
     // ************ //
     // Normal Cases //
@@ -67,22 +69,51 @@ TEST_F(StringMemberTest, Contructor) {
 
 
     // TEST 1
-    testMessage = "Hello, world!";
-    result = "Ctor: \"" + testMessage +  "\"";
-    String test1(testMessage.c_str());
-    ASSERT_STREQ(result.c_str(), output.str().c_str());
+    {
+        ostringstream output; 
+        StreamSwapper swapper(cout, output);
+        testMessage = "alpha";
+        result = "Ctor: \"" + testMessage +  "\"" + newline;
+        runningLength = testMessage.length() + 1;
+
+        String test1(testMessage.c_str());
+
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        ASSERT_EQ(1, String::get_number());
+        ASSERT_EQ(runningLength, String::get_total_allocation());
+    }
+
 
     // TEST 2
-    testMessage = "Google Test is FuN!";
-    result = "Ctor: \"" + testMessage +  "\"";
-    String test2(testMessage.c_str());
-    ASSERT_STREQ(result.c_str(), output.str().c_str());
+    {
+        ostringstream output; 
+        StreamSwapper swapper(cout, output);
+        testMessage = "Hello, world!";
+        result = "Ctor: \"" + testMessage +  "\"" + newline;
+        runningLength += testMessage.length() + 1;
+
+        String test2(testMessage.c_str());
+
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        ASSERT_EQ(2, String::get_number());
+        ASSERT_EQ(runningLength, String::get_total_allocation());
+    }
+
 
     // TEST 3
-    testMessage = "The quick brown fox jumped over the lazy dog";
-    result = "Ctor: \"" + testMessage +  "\"";
-    String test3(testMessage.c_str());
-    ASSERT_STREQ(result.c_str(), output.str().c_str());
+    {
+        ostringstream output; 
+        StreamSwapper swapper(cout, output);
+        testMessage = "The!quick@brown#fox$jumped^over&the*lazy.dog";
+        result = "Ctor: \"" + testMessage +  "\"" + newline;
+        runningLength += testMessage.length() + 1;
+
+        String test3(testMessage.c_str());
+
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        ASSERT_EQ(3, String::get_number());
+        ASSERT_EQ(runningLength, String::get_total_allocation());
+    }
 
 
     // ************ //
@@ -91,10 +122,19 @@ TEST_F(StringMemberTest, Contructor) {
 
 
     // TEST 4
-    testMessage = "";
-    result = "Ctor: \"" + testMessage +  "\"";
-    String test4(testMessage.c_str());
-    ASSERT_STREQ(result.c_str(), output.str().c_str());
+    {
+        ostringstream output; 
+        StreamSwapper swapper(cout, output);
+        testMessage = "";
+        result = "Ctor: \"" + testMessage +  "\"" + newline;
+        runningLength += testMessage.length() + 1;
+
+        String test4(testMessage.c_str());
+
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        ASSERT_EQ(4, String::get_number());
+        ASSERT_EQ(runningLength, String::get_total_allocation());
+    }
 }
 
 // copy constructor

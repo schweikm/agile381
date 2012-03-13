@@ -1,14 +1,36 @@
 #include <String.h>
+
+#include <cstddef>
+#include <cstring>
 #include <iostream>
 
+using std::cout;
+using std::endl;
 using std::istream;
 using std::ostream;
 
+
 // initialize static members
-bool String::messages_wanted = false;
+int  String::number           = 0;
+int  String::total_allocation = 0; 
+bool String::messages_wanted  = false;
 
+// constructor
 String::String(const char * in_cstr) {
+    // create the initial internal C string
+    size_t strSize = strlen(in_cstr);
+    myInternalCStrSize = strSize + 1;
+    myInternalCStr = new char[myInternalCStrSize];
+    strncpy(myInternalCStr, in_cstr, strSize);
 
+    // update the static members
+    number++;
+    total_allocation += myInternalCStrSize;
+
+    // output message if wanted
+    if(true == messages_wanted) {
+        cout << "Ctor: \"" << in_cstr << "\"" << endl;
+    }
 }
 
 String::String(const String& copy) {
