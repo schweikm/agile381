@@ -81,16 +81,16 @@ public:
 
     // Accesssors
     // Return a pointer to the internal C-string
-    const char * c_str() const
-        {/*** fill this in */}
+    const char* c_str() const
+        { return myInternalCStr; }
 
     // Return size of internal C-string in this String
     int size() const
-        {/*** fill this in */}
+        { return myInternalCStrSize; }
 
     // Return current allocation for this String
     int get_allocation() const
-        {/*** fill this in */}
+        { return myInternalCStrAllocation; }
 
     // Return a reference to character i in the string.
     // Throw exception if 0 <= i < size is false.
@@ -158,6 +158,9 @@ private:
 
     // size of internal C string
     size_t myInternalCStrSize;
+
+    // total bytes allocated for the internal C string
+    size_t myInternalCStrAllocation;
 
     /* Variables for monitoring functions - not part of a normal implementation. */
     /* But used here for demonstration and testing purposes. */

@@ -6,34 +6,19 @@
 #include <string>
 
 using std::cout;
-using std::streambuf;
 using std::ostream;
 using std::ostringstream;
+using std::streambuf;
 
 using std::string;
-
-// To use a test fixture, derive a class from testing::Test.
-class StringMemberTest : public testing::Test {
-    protected:
-
-    // virtual void SetUp() will be called before each test is run.  You
-    // should define it if you need to initialize the varaibles.
-    // Otherwise, this can be skipped.
-    virtual void SetUp() {
-    }
-
-    // virtual void TearDown() will be called after each test is run.
-    // You should define it if there is cleanup work to do.  Otherwise,
-    // you don't have to provide it.
-    virtual void TearDown() {
-    }
-
-    // Declares the variables your tests want to use.
-};
 
 
 // smart class that will swap streambufs and replace them 
 // when object goes out of scope. 
+//
+//: MAINTENANCE
+//    This should be moved to a Google Test Utility file at some point
+//
 class StreamSwapper { 
 public: 
     StreamSwapper(ostream& orig, ostream& replacement) 
@@ -51,16 +36,59 @@ private:
 };
 
 
-// constructor
+// To use a test fixture, derive a class from testing::Test.
+class StringMemberTest : public testing::Test {
+protected:
+
+    // virtual void SetUp() will be called before each test is run.  You
+    // should define it if you need to initialize the varaibles.
+    // Otherwise, this can be skipped.
+    virtual void SetUp() {
+    }
+
+    // virtual void TearDown() will be called after each test is run.
+    // You should define it if there is cleanup work to do.  Otherwise,
+    // you don't have to provide it.
+    virtual void TearDown() {
+    }
+
+    // Constructor Helper
+    void ConstructorHelper(string in_string) {
+        // capture the ouput to stdout
+        ostringstream output;
+        StreamSwapper swapper(cout, output);
+
+        //: MAINTENANCE
+        //    I'm not sure how to convert std::endl to a character,
+        //    so I'll do this hack instead
+        char newline = '\n';
+        string result = "Ctor: \"" + in_string +  "\"" + newline;
+
+        // create the String instance
+        String test(in_string.c_str());
+
+        // Google Test assertions
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        ASSERT_EQ(in_string.length(), test.size());
+        ASSERT_EQ(in_string.length() + 1, test.get_allocation());
+    }
+
+    // Declares the variables your tests want to use.
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Constructor
+//
+//    DEPENDS ON:  c_str()
+//                 size()
+//                 get_allocation()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Contructor) {
     // turn on diagnostic messages
     String::set_messages_wanted(true);
-
-    // capture stdout
-    string testMessage;
-    string result;
-    size_t runningLength = 0;
-    char newline = '\n';
 
 
     // ************ //
@@ -69,51 +97,15 @@ TEST_F(StringMemberTest, Contructor) {
 
 
     // TEST 1
-    {
-        ostringstream output; 
-        StreamSwapper swapper(cout, output);
-        testMessage = "alpha";
-        result = "Ctor: \"" + testMessage +  "\"" + newline;
-        runningLength = testMessage.length() + 1;
-
-        String test1(testMessage.c_str());
-
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
-        ASSERT_EQ(1, String::get_number());
-        ASSERT_EQ(runningLength, String::get_total_allocation());
-    }
+    ConstructorHelper("alpha");
 
 
     // TEST 2
-    {
-        ostringstream output; 
-        StreamSwapper swapper(cout, output);
-        testMessage = "Hello, world!";
-        result = "Ctor: \"" + testMessage +  "\"" + newline;
-        runningLength += testMessage.length() + 1;
-
-        String test2(testMessage.c_str());
-
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
-        ASSERT_EQ(2, String::get_number());
-        ASSERT_EQ(runningLength, String::get_total_allocation());
-    }
+    ConstructorHelper("Hello, world!");
 
 
     // TEST 3
-    {
-        ostringstream output; 
-        StreamSwapper swapper(cout, output);
-        testMessage = "The!quick@brown#fox$jumped^over&the*lazy.dog";
-        result = "Ctor: \"" + testMessage +  "\"" + newline;
-        runningLength += testMessage.length() + 1;
-
-        String test3(testMessage.c_str());
-
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
-        ASSERT_EQ(3, String::get_number());
-        ASSERT_EQ(runningLength, String::get_total_allocation());
-    }
+    ConstructorHelper("The!quick@brown#fox$jumped^over&the*lazy.dog");
 
 
     // ************ //
@@ -122,19 +114,7 @@ TEST_F(StringMemberTest, Contructor) {
 
 
     // TEST 4
-    {
-        ostringstream output; 
-        StreamSwapper swapper(cout, output);
-        testMessage = "";
-        result = "Ctor: \"" + testMessage +  "\"" + newline;
-        runningLength += testMessage.length() + 1;
-
-        String test4(testMessage.c_str());
-
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
-        ASSERT_EQ(4, String::get_number());
-        ASSERT_EQ(runningLength, String::get_total_allocation());
-    }
+    ConstructorHelper("");
 }
 
 // copy constructor
