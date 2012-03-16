@@ -11,7 +11,7 @@ errors = doc.findall('.//error')
 out = open(testDir + "/" + testName + "_valgrind.xml", "w")
 out.write('<?xml version="1.0" encoding="UTF-8"?>\n')
 out.write('<testsuite name="' + testName + '" tests="1" errors="0" failures="' + str(len(errors)) + '" skip="0">\n')
-out.write('    <testcase name="Memory check" status="run" time="0" classname="' + testName + '" />\n')
+out.write('    <testcase name="Memory check" status="run" time="0" classname="' + testName + '">\n')
 for error in errors:
         kind = error.find('kind')
         what = error.find('what')
