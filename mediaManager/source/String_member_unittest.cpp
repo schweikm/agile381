@@ -43,14 +43,12 @@ protected:
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.
-    virtual void SetUp() {
-    }
+    virtual void SetUp() { }
 
     // virtual void TearDown() will be called after each test is run.
     // You should define it if there is cleanup work to do.  Otherwise,
     // you don't have to provide it.
-    virtual void TearDown() {
-    }
+    virtual void TearDown() { }
 
     // Constructor Helper
     void ConstructorHelper(string in_string) {
@@ -62,15 +60,22 @@ protected:
         //    I'm not sure how to convert std::endl to a character,
         //    so I'll do this hack instead
         char newline = '\n';
-        string result = "Ctor: \"" + in_string +  "\"" + newline;
+        string result = "Ctor: \"" + in_string + "\"" + newline;
 
         // create the String instance
-        String test(in_string.c_str());
+        String testStr(in_string.c_str());
 
-        // Google Test assertions
+        // message to cout is correct
         ASSERT_STREQ(result.c_str(), output.str().c_str());
-        ASSERT_EQ(in_string.length(), test.size());
-        ASSERT_EQ(in_string.length() + 1, test.get_allocation());
+
+        // String value is correct
+        ASSERT_STREQ(in_string.c_str(), testStr.c_str());
+
+        // the length is correct
+        ASSERT_EQ(in_string.length(), testStr.size());
+
+        // the allocation is correct
+        ASSERT_EQ(in_string.length() + 1, testStr.get_allocation());
     }
 
     // Declares the variables your tests want to use.
@@ -81,9 +86,11 @@ protected:
 //
 // Constructor
 //
-//    DEPENDS ON:  c_str()
-//                 size()
-//                 get_allocation()
+//    DEPENDS ON:
+//      - c_str()
+//      - size()
+//      - get_allocation()
+//      - String::set_messages_wanted()
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Contructor) {
@@ -91,29 +98,20 @@ TEST_F(StringMemberTest, Contructor) {
     String::set_messages_wanted(true);
 
 
-    // ************ //
-    // Normal Cases //
-    // ************ //
-
-
     // TEST 1
+    //    Simple string - one word
     ConstructorHelper("alpha");
 
-
     // TEST 2
+    //    Simple string - a little more complex with punctuation
     ConstructorHelper("Hello, world!");
 
-
     // TEST 3
+    //    Simple string - lots of non-word characters
     ConstructorHelper("The!quick@brown#fox$jumped^over&the*lazy.dog");
 
-
-    // ************ //
-    // Corner Cases //
-    // ************ //
-
-
     // TEST 4
+    //    Corner case - Empty string
     ConstructorHelper("");
 }
 
@@ -127,9 +125,50 @@ TEST_F(StringMemberTest, AssignmentOperator) {
     ASSERT_EQ(1, 1); 
 }
 
-// destructor
+///////////////////////////////////////////////////////////////////////////////
+//
+// Destructor
+//
+//    DEPENDS ON:
+//      - String()
+//      - String::get_number()
+//      - String::set_messages_wanted()
+//      - String::get_total_allocation()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Destructor) {
-    ASSERT_EQ(1, 1); 
+    // turn off diagnostic messages
+    String::set_messages_wanted(false);
+    {
+        // capture the ouput to stdout
+        ostringstream output;
+        StreamSwapper swapper(cout, output);
+        string test1Val = "alpha";
+
+        {
+            String test1(test1Val.c_str());
+            ASSERT_EQ(1, String::get_number());
+            ASSERT_EQ(test1Val.length() + 1, String::get_total_allocation());
+
+            // turn on diagnostic messages
+            String::set_messages_wanted(true);
+        } // test1 goes out of scope - destructor called
+
+        //: MAINTENANCE
+        //    I'm not sure how to convert std::endl to a character,
+        //    so I'll do this hack instead
+        char newline = '\n';
+        string result = "Dtor: \"" + test1Val + "\"" + newline;
+
+        // message to cout is correct
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+
+        // number of strings is decremented
+        ASSERT_EQ(0, String::get_number());
+
+        // allocation is decreased
+        ASSERT_EQ(0, String::get_total_allocation());
+    }
 }
 
 // c_str()
@@ -139,11 +178,6 @@ TEST_F(StringMemberTest, cStr) {
 
 // size
 TEST_F(StringMemberTest, size) {
-    ASSERT_EQ(1, 1); 
-}
-
-// get_allocation
-TEST_F(StringMemberTest, getAllocation) {
     ASSERT_EQ(1, 1); 
 }
 

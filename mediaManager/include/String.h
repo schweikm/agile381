@@ -141,16 +141,16 @@ public:
 
     // Return the total number of Strings in existence  
     static int get_number()
-        {return number;}
+        { return ourNumber; }
 
     // Return total bytes allocated for all Strings in existence
     static int get_total_allocation()
-        {return total_allocation;}
+        { return ourTotalAllocation; }
 
     // Call with true to cause ctor, assignment, and dtor messages to be output.
     // These messages are output from each function before it does anything else.
-    static void set_messages_wanted(bool messages_wanted_)
-        {messages_wanted = messages_wanted_;}
+    static void set_messages_wanted(bool in_messagesWanted)
+        { ourMessagesWanted = in_messagesWanted; }
 
 private:
     // internal C string
@@ -164,9 +164,9 @@ private:
 
     /* Variables for monitoring functions - not part of a normal implementation. */
     /* But used here for demonstration and testing purposes. */
-    static int number;              // counts number of String objects in existence
-    static int total_allocation;    // counts total amount of memory allocated
-    static bool messages_wanted;    // whether to output ctor/dtor/operator= messages, initially false
+    static int ourNumber;             // counts number of String objects in existence
+    static int ourTotalAllocation;    // counts total amount of memory allocated
+    static bool ourMessagesWanted;    // whether to output ctor/dtor/operator= messages, initially false
 };
 
 // non-member overloaded operators

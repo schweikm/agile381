@@ -11,12 +11,17 @@ using std::ostream;
 
 
 // initialize static members
-int  String::number           = 0;
-int  String::total_allocation = 0; 
-bool String::messages_wanted  = false;
+int  String::ourNumber          = 0;
+int  String::ourTotalAllocation = 0; 
+bool String::ourMessagesWanted  = false;
 
 // constructor
-String::String(const char * in_cstr) {
+String::String(const char* in_cstr) {
+    // output message if wanted
+    if(true == ourMessagesWanted) {
+        cout << "Ctor: \"" << in_cstr << "\"" << endl;
+    }
+
     // calculate the sizes
     size_t strSize = strlen(in_cstr);
     myInternalCStrSize = strSize;
@@ -27,13 +32,8 @@ String::String(const char * in_cstr) {
     strncpy(myInternalCStr, in_cstr, myInternalCStrAllocation);
 
     // update the static members
-    number++;
-    total_allocation += myInternalCStrAllocation;
-
-    // output message if wanted
-    if(true == messages_wanted) {
-        cout << "Ctor: \"" << in_cstr << "\"" << endl;
-    }
+    ourNumber++;
+    ourTotalAllocation += myInternalCStrAllocation;
 }
 
 String::String(const String& copy) {
@@ -48,8 +48,19 @@ String& String::operator=(const char* other) {
 
 }
 
+// destructor
 String::~String() {
+    // output message if wanted
+    if(true == ourMessagesWanted) {
+        cout << "Dtor: \"" << myInternalCStr << "\"" << endl;
+    }
 
+    // free the allocated memory
+//    delete [] myInternalCStr;
+
+    // update the static members
+    ourNumber--;
+    ourTotalAllocation -= myInternalCStrAllocation;
 }
 
 char& String::operator[] (int i) {
