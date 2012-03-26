@@ -84,11 +84,10 @@ sub parseValgrindXMLFailures {
         last if !defined($valgrindData->{'error'}->{$hex}->{'kind'});
 
         my $message = $valgrindData->{'error'}->{$hex}->{'xwhat'}->{'text'};
-        my $stackTrace = "<![CDATA[";
-
         my @errors = $valgrindData->{'error'}->{$hex}->{'stack'}->{'frame'};
         my $count = 0;
         my @trace = ();
+
         for(;;) {
             my $hash = $errors[0][$count];
             last if !defined($hash->{'ip'});
@@ -104,11 +103,15 @@ sub parseValgrindXMLFailures {
         }
 
         # create the XML failure message
-        my $failureMessage = "        <failure message=\"$message\" stack-trace=\"<![CDATA[";
+        my $failureMessage = "        <failure>\n" .
+                             "            <message>$message</message>\n" .
+                             "            <stack-trace>\n<![CDATA[";
         foreach my $trace (@trace) {
             $failureMessage .= $trace;
         }
-        $failureMessage .= "]]>\"/>\n";
+        $failureMessage .= "]]>\n" .
+                           "            </stack-trace>\n" .
+                           "        </failure>\n";
 
         print $XUNIT $failureMessage;
         $unique++;
