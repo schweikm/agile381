@@ -3,14 +3,16 @@
 use strict;
 use warnings;
 
+# XML parsing
+use XML::Simple;
+use Data::Dumper;
+
 # directories
 my $UT_DIR = "../bin/UnitTest";
 my $TEST_REP_DIR = "../test_reports";
 
 # executables
 my $valgrind = "/usr/bin/valgrind";
-my $rm = "/bin/rm -fr";
-my $pyScript = "valgrind2xunit.py";
 
 # main
 {
@@ -19,21 +21,96 @@ my $pyScript = "valgrind2xunit.py";
 
     foreach my $file (@files) {
         if($file =~ m/[.]*_UT.exe$/) {
-            # grab the test name
+            # define the local variables
             my $testName = substr($file, 0, length($file) - 7);
+            my $valgrindFile = $TEST_REP_DIR . "/valgrind_$testName" . ".xml";
+            my $xUnitFile = $TEST_REP_DIR . "/$testName" . "_valgrind.xml";
 
             # run the Unit Test
-            system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=" .
-                   "$TEST_REP_DIR/valgrind_$testName" . ".xml $UT_DIR/$file --gtest_output=xml:$TEST_REP_DIR/$testName" . ".xml")
-              && die "Could not execute $file: $!\n";
+            system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=$valgrindFile " .
+                   "$UT_DIR/$file --gtest_output=xml:$TEST_REP_DIR/$testName" . ".xml")
+              && die "Could not execute Unit Test \"$file\": $!\n";
 
             # then convert the valgrind XML file
-            system("./$pyScript $TEST_REP_DIR $testName")
-              && die "Could not invoke python script: $!\n";
+            &convertValgrindXML($valgrindFile, $xUnitFile, $testName);
 
-            # delete the tmp file
-            system("$rm $TEST_REP_DIR/valgrind_$testName" . ".xml")
-              && die "Failed to delete tmp XML file: $!\n";
+            # delete the temp file
+            system("rm -f $valgrindFile") && die "Failed to remove $valgrindFile: $!\n";
         }
     } 
+    closedir(DIR);
+}
+
+
+sub convertValgrindXML {
+    my $valgrindFile  = shift;
+    my $xUnitFile     = shift;
+    my $testName      = shift;
+
+    # find the number of errors
+    my $numErrors = `grep \"<error>\" $valgrindFile | wc -l`;
+    chomp($numErrors);
+
+    open(XUNIT, ">", $xUnitFile) || die "Could not open \"$xUnitFile\" for writing: $!\n";
+
+    # print the header information
+    print XUNIT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    print XUNIT "<testsuite name=\"" . $testName . "\" tests=\"1\" errors=\"0\" failures=\"" . $numErrors . "\" skip=\"0\">\n";
+    print XUNIT "    <testcase name=\"Valgrind\" status=\"run\" time=\"0\" classname=\"" . $testName . "\">\n";
+
+    # add the failures if necessary
+    &parseValgrindXMLFailures($valgrindFile, \*XUNIT);
+
+    # print the footer information
+    print XUNIT "    </testcase>\n";
+    print XUNIT "</testsuite>\n";
+
+    close(XUNIT);
+}
+
+sub parseValgrindXMLFailures {
+    my $valgrindFile = shift;
+    my $XUNIT = shift;
+
+    # create object
+    my $valgrindXML = new XML::Simple;
+   
+    # read XML file
+    my $valgrindData = $valgrindXML->XMLin($valgrindFile, KeyAttr => {error => 'unique'});
+
+    my $unique = 4;
+    for(;;) {
+        my $hex = sprintf("%#x", $unique);
+        last if !defined($valgrindData->{'error'}->{$hex}->{'kind'});
+
+        my $message = $valgrindData->{'error'}->{$hex}->{'xwhat'}->{'text'};
+        my $stackTrace = "<![CDATA[";
+
+        my @errors = $valgrindData->{'error'}->{$hex}->{'stack'}->{'frame'};
+        my $count = 0;
+        my @trace = ();
+        for(;;) {
+            my $hash = $errors[0][$count];
+            last if !defined($hash->{'ip'});
+
+            my $file = $hash->{'file'};
+            my $line = $hash->{'line'};
+            my $fn   = $hash->{'fn'};
+
+            if(defined($file) && defined($line)) {
+                push(@trace, "$fn,  $file" . ":" . $line . "\n");
+            }
+            $count++;
+        }
+
+        # create the XML failure message
+        my $failureMessage = "        <failure message=\"$message\" stack-trace=\"<![CDATA[";
+        foreach my $trace (@trace) {
+            $failureMessage .= $trace;
+        }
+        $failureMessage .= "]]>\"/>\n";
+
+        print $XUNIT $failureMessage;
+        $unique++;
+    }
 }
