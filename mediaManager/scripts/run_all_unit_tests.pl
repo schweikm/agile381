@@ -24,7 +24,7 @@ my $valgrind = "/usr/bin/valgrind";
             # define the local variables
             my $testName = substr($file, 0, length($file) - 7);
             my $valgrindFile = $TEST_REP_DIR . "/valgrind_$testName" . ".xml";
-            my $xUnitFile = $TEST_REP_DIR . "/$testName" . "_valgrind.xml";
+            my $xUnitFile = $TEST_REP_DIR . "/$testName" . "Valgrind.xml";
 
             # run the Unit Test
             system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=$valgrindFile " .
@@ -55,8 +55,8 @@ sub convertValgrindXML {
 
     # print the header information
     print XUNIT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    print XUNIT "<testsuite name=\"" . $testName . "\" tests=\"1\" errors=\"0\" failures=\"" . $numErrors . "\" skip=\"0\">\n";
-    print XUNIT "    <testcase name=\"Valgrind\" status=\"run\" time=\"0\" classname=\"" . $testName . "\">\n";
+    print XUNIT "<testsuite name=\"" . $testName . "Valgrind\" tests=\"1\" errors=\"0\" failures=\"" . $numErrors . "\" skip=\"0\">\n";
+    print XUNIT "    <testcase name=\"Memory Check\" status=\"run\" time=\"0\" classname=\"" . $testName . "Valgrind\">\n";
 
     # add the failures if necessary
     &parseValgrindXMLFailures($valgrindFile, \*XUNIT);
