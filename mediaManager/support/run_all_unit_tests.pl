@@ -84,12 +84,14 @@ sub parseValgrindXMLFailures {
         last if !defined($valgrindData->{'error'}->{$hex}->{'kind'});
 
         my $message = $valgrindData->{'error'}->{$hex}->{'xwhat'}->{'text'};
-        my @errors = $valgrindData->{'error'}->{$hex}->{'stack'}->{'frame'};
+        my $type    = $valgrindData->{'error'}->{$hex}->{'kind'};
+        my @stack   = $valgrindData->{'error'}->{$hex}->{'stack'}->{'frame'};
+
         my $count = 0;
-        my @trace = ();
+        my @stackTrace = ();
 
         for(;;) {
-            my $hash = $errors[0][$count];
+            my $hash = $stack[0][$count];
             last if !defined($hash->{'ip'});
 
             my $file = $hash->{'file'};
@@ -97,21 +99,17 @@ sub parseValgrindXMLFailures {
             my $fn   = $hash->{'fn'};
 
             if(defined($file) && defined($line)) {
-                push(@trace, "$fn,  $file" . ":" . $line . "\n");
+                push(@stackTrace, "at $fn ($file:$line)");
             }
             $count++;
         }
 
         # create the XML failure message
-        my $failureMessage = "        <failure>\n" .
-                             "            <message>$message</message>\n" .
-                             "            <stack-trace>\n<![CDATA[";
-        foreach my $trace (@trace) {
-            $failureMessage .= $trace;
+        my $failureMessage = "        <failure message=\"$message\" type=\"$type\">\n";
+        foreach my $trace (@stackTrace) {
+            $failureMessage .= $trace . "\n";
         }
-        $failureMessage .= "]]>\n" .
-                           "            </stack-trace>\n" .
-                           "        </failure>\n";
+        $failureMessage .=   "        </failure>\n";
 
         print $XUNIT $failureMessage;
         $unique++;
