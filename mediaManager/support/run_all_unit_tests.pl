@@ -105,11 +105,12 @@ sub parseValgrindXMLFailures {
         }
 
         # create the XML failure message
-        my $failureMessage = "        <failure message=\"$message\" type=\"$type\">\n";
+        my $failureMessage = "        <failure message=\"$message\" type=\"$type\"><![CDATA[\n";
         foreach my $trace (@stackTrace) {
             $failureMessage .= $trace . "\n";
         }
-        $failureMessage .=   "        </failure>\n";
+        $failureMessage .=   "]]>\n" .
+                             "        </failure>\n";
 
         print $XUNIT $failureMessage;
         $unique++;
