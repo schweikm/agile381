@@ -56,7 +56,7 @@ String::~String() {
     }
 
     // free the allocated memory
-//    delete [] myInternalCStr;
+    delete [] myInternalCStr;
 
     // update the static members
     ourNumber--;
