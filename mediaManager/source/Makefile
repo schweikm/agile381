@@ -1,4 +1,4 @@
-include ../infrastructure/standard_macro.mak
+include ../support/standard_macro.mak
 
 
 ############################################################
@@ -63,4 +63,4 @@ clean:
 	@$(RM) $(GTEST_STRING_NONMEMBER)
 
 
-include ../infrastructure/standard_rules.mak
+include ../support/standard_rules.mak

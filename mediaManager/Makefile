@@ -1,4 +1,4 @@
-include infrastructure/standard_macro.mak
+include support/standard_macro.mak
 
 #### Objects to Build ####
 SUB_DIRS = .
