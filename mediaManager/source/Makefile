@@ -61,6 +61,8 @@ clean:
 	@$(RMDIR) $(GTEST_OBJ_DIR)
 	@$(RM) $(GTEST_STRING_MEMBER)
 	@$(RM) $(GTEST_STRING_NONMEMBER)
+	@$(RM) gmon.out
+	@$(RM) *.gcov
 
 
 include ../support/standard_rules.mak

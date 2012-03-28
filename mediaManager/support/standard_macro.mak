@@ -232,6 +232,26 @@ endif
 
 
 #######################
+#### PROFILE FLAGS ####
+#######################
+
+ifeq ($(PROFILE),on)
+    GENERIC_CFLAGS      += -pg
+    GTEST_GENERIC_FLAGS += -pg
+endif
+
+
+########################
+#### COVERAGE FLAGS ####
+########################
+
+ifeq ($(COVERAGE),on)
+    GENERIC_CFLAGS      += -fprofile-arcs -ftest-coverage
+    GTEST_GENERIC_FLAGS += -fprofile-arcs -ftest-coverage
+endif
+
+
+#######################
 #### PLAFORM FLAGS ####
 #######################
 
