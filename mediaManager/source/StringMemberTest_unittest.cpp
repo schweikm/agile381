@@ -62,6 +62,9 @@ protected:
         char newline = '\n';
         string result = "Ctor: \"" + in_string + "\"" + newline;
 
+        // turn on diagnostic messages
+        String::set_messages_wanted(true);
+
         // create the String instance
         String testStr(in_string.c_str());
 
@@ -76,6 +79,47 @@ protected:
 
         // the allocation is correct
         ASSERT_EQ(in_string.length() + 1, testStr.get_allocation());
+
+        // turn off diagnostic messages
+        String::set_messages_wanted(false);
+    }
+
+    // Copy Constructor Helper
+    void CopyConstructorHelper(string in_string) {
+        // capture the ouput to stdout
+        ostringstream output;
+        StreamSwapper swapper(cout, output);
+
+        //: MAINTENANCE
+        //    I'm not sure how to convert std::endl to a character,
+        //    so I'll do this hack instead
+        char newline = '\n';
+        string result = "Copy ctor: \"" + in_string + "\"" + newline;
+
+        // create the String to copy from
+        String::set_messages_wanted(false);
+        String fromString(in_string.c_str());
+        
+        // turn on diagnostic messages
+        String::set_messages_wanted(true);
+
+        // create the String instance
+        String testStr(fromString);
+
+        // message to cout is correct
+        ASSERT_STREQ(result.c_str(), output.str().c_str());
+
+        // String value is correct
+        ASSERT_STREQ(in_string.c_str(), testStr.c_str());
+
+        // the length is correct
+        ASSERT_EQ(in_string.length(), testStr.size());
+
+        // the allocation is correct
+        ASSERT_EQ(in_string.length() + 1, testStr.get_allocation());
+
+        // turn off diagnostic messages
+        String::set_messages_wanted(false);
     }
 
     // Declares the variables your tests want to use.
@@ -94,9 +138,6 @@ protected:
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Contructor) {
-    // turn on diagnostic messages
-    String::set_messages_wanted(true);
-
 
     // TEST 1
     //    Simple string - one word
@@ -117,7 +158,22 @@ TEST_F(StringMemberTest, Contructor) {
 
 // copy constructor
 TEST_F(StringMemberTest, CopyContructor) {
-    ASSERT_EQ(1, 1); 
+
+    // TEST 1
+    //    Simple string - one word
+    CopyConstructorHelper("alpha");
+
+    // TEST 2
+    //    Simple string - a little more complex with punctuation
+    CopyConstructorHelper("Hello, world!");
+
+    // TEST 3
+    //    Simple string - lots of non-word characters
+    CopyConstructorHelper("The!quick@brown#fox$jumped^over&the*lazy.dog");
+
+    // TEST 4
+    //    Corner case - Empty string
+    CopyConstructorHelper("");
 }
 
 // assignment operator

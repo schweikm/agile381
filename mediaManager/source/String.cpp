@@ -36,8 +36,24 @@ String::String(const char* in_cstr) {
     ourTotalAllocation += myInternalCStrAllocation;
 }
 
+// copy constructor
 String::String(const String& copy) {
+    // output message if wanted
+    if(true == ourMessagesWanted) {
+        cout << "Copy ctor: \"" << copy.c_str() << "\"" << endl;
+    }
 
+    // copy the primitives
+    myInternalCStrSize = copy.size();
+    myInternalCStrAllocation = copy.get_allocation();
+
+    // deep copy the internal C string
+    myInternalCStr = new char[myInternalCStrAllocation];
+    strncpy(myInternalCStr, copy.c_str(), myInternalCStrAllocation);
+
+    // update the static members
+    ourNumber++;
+    ourTotalAllocation += myInternalCStrAllocation;
 }
 
 String& String::operator=(const String& other) {
