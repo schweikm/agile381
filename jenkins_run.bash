@@ -3,6 +3,10 @@
 # set up some variables
 GTEST=`ls | grep gtest`
 
+# python prints the version to stderr
+# so we have to do this stupid hack
+PYVER=$(python --version 2>&1 > /dev/null)
+
 echo
 echo
 echo "====================================="
@@ -10,14 +14,14 @@ echo "==== Step 1: Dependency versions ===="
 echo "====================================="
 echo
 echo
-echo "-------------------------------------------------------------------"
-echo "|  `which make`     |  `make --version | head -1`                             |"
-echo "|  `which g++`      |  `g++ --version | head -1`  |"
-#echo "|  `which python`   |  `python --version | head -1`  |"
-echo "|  `which python`   |  Python 2.7.2+                             |"
-echo "|  Google Test       |  $GTEST                               |"
-echo "|  gcovr             |  `mediaManager/support/gcovr --version | head -1`                      |"
-echo "-------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------------------------------------------"
+echo "|  `which make`    |  `make --version | head -1`                                                                               |"
+echo "|  `which g++`     |  `g++ --version | head -1`                                                    |"
+echo "|  `which perl`    |  `perl --version | head -2 | tail -1`  |"
+echo "|  `which python`  |  $PYVER                                                                               |"
+echo "|  Google Test      |  $GTEST                                                                                 |"
+echo "|  gcovr script     |  `mediaManager/support/gcovr --version | head -1`                                                                        |"
+echo "--------------------------------------------------------------------------------------------------------------------"
 
 
 echo

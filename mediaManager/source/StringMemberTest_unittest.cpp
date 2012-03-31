@@ -22,17 +22,17 @@ using std::string;
 class StreamSwapper { 
 public: 
     StreamSwapper(ostream& orig, ostream& replacement) 
-      : buf_(orig.rdbuf()), str_(orig) {
+      : buf(orig.rdbuf()), str(orig) {
         orig.rdbuf(replacement.rdbuf());
     } 
     
     ~StreamSwapper() {
-        str_.rdbuf(buf_);
+        str.rdbuf(buf);
     } 
 
 private: 
-    streambuf* buf_; 
-    ostream& str_; 
+    streambuf* buf; 
+    ostream& str; 
 };
 
 
@@ -43,12 +43,12 @@ protected:
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.
-    virtual void SetUp() { }
+//    virtual void SetUp() { }
 
     // virtual void TearDown() will be called after each test is run.
     // You should define it if there is cleanup work to do.  Otherwise,
     // you don't have to provide it.
-    virtual void TearDown() { }
+//    virtual void TearDown() { }
 
     // Constructor Helper
     void ConstructorHelper(string in_string) {
@@ -62,26 +62,21 @@ protected:
         char newline = '\n';
         string result = "Ctor: \"" + in_string + "\"" + newline;
 
-        // turn on diagnostic messages
-        String::set_messages_wanted(true);
+        // capture the statics before creating the String instance
+        const int numStrings = String::get_number();
+        const int totalAllocation = String::get_total_allocation();
 
         // create the String instance
+        String::set_messages_wanted(true);
         String testStr(in_string.c_str());
-
-        // message to cout is correct
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
-
-        // String value is correct
-        ASSERT_STREQ(in_string.c_str(), testStr.c_str());
-
-        // the length is correct
-        ASSERT_EQ(in_string.length(), testStr.size());
-
-        // the allocation is correct
-        ASSERT_EQ(in_string.length() + 1, testStr.get_allocation());
-
-        // turn off diagnostic messages
         String::set_messages_wanted(false);
+
+        // verify everything is correct
+        verifyStrings(result.c_str()        , output.str().c_str(),
+                      in_string.c_str()     , testStr.c_str(),
+                      in_string.length()    , testStr.size(),
+                      in_string.length() + 1, testStr.get_allocation(),
+                      numStrings + 1        , totalAllocation + testStr.get_allocation());
     }
 
     // Copy Constructor Helper
@@ -100,27 +95,49 @@ protected:
         String::set_messages_wanted(false);
         String fromString(in_string.c_str());
         
-        // turn on diagnostic messages
-        String::set_messages_wanted(true);
+        // capture the statics before creating the String instance
+        const int numStrings = String::get_number();
+        const int totalAllocation = String::get_total_allocation();
 
         // create the String instance
+        String::set_messages_wanted(true);
         String testStr(fromString);
+        String::set_messages_wanted(false);
+
+        // verify everything is correct
+        verifyStrings(result.c_str()        , output.str().c_str(),
+                      in_string.c_str()     , testStr.c_str(),
+                      in_string.length()    , testStr.size(),
+                      in_string.length() + 1, testStr.get_allocation(),
+                      numStrings + 1        , totalAllocation + testStr.get_allocation());
+    }
+
+    // utility method to compare the String data
+    void verifyStrings(const char* expected_stdout_cstr  , const char* actual_stdout_cstr,
+                       const char* expected_cstr         , const char* actual_cstr,
+                       const int expected_length         , const int actual_length,
+                       const int expected_allocation     , const int actual_allocation,
+                       const int expected_numStrings     , const int expected_totalAllocation) {
 
         // message to cout is correct
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        EXPECT_STREQ(expected_stdout_cstr, actual_stdout_cstr);
 
         // String value is correct
-        ASSERT_STREQ(in_string.c_str(), testStr.c_str());
+        EXPECT_STREQ(expected_cstr, actual_cstr);
 
         // the length is correct
-        ASSERT_EQ(in_string.length(), testStr.size());
+        EXPECT_EQ(expected_length, actual_length);
 
         // the allocation is correct
-        ASSERT_EQ(in_string.length() + 1, testStr.get_allocation());
+        EXPECT_EQ(expected_allocation, actual_allocation);
 
-        // turn off diagnostic messages
-        String::set_messages_wanted(false);
+        // the global number of string is correct
+        EXPECT_EQ(expected_numStrings, String::get_number());
+
+        // the global allocation of memory is correct
+        EXPECT_EQ(expected_totalAllocation, String::get_total_allocation());
     }
+
 
     // Declares the variables your tests want to use.
 };
@@ -134,6 +151,8 @@ protected:
 //      - c_str()
 //      - size()
 //      - get_allocation()
+//      - String::get_number()
+//      - String::get_total_allocation()
 //      - String::set_messages_wanted()
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -156,7 +175,20 @@ TEST_F(StringMemberTest, Contructor) {
     ConstructorHelper("");
 }
 
-// copy constructor
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy Constructor
+//
+//    DEPENDS ON:
+//      - String()
+//      - c_str()
+//      - size()
+//      - get_allocation()
+//      - String::get_number()
+//      - String::get_total_allocation()
+//      - String::set_messages_wanted()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, CopyContructor) {
 
     // TEST 1
@@ -203,8 +235,8 @@ TEST_F(StringMemberTest, Destructor) {
 
         {
             String test1(test1Val.c_str());
-            ASSERT_EQ(1, String::get_number());
-            ASSERT_EQ(test1Val.length() + 1, String::get_total_allocation());
+            EXPECT_EQ(1, String::get_number());
+            EXPECT_EQ(test1Val.length() + 1, String::get_total_allocation());
 
             // turn on diagnostic messages
             String::set_messages_wanted(true);
@@ -217,13 +249,13 @@ TEST_F(StringMemberTest, Destructor) {
         string result = "Dtor: \"" + test1Val + "\"" + newline;
 
         // message to cout is correct
-        ASSERT_STREQ(result.c_str(), output.str().c_str());
+        EXPECT_STREQ(result.c_str(), output.str().c_str());
 
         // number of strings is decremented
-        ASSERT_EQ(0, String::get_number());
+        EXPECT_EQ(0, String::get_number());
 
         // allocation is decreased
-        ASSERT_EQ(0, String::get_total_allocation());
+        EXPECT_EQ(0, String::get_total_allocation());
     }
 }
 
