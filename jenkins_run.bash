@@ -7,6 +7,7 @@ GTEST=`ls | grep gtest`
 # so we have to do this stupid hack
 PYVER=$(python --version 2>&1 > /dev/null)
 
+
 echo
 echo
 echo "====================================="
@@ -14,14 +15,16 @@ echo "==== Step 1: Dependency versions ===="
 echo "====================================="
 echo
 echo
-echo "--------------------------------------------------------------------------------------------------------------------"
-echo "|  `which make`    |  `make --version | head -1`                                                                               |"
-echo "|  `which g++`     |  `g++ --version | head -1`                                                    |"
-echo "|  `which perl`    |  `perl --version | head -2 | tail -1`  |"
-echo "|  `which python`  |  $PYVER                                                                               |"
-echo "|  Google Test      |  $GTEST                                                                                 |"
-echo "|  gcovr script     |  `mediaManager/support/gcovr --version | head -1`                                                                        |"
-echo "--------------------------------------------------------------------------------------------------------------------"
+echo "-----------------------------------------------------------------------------------------------------------------"
+echo "|  Make          |  `make --version | head -1`                                                                               |"
+echo "|  G++           |  `g++ --version | head -1`                                                    |"
+echo "|  Perl          |  `perl --version | head -2 | tail -1`  |"
+echo "|  Python        |  $PYVER                                                                               |"
+echo "|  Ruby          |  `ruby --version`                                   |"
+echo "|  Cucumber      |  `cucumber --version`                                                                                       |"
+echo "|  Google Test   |  $GTEST                                                                                 |"
+echo "|  gcovr script  |  `mediaManager/support/gcovr --version | head -1`                                                                        |"
+echo "-----------------------------------------------------------------------------------------------------------------"
 
 
 echo
