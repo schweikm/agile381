@@ -17,9 +17,9 @@ echo
 echo
 echo "-----------------------------------------------------------------------------------------------------------------"
 echo "|  Make          |  `make --version | head -1`                                                                               |"
-echo "|  G++           |  `g++ --version | head -1`                                                    |"
-echo "|  Perl          |  `perl --version | head -2 | tail -1`  |"
-echo "|  Python        |  $PYVER                                                                               |"
+echo "|  G++           |  `g++ --version | head -1`                                                  |"
+echo "|  Perl          |  `perl --version | head -2 | tail -1`      |"
+echo "|  Python        |  $PYVER                                                                                |"
 echo "|  Ruby          |  `ruby --version`                                   |"
 echo "|  Cucumber      |  `cucumber --version`                                                                                       |"
 echo "|  Google Test   |  $GTEST                                                                                 |"
