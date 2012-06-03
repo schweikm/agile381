@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+
+###############################################################################
+#
+# This is the command to place as the one Jenkins build step
+#
+#   #!/bin/bash
+#   [[ -s "/usr/local/rvm/scripts/rvm" ]] && . "/usr/local/rvm/scripts/rvm"
+#   cd $WORKSPACE/trunk
+#   ./jenkins_run.bash
+#
+###############################################################################
+
+
 # set up some variables
 GTEST=`ls | grep gtest`
 

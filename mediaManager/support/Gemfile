@@ -1,6 +1,6 @@
 source :rubygems
   group :cucumber do
-    gem 'cucumber', '1.2.0'
-    gem 'rspec-expectations', '2.10.0' 
+    gem 'cucumber'
+    gem 'rspec-expectations'
   end
 
