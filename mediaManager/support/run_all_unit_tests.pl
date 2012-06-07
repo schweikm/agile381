@@ -14,6 +14,9 @@ my $TEST_REP_DIR = "../test_reports";
 # executables
 my $valgrind = "/usr/bin/valgrind";
 
+# other constants
+my $namePrefix = "xunit";
+
 # main
 {
     opendir(DIR, $UT_DIR) || die "Failed to open $UT_DIR: $!\n";
@@ -24,11 +27,11 @@ my $valgrind = "/usr/bin/valgrind";
             # define the local variables
             my $testName = substr($file, 0, length($file) - 7);
             my $valgrindFile = $TEST_REP_DIR . "/valgrind_$testName" . ".xml";
-            my $xUnitFile = $TEST_REP_DIR . "/$testName" . "Valgrind.xml";
+            my $xUnitFile = $TEST_REP_DIR . "/" . $namePrefix . "-" .$testName . "Valgrind.xml";
 
             # run the Unit Test
             system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=$valgrindFile " .
-                   "$UT_DIR/$file --gtest_output=xml:$TEST_REP_DIR/$testName" . ".xml")
+                   "$UT_DIR/$file --gtest_output=xml:$TEST_REP_DIR/" . $namePrefix . "-" . $testName . ".xml")
               && die "Could not execute Unit Test \"$file\": $!\n";
 
             # then convert the valgrind XML file
