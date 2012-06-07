@@ -36,7 +36,8 @@ echo "|  Python        |  $PYVER                                                
 echo "|  Ruby          |  `ruby --version`                                   |"
 echo "|  Cucumber      |  `cucumber --version`                                                                                       |"
 echo "|  Google Test   |  $GTEST                                                                                 |"
-echo "|  gcovr script  |  `mediaManager/support/gcovr --version | head -1`                                                                        |"
+echo "|  gcovr script  |  `mediaManager/support/gcovr --version | head -1`                                                                |"
+echo "|  Cppcheck      |  `cppcheck --version`                                                                               |"
 echo "-----------------------------------------------------------------------------------------------------------------"
 
 
@@ -92,3 +93,15 @@ echo
 cd ..
 ROOT=`pwd`
 support/gcovr --root=$ROOT --xml --output=test_reports/gcovr.xml
+
+
+echo
+echo
+echo "=========================="
+echo "==== Step 6: Cppcheck ===="
+echo "=========================="
+echo
+echo
+
+cd ..
+cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
