@@ -4,12 +4,12 @@ use strict;
 use warnings;
 
 # directories
-my $INC_DIR = "../include";
-my $SRC_DIR = "../source";
-my $TEST_REP_DIR = "../test_reports";
+my $INC_DIR = "trunk/mediaManager/include";
+my $SRC_DIR = "trunk/mediaManager/source";
+my $TEST_REP_DIR = "trunk/mediaManager/test_reports";
 
 # scripts
-my $cpplint_exe = "./cpplint.py";
+my $cpplint_exe = "trunk/mediaManager/support/cpplint.py";
 
 # other constants
 my $INC_EXT = ".h";

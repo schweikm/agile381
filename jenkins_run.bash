@@ -115,5 +115,5 @@ echo "========================="
 echo
 echo
 
-cd mediaManager/support
-./run_cpplint.pl
+cd ..
+trunk/mediaManager/support/run_cpplint.pl
