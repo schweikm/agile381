@@ -22,15 +22,20 @@ my $SRC_EXT = ".cpp";
 }
 
 sub runCpplint {
-    my $directory = shift;
-    my $extension  = shift;
+    my $dir = shift;
+    my $ext  = shift;
 
-    opendir(DIR, $directory) || die "Failed to open $directory: $!\n";
+    # find the absolute path
+    my $absDir = `cd $dir ; pwd`;
+    chomp($absDir);
+
+    opendir(DIR, $dir) || die "Failed to open $dir: $!\n";
     my @files = readdir(DIR); 
 
     foreach my $file (@files) {
-        if($file =~ m/[.]*$extension$/) {
-            system("$cpplint_exe $directory/$file |& tee $TEST_REP_DIR/cpplint-$file.log");
+        if($file =~ m/[.]*$ext$/) {
+            system("$cpplint_exe $absDir/$file |& tee $TEST_REP_DIR/cpplint-$file.log");
         }
     } 
+    closedir(DIR);
 }
