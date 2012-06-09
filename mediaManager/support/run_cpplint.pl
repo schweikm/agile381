@@ -25,16 +25,12 @@ sub runCpplint {
     my $dir = shift;
     my $ext  = shift;
 
-    # find the absolute path
-    my $absDir = `cd $dir ; pwd`;
-    chomp($absDir);
-
     opendir(DIR, $dir) || die "Failed to open $dir: $!\n";
     my @files = readdir(DIR); 
 
     foreach my $file (@files) {
         if($file =~ m/[.]*$ext$/) {
-            system("$cpplint_exe $absDir/$file |& tee $TEST_REP_DIR/cpplint-$file.log");
+            system("$cpplint_exe $dir/$file |& tee $TEST_REP_DIR/cpplint-$file.log");
         }
     } 
     closedir(DIR);
