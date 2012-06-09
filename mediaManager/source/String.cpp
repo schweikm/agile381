@@ -12,7 +12,7 @@ using std::ostream;
 
 // initialize static members
 int  String::ourNumber          = 0;
-int  String::ourTotalAllocation = 0; 
+int  String::ourTotalAllocation = 0;
 bool String::ourMessagesWanted  = false;
 
 // constructor
@@ -67,7 +67,7 @@ String& String::operator=(const char* other) {
 // destructor
 String::~String() {
     // output message if wanted
-    if(true == ourMessagesWanted) {
+    if (true == ourMessagesWanted) {
         cout << "Dtor: \"" << myInternalCStr << "\"" << endl;
     }
 
@@ -115,7 +115,7 @@ String& String::operator += (const String& rhs) {
 
 }
 
-void String::swap(String& other) {
+void String::swap(String& other) { // NOLINT
 
 }
 

@@ -13,25 +13,25 @@ using std::streambuf;
 using std::string;
 
 
-// smart class that will swap streambufs and replace them 
-// when object goes out of scope. 
+// smart class that will swap streambufs and replace them
+// when object goes out of scope.
 //
-//: MAINTENANCE
+// MAINTENANCE
 //    This should be moved to a Google Test Utility file at some point
 //
 class StreamSwapper { 
 public: 
-    StreamSwapper(ostream& orig, ostream& replacement) 
+    StreamSwapper(ostream& orig, ostream& replacement)
       : buf(orig.rdbuf()), str(orig) {
         orig.rdbuf(replacement.rdbuf());
     } 
     
     ~StreamSwapper() {
         str.rdbuf(buf);
-    } 
+    }
 
-private: 
-    streambuf* buf; 
+private:
+    streambuf* buf;
     ostream& str; 
 };
 
@@ -39,7 +39,6 @@ private:
 // To use a test fixture, derive a class from testing::Test.
 class StringMemberTest : public testing::Test {
 protected:
-
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.
@@ -56,7 +55,7 @@ protected:
         ostringstream output;
         StreamSwapper swapper(cout, output);
 
-        //: MAINTENANCE
+        // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
         //    so I'll do this hack instead
         char newline = '\n';
@@ -76,7 +75,8 @@ protected:
                       in_string.c_str()     , testStr.c_str(),
                       in_string.length()    , testStr.size(),
                       in_string.length() + 1, testStr.get_allocation(),
-                      numStrings + 1        , totalAllocation + testStr.get_allocation());
+                      numStrings + 1        , totalAllocation +
+                                                testStr.get_allocation());
     }
 
     // Copy Constructor Helper
@@ -85,7 +85,7 @@ protected:
         ostringstream output;
         StreamSwapper swapper(cout, output);
 
-        //: MAINTENANCE
+        // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
         //    so I'll do this hack instead
         char newline = '\n';
@@ -94,7 +94,7 @@ protected:
         // create the String to copy from
         String::set_messages_wanted(false);
         String fromString(in_string.c_str());
-        
+
         // capture the statics before creating the String instance
         const int numStrings = String::get_number();
         const int totalAllocation = String::get_total_allocation();
@@ -109,15 +109,21 @@ protected:
                       in_string.c_str()     , testStr.c_str(),
                       in_string.length()    , testStr.size(),
                       in_string.length() + 1, testStr.get_allocation(),
-                      numStrings + 1        , totalAllocation + testStr.get_allocation());
+                      numStrings + 1        , totalAllocation +
+                                                testStr.get_allocation());
     }
 
     // utility method to compare the String data
-    void verifyStrings(const char* expected_stdout_cstr  , const char* actual_stdout_cstr,
-                       const char* expected_cstr         , const char* actual_cstr,
-                       const int expected_length         , const int actual_length,
-                       const int expected_allocation     , const int actual_allocation,
-                       const int expected_numStrings     , const int expected_totalAllocation) {
+    void verifyStrings(const char* expected_stdout_cstr,
+                       const char* actual_stdout_cstr,
+                       const char* expected_cstr,
+                       const char* actual_cstr,
+                       const int expected_length,
+                       const int actual_length,
+                       const int expected_allocation,
+                       const int actual_allocation,
+                       const int expected_numStrings,
+                       const int expected_totalAllocation) {
 
         // message to cout is correct
         EXPECT_STREQ(expected_stdout_cstr, actual_stdout_cstr);
@@ -157,7 +163,6 @@ protected:
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Contructor) {
-
     // TEST 1
     //    Simple string - one word
     ConstructorHelper("alpha");
@@ -190,7 +195,6 @@ TEST_F(StringMemberTest, Contructor) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, CopyContructor) {
-
     // TEST 1
     //    Simple string - one word
     CopyConstructorHelper("alpha");
@@ -210,7 +214,7 @@ TEST_F(StringMemberTest, CopyContructor) {
 
 // assignment operator
 TEST_F(StringMemberTest, AssignmentOperator) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,9 +244,9 @@ TEST_F(StringMemberTest, Destructor) {
 
             // turn on diagnostic messages
             String::set_messages_wanted(true);
-        } // test1 goes out of scope - destructor called
+        }  // test1 goes out of scope - destructor called
 
-        //: MAINTENANCE
+        // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
         //    so I'll do this hack instead
         char newline = '\n';
@@ -261,46 +265,46 @@ TEST_F(StringMemberTest, Destructor) {
 
 // c_str()
 TEST_F(StringMemberTest, cStr) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // size
 TEST_F(StringMemberTest, size) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // operator[]
 TEST_F(StringMemberTest, OperatorAccessor) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // substring
 TEST_F(StringMemberTest, substring) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // clear
 TEST_F(StringMemberTest, clear) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // remove
 TEST_F(StringMemberTest, remove) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // insert_before
 TEST_F(StringMemberTest, insertBefore) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // operator+=
 TEST_F(StringMemberTest, operatorConcatenation) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
 // swap
 TEST_F(StringMemberTest, swap) {
-    ASSERT_EQ(1, 1); 
+    ASSERT_EQ(1, 1);
 }
 
