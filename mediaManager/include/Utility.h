@@ -3,10 +3,10 @@
 
 // a simple class for error exceptions - msg points to a C-string error message
 struct Error {
-	Error(const char * in_msg = "") :
-		msg(in_msg)
-		{}
-	const char * msg;
+    Error(const char * in_msg = "") :
+        msg(in_msg)
+        {}
+    const char * msg;
 };
 
 // define a function template named "swapem" that interchanges the values of two variables

@@ -64,157 +64,157 @@ bool less_than(const T& t1, const T& t2)
 
 class Ordered_list {
 private:
-	// Node is a nested class that is private to the Ordered_list<T> class; 
-	// declared first to simplify later declarations.
-	// *** you may add another Node * member, and constructor parameter, if you want to use a two-way linked list
-	struct Node {
-		Node(const T& in_datum, Node * in_next) :
-			datum(in_datum), next(in_next)
-			{g_Ordered_list_Node_count++;}
-		// copy ctor and dtor defined only to support allocation counting
-		Node(const Node& other) :
-			datum(other.datum), next(other.next)
-			{g_Ordered_list_Node_count++;}
-		~Node()
-			{g_Ordered_list_Node_count--;}
-		T datum;
-		Node * next;
-		};
-		
-		
+    // Node is a nested class that is private to the Ordered_list<T> class; 
+    // declared first to simplify later declarations.
+    // *** you may add another Node * member, and constructor parameter, if you want to use a two-way linked list
+    struct Node {
+        Node(const T& in_datum, Node * in_next) :
+            datum(in_datum), next(in_next)
+            {g_Ordered_list_Node_count++;}
+        // copy ctor and dtor defined only to support allocation counting
+        Node(const Node& other) :
+            datum(other.datum), next(other.next)
+            {g_Ordered_list_Node_count++;}
+        ~Node()
+            {g_Ordered_list_Node_count--;}
+        T datum;
+        Node * next;
+        };
+        
+        
 public:
-	// The constructor takes a ordering function that returns true if the first argument should come
-	// before the second; the arguments are passed in by reference-to-const to avoid data copying.
-	// The default constructor parameter is the less_than function for the type.
-	Ordered_list(bool (*ordering_function_)(const T&, const T&) = less_than<T>);
+    // The constructor takes a ordering function that returns true if the first argument should come
+    // before the second; the arguments are passed in by reference-to-const to avoid data copying.
+    // The default constructor parameter is the less_than function for the type.
+    Ordered_list(bool (*ordering_function_)(const T&, const T&) = less_than<T>);
 
-	/* *** Defined the constructor, and declare and define the destructor, copy constructor, and assignment operator.
-	The destructor must deallocate all nodes. Copy and assignment must produce a list that
-	contains nodes that have a copy of the data in the other ordered list. Assignment must use
-	the "copy-swap" idiom. 
-	
-	The constructors and destructor must increment/decrement g_Ordered_list_count.
-	*/
-	
-	// Delete the nodes in the list, if any, and initialize it. 
-	void clear();
-	// Return the number of nodes in the list
-	int size() const
-		{/* fill this in */}
-	// Return true if the list is empty
-	bool empty() const
-		{/* fill this in */}
-		
-	// An Iterator object designates a Node by encapsulating a pointer to the Node, 
-	// and provides Standard Library-style operators for using, manipulating, and comparing Iterators.
-	// This class is nested inside Ordered_list<> as a public member, refer to as e.g. Ordered_list<int>::Iterator
-	class Iterator {
-		public:
-			// default initialize to zero
-			Iterator() :
-				node_ptr(0)
-				{}
-				
-			// Overloaded dereferencing operators
-			// * returns a reference to the datum in the pointed-to node
-			T& operator* () const
-				{/* fill this in */}
-			// operator-> simply returns the address of the data in the pointed-to node.
-			// For this operator, the compiler reapplies the -> operator with the returned pointer.
-			/* *** definition supplied here because it is a special-case of operator overloading. */
-			T* operator-> () const
-				{assert(node_ptr); return &(node_ptr->datum);}
+    /* *** Defined the constructor, and declare and define the destructor, copy constructor, and assignment operator.
+    The destructor must deallocate all nodes. Copy and assignment must produce a list that
+    contains nodes that have a copy of the data in the other ordered list. Assignment must use
+    the "copy-swap" idiom. 
+    
+    The constructors and destructor must increment/decrement g_Ordered_list_count.
+    */
+    
+    // Delete the nodes in the list, if any, and initialize it. 
+    void clear();
+    // Return the number of nodes in the list
+    int size() const
+        {/* fill this in */}
+    // Return true if the list is empty
+    bool empty() const
+        {/* fill this in */}
+        
+    // An Iterator object designates a Node by encapsulating a pointer to the Node, 
+    // and provides Standard Library-style operators for using, manipulating, and comparing Iterators.
+    // This class is nested inside Ordered_list<> as a public member, refer to as e.g. Ordered_list<int>::Iterator
+    class Iterator {
+        public:
+            // default initialize to zero
+            Iterator() :
+                node_ptr(0)
+                {}
+                
+            // Overloaded dereferencing operators
+            // * returns a reference to the datum in the pointed-to node
+            T& operator* () const
+                {/* fill this in */}
+            // operator-> simply returns the address of the data in the pointed-to node.
+            // For this operator, the compiler reapplies the -> operator with the returned pointer.
+            /* *** definition supplied here because it is a special-case of operator overloading. */
+            T* operator-> () const
+                {assert(node_ptr); return &(node_ptr->datum);}
 
-			// ++ operator moves the iterator forward to point to the next node
-			Iterator operator++ ()	// prefix
-				{	
-					/* fill this in */
-				}
-			Iterator operator++ (int)	// postfix
-				{	
-					/* fill this in */
-				}
-			// Iterators ar equal if they point to the same node
-			bool operator== (Iterator rhs) const
-				{/* fill this in */}
-			bool operator!= (Iterator rhs) const
-				{/* fill this in */}
-	
-			// *** here, declare the outer Ordered_list class is a friend			
+            // ++ operator moves the iterator forward to point to the next node
+            Iterator operator++ ()  // prefix
+                {   
+                    /* fill this in */
+                }
+            Iterator operator++ (int)   // postfix
+                {   
+                    /* fill this in */
+                }
+            // Iterators ar equal if they point to the same node
+            bool operator== (Iterator rhs) const
+                {/* fill this in */}
+            bool operator!= (Iterator rhs) const
+                {/* fill this in */}
+    
+            // *** here, declare the outer Ordered_list class is a friend           
 
-		private:
-			/* *** define here a private constructor for Iterator that takes a Node * parameter.
-			Ordered_list<T> can use this to create Iterators conveniently initialized to point to a Node.
-			It is private because the client code can't and shouldn't be using it - it isn't even supposed to
-			know about the Node objects.  */
-			/* *** you may have other private member functions, but not member variables */
-			Node * node_ptr;
-		};
-	// end of nested Iterator class declaration
-	
-	// return an iterator pointing to the first node
-	Iterator begin() const
-		{/* fill this in */}
-	// return an iterator pointing to "past the end"
-	Iterator end() const
-		{return Iterator(0);}	// same as next pointer of last node
+        private:
+            /* *** define here a private constructor for Iterator that takes a Node * parameter.
+            Ordered_list<T> can use this to create Iterators conveniently initialized to point to a Node.
+            It is private because the client code can't and shouldn't be using it - it isn't even supposed to
+            know about the Node objects.  */
+            /* *** you may have other private member functions, but not member variables */
+            Node * node_ptr;
+        };
+    // end of nested Iterator class declaration
+    
+    // return an iterator pointing to the first node
+    Iterator begin() const
+        {/* fill this in */}
+    // return an iterator pointing to "past the end"
+    Iterator end() const
+        {return Iterator(0);}   // same as next pointer of last node
 
-	// The insert functions add the new datum to the list using the ordering function. 
-	// If an "equal" object is already in the list, then the new datum object 
-	// is placed in the list before the "equal" one that is already there.
-	void insert(const T& new_datum);
-	
-	// Delete the specified node.
-	// Caller is responsible for any required deletion of any pointed-to data beforehand.
-	// Do not attempt to dereference the iterator after calling this function - it
-	// is invalid after this function executes.
-	void erase(Iterator it);
+    // The insert functions add the new datum to the list using the ordering function. 
+    // If an "equal" object is already in the list, then the new datum object 
+    // is placed in the list before the "equal" one that is already there.
+    void insert(const T& new_datum);
+    
+    // Delete the specified node.
+    // Caller is responsible for any required deletion of any pointed-to data beforehand.
+    // Do not attempt to dereference the iterator after calling this function - it
+    // is invalid after this function executes.
+    void erase(Iterator it);
 
-	// The find function returns an iterator designating the node containing the datum that according to
-	// the ordering function, is equal to the supplied probe_datum; end() is returned if the node is not found. 
-	// If more than one item is equal to the probe, the returned iterator points to the first one.
-	// If a matching item is not present, the scan is terminated as soon as possible by detecting 
-	// when the scan goes past where the matching item would be.
-	Iterator find(const T& probe_datum) const;
-	
-	// None of the following "apply" functions is allowed to modify the list or items in the list
+    // The find function returns an iterator designating the node containing the datum that according to
+    // the ordering function, is equal to the supplied probe_datum; end() is returned if the node is not found. 
+    // If more than one item is equal to the probe, the returned iterator points to the first one.
+    // If a matching item is not present, the scan is terminated as soon as possible by detecting 
+    // when the scan goes past where the matching item would be.
+    Iterator find(const T& probe_datum) const;
+    
+    // None of the following "apply" functions is allowed to modify the list or items in the list
 
-	// The apply function takes a pointer to a function that takes a type T argument, and
-	// iterates through the list calling this function or each datum in the list. The function
-	// is not allowed to modify items in the list or th.
-	void apply(void (*apply_function) (const T&)) const;
+    // The apply function takes a pointer to a function that takes a type T argument, and
+    // iterates through the list calling this function or each datum in the list. The function
+    // is not allowed to modify items in the list or th.
+    void apply(void (*apply_function) (const T&)) const;
 
-	// The apply_if functions are like the apply functions in that they call the supplied function 
-	// for each item in the list, but stop the iteration and return true if the function returns true.
-	// The function is not allowed to modify items in the list.
-	bool apply_if(bool (*apply_function) (const T&)) const;
-	
-	// The following are templated member functions - they have an additional template argument for
-	// the type of the additional function parameter. 
-	/* *** if you define these outside the class declaration, declare the second template parameter
-	as follows:
-	template<typename T> template <typename Arg>
-	void Ordered_list<T>::apply_arg(void (*apply_function) (const T&, Arg), Arg apply_arg) const
-	{
-	}
-	*/
-	// The apply_arg functions take a pointer to a function that takes a type T argument and a second argument
-	// of type Arg, and iterates through the list calling this function for each datum in the list.
-	// Note that you can tell the compiler how to interpret Arg if it cannot deduce the function prototype
-	// correctly from the call, for example, to pass in a stream by reference:
-	//  my_OL.apply_arg<ofstream&>(output_item, outfile);
-	template <typename Arg>
-	void apply_arg(void (*apply_function) (const T&, Arg), Arg apply_arg) const;
-	
-	template <typename Arg>
-	bool apply_if_arg(bool (*apply_function) (const T&, Arg), Arg apply_arg) const;
-		
-	// interchange the member variable values of this list with the other list
-	void swap(Ordered_list & other);
+    // The apply_if functions are like the apply functions in that they call the supplied function 
+    // for each item in the list, but stop the iteration and return true if the function returns true.
+    // The function is not allowed to modify items in the list.
+    bool apply_if(bool (*apply_function) (const T&)) const;
+    
+    // The following are templated member functions - they have an additional template argument for
+    // the type of the additional function parameter. 
+    /* *** if you define these outside the class declaration, declare the second template parameter
+    as follows:
+    template<typename T> template <typename Arg>
+    void Ordered_list<T>::apply_arg(void (*apply_function) (const T&, Arg), Arg apply_arg) const
+    {
+    }
+    */
+    // The apply_arg functions take a pointer to a function that takes a type T argument and a second argument
+    // of type Arg, and iterates through the list calling this function for each datum in the list.
+    // Note that you can tell the compiler how to interpret Arg if it cannot deduce the function prototype
+    // correctly from the call, for example, to pass in a stream by reference:
+    //  my_OL.apply_arg<ofstream&>(output_item, outfile);
+    template <typename Arg>
+    void apply_arg(void (*apply_function) (const T&, Arg), Arg apply_arg) const;
+    
+    template <typename Arg>
+    bool apply_if_arg(bool (*apply_function) (const T&, Arg), Arg apply_arg) const;
+        
+    // interchange the member variable values of this list with the other list
+    void swap(Ordered_list & other);
 
 private:
 // *** this is the member variable declaration for the ordering function - name is your choice.
-	bool (*ordering_function) (const T&, const T&);
-	/* *** private member variables and functions are your choice. */
+    bool (*ordering_function) (const T&, const T&);
+    /* *** private member variables and functions are your choice. */
 };
 
