@@ -67,7 +67,7 @@ export DEBUG=on
 export RELEASE=off
 export COVERAGE=on
 export PROFILE=off
-make -wB
+make -wB |& tee test_reports/gcc-mediaManager.log
 
 
 echo
@@ -105,3 +105,15 @@ echo
 
 cd ..
 cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
+
+
+echo
+echo
+echo "========================="
+echo "==== Step 7: Cpplint ===="
+echo "========================="
+echo
+echo
+
+cd mediaManager/support
+./run_cpplint.pl

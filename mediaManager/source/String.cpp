@@ -18,7 +18,7 @@ bool String::ourMessagesWanted  = false;
 // constructor
 String::String(const char* in_cstr) {
     // output message if wanted
-    if(true == ourMessagesWanted) {
+    if (true == ourMessagesWanted) {
         cout << "Ctor: \"" << in_cstr << "\"" << endl;
     }
 
@@ -39,7 +39,7 @@ String::String(const char* in_cstr) {
 // copy constructor
 String::String(const String& copy) {
     // output message if wanted
-    if(true == ourMessagesWanted) {
+    if (true == ourMessagesWanted) {
         cout << "Copy ctor: \"" << copy.c_str() << "\"" << endl;
     }
 
