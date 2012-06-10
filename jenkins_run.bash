@@ -92,7 +92,8 @@ echo
 
 cd ..
 ROOT=`pwd`
-support/gcovr --root=$ROOT --xml --output=test_reports/gcovr.xml
+support/gcovr.py --root=$ROOT --xml --output=test_reports/gcovr.xml
+echo Done!
 
 
 echo
@@ -105,6 +106,7 @@ echo
 
 cd ..
 cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
+echo Done!
 
 
 echo
@@ -117,3 +119,4 @@ echo
 
 cd ..
 trunk/mediaManager/support/run_cpplint.pl
+echo Done!
