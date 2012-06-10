@@ -23,8 +23,8 @@ echo "=========================="
 echo
 echo
 
-cd ..
-cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
+cd ../..
+cppcheck --enable=all --std=posix -I trunk/mediaManager/include/ trunk/mediaManager/source/ --xml >& trunk/mediaManager/test_reports/cppcheck-mediaManager.xml
 echo Done!
 
 
@@ -36,6 +36,5 @@ echo "========================="
 echo
 echo
 
-cd ..
 trunk/mediaManager/support/run_cpplint.pl
 echo Done!
