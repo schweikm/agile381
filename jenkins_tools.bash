@@ -9,10 +9,17 @@ echo "==============================="
 echo
 echo
 
+# set the root for code coverage
 cd mediaManager/source
 ROOT=`pwd`
+
+# then run the tool
 cd ../../..
 trunk/mediaManager/support/gcovr.py --root=$ROOT --xml --output=trunk/mediaManager/test_reports/gcovr.xml
+
+# manually change the paths - needs update
+sed --in-place "s/obj_lin64/source/g;s/obj-UT_lin64/source/g" trunk/mediaManager/test_reports/gcovr.xml
+
 echo Done!
 
 
