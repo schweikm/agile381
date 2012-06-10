@@ -9,9 +9,10 @@ echo "==============================="
 echo
 echo
 
-cd mediaManager
+cd mediaManager/source
 ROOT=`pwd`
-support/gcovr.py --root=$ROOT --xml --output=test_reports/gcovr.xml
+cd ../../..
+trunk/mediaManager/support/gcovr.py --root=$ROOT --xml --output=trunk/mediaManager/test_reports/gcovr.xml
 echo Done!
 
 
@@ -23,7 +24,6 @@ echo "=========================="
 echo
 echo
 
-cd ../..
 cppcheck --enable=all --std=posix -I trunk/mediaManager/include/ trunk/mediaManager/source/ --xml >& trunk/mediaManager/test_reports/cppcheck-mediaManager.xml
 echo Done!
 
