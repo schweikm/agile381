@@ -13,7 +13,7 @@
 ###############################################################################
 
 
-# set up some variables
+# find the google test directory
 GTEST=`ls | grep gtest`
 
 # python prints the version to stderr
@@ -30,93 +30,22 @@ echo
 echo
 echo "-----------------------------------------------------------------------------------------------------------------"
 echo "|  Make          |  `make --version | head -1`                                                                               |"
-echo "|  G++           |  `g++ --version | head -1`                                                  |"
+echo "|  g++           |  `g++ --version | head -1`                                                  |"
 echo "|  Perl          |  `perl --version | head -2 | tail -1`      |"
 echo "|  Python        |  $PYVER                                                                                |"
 echo "|  Ruby          |  `ruby --version`                                   |"
 echo "|  Cucumber      |  `cucumber --version`                                                                                       |"
 echo "|  Google Test   |  $GTEST                                                                                 |"
-echo "|  gcovr script  |  `mediaManager/support/gcovr --version | head -1`                                                                |"
+echo "|  gcov          |  `gcov --version | head -1`                                                 |"
+echo "|  gcovr.py      |  `mediaManager/support/gcovr.py --version | head -1`                                                                |"
 echo "|  Cppcheck      |  `cppcheck --version`                                                                               |"
+echo "|  Cpplint       |  google-styleguide - Revision 83                                                             |"
 echo "-----------------------------------------------------------------------------------------------------------------"
 
 
+# farm the work out to sub scripts
+source jenkins_compile.bash
+source jenkins_test.bash
+source jenkins_tools.bash
 echo
 echo
-echo "============================="
-echo "==== Step 2: Google Test ===="
-echo "============================="
-echo
-echo
-
-cd $GTEST
-./configure
-make -wB
-
-
-echo
-echo
-echo "==============================="
-echo "==== Step 3: Media Manager ===="
-echo "==============================="
-echo
-echo
-
-cd ../mediaManager
-export DEBUG=on
-export RELEASE=off
-export COVERAGE=on
-export PROFILE=off
-make -wB |& tee test_reports/gcc-mediaManager.log
-
-
-echo
-echo
-echo "============================"
-echo "==== Step 4: Unit Tests ===="
-echo "============================"
-echo
-echo
-
-cd support
-./run_all_unit_tests.pl
-
-
-echo
-echo
-echo "==============================="
-echo "==== Step 5: Code Coverage ===="
-echo "==============================="
-echo
-echo
-
-cd ..
-ROOT=`pwd`
-support/gcovr.py --root=$ROOT --xml --output=test_reports/gcovr.xml
-echo Done!
-
-
-echo
-echo
-echo "=========================="
-echo "==== Step 6: Cppcheck ===="
-echo "=========================="
-echo
-echo
-
-cd ..
-cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
-echo Done!
-
-
-echo
-echo
-echo "========================="
-echo "==== Step 7: Cpplint ===="
-echo "========================="
-echo
-echo
-
-cd ..
-trunk/mediaManager/support/run_cpplint.pl
-echo Done!
