@@ -19,20 +19,20 @@ using std::string;
 // MAINTENANCE
 //    This should be moved to a Google Test Utility file at some point
 //
-class StreamSwapper { 
-public: 
+class StreamSwapper {
+public:
     StreamSwapper(ostream& orig, ostream& replacement)
       : buf(orig.rdbuf()), str(orig) {
         orig.rdbuf(replacement.rdbuf());
-    } 
-    
+    }
+
     ~StreamSwapper() {
         str.rdbuf(buf);
     }
 
 private:
     streambuf* buf;
-    ostream& str; 
+    ostream& str;
 };
 
 
@@ -124,7 +124,6 @@ protected:
                        const int actual_allocation,
                        const int expected_numStrings,
                        const int expected_totalAllocation) {
-
         // message to cout is correct
         EXPECT_STREQ(expected_stdout_cstr, actual_stdout_cstr);
 

@@ -1,13 +1,13 @@
 /*
 String class - a subset of the C++ Standard Library <string> class
-String objects contain a C-string in a dynamically allocated piece of memory and 
-support input/output, comparisons, copy, assignment, and concatenation, 
+String objects contain a C-string in a dynamically allocated piece of memory and
+support input/output, comparisons, copy, assignment, and concatenation,
 access to individual characters and substrings, and insertion and removal
 of parts of the string.
 
 Individual characters in the string are indexed the same as an array, 0 through length - 1.
 The "size" of the string is the length of the internal C-string, as defined by std::strlen
-and does not count the null byte marking the end of the C-string. The "allocation" does 
+and does not count the null byte marking the end of the C-string. The "allocation" does
 count the null byte. Thus allocation must be >= size + 1.
 
 Most operations result in a string that occupies the minimum amount of memory
@@ -19,22 +19,22 @@ The doubling rule: If n characters are to be added to a string, and the current 
 is  not large enough to hold the result (allocation < size + n + 1), a new piece of memory
 is allocated whose size is 2 * (size + n + 1).
 
-The doubling rule is a way to prevent excessive reallocation and copying work as 
-the internal contents of a String are expanded - thus it only applies in cases where 
+The doubling rule is a way to prevent excessive reallocation and copying work as
+the internal contents of a String are expanded - thus it only applies in cases where
 more characters are being added to the String. In particular:
 
 * The concatenation operators += follow the doubling rule.
-* Any operator that should be implemented in terms of +=, such as operator+ and operator>>, 
+* Any operator that should be implemented in terms of +=, such as operator+ and operator>>,
 and the function getline, will then also follow the doubling rule as a result.
 * The insert_before function follows the doubling rule.
-* All other functions and operators either leave the allocation unchanged (e.g. swap) 
+* All other functions and operators either leave the allocation unchanged (e.g. swap)
 or result in the minimum allocation (size +1).
 
 For those operations that involve indexing into the string such as operator[],
 an exception is thrown with an error message if the index is not within a valid range.
 
-For testing and demonstration purposes, this class contains static members that record the 
-current number of Strings in existence and their total memory allocation. 
+For testing and demonstration purposes, this class contains static members that record the
+current number of Strings in existence and their total memory allocation.
 If the messages_wanted variable is true, the constructors, destructor, and assignment operators
 output a message to demonstrate when these functions are called. The message is output
 before the function does the actual work.  To help identify the String involved,
@@ -58,7 +58,7 @@ struct String_exception {
 
 
 class String {
-public:
+  public:
     // Default initialization is to contain an empty string; if a non-empty
     // C-string is supplied, this String gets minimum allocation.
     String(const char * in_cstr = "");
@@ -70,7 +70,7 @@ public:
     // There are two assignment operators: one has a String on the right-hand-side,
     // the other a C-string (char *). In both cases, the left-hand-side gets
     // a copy of the right-hand-side data and gets minimum allocation.
-    // The assign from String must use the "copy-swap" idiom; you should use the 
+    // The assign from String must use the "copy-swap" idiom; you should use the
     // obvious "construct and swap" variation on this for assigning from a C-string.
     String& operator=(const String& other);
     String& operator=(const char* other);
@@ -123,7 +123,7 @@ public:
 
     // These concatenation operators add the rhs string data to the lhs object.
     // They do not create any temporary String objects. They either directly copy the rhs data
-    // into the lhs space if it is big enough to hold the rhs, or allocate new space 
+    // into the lhs space if it is big enough to hold the rhs, or allocate new space
     // and copy the old lhs data into it followed by the rhs data. The lhs object retains the
     // final memory allocation.
     String& operator += (char rhs);
@@ -132,14 +132,14 @@ public:
 
     // Swap the contents of this String with another one.
     // The member variable values are interchanged, along with the
-    // pointers to the allocated C-strings, but the two C-strings 
+    // pointers to the allocated C-strings, but the two C-strings
     // are neither copied nor modified. No memory allocation/deallocation is done.
     void swap(String& other);
 
     /* Monitoring functions - not part of a normal implementation */
     /*  used here for demonstration and testing purposes. */
 
-    // Return the total number of Strings in existence  
+    // Return the total number of Strings in existence
     static int get_number()
         { return ourNumber; }
 
@@ -152,7 +152,7 @@ public:
     static void set_messages_wanted(bool in_messagesWanted)
         { ourMessagesWanted = in_messagesWanted; }
 
-private:
+  private:
     // internal C string
     char* myInternalCStr;
 
@@ -193,11 +193,11 @@ std::ostream& operator<< (std::ostream& os, const String& str);
 // It skips initial whitespace, then copies characters into
 // the supplied str until whitespace is encountered again. The terminating
 // whitespace remains in the input stream, analogous to how input normally works.
-// str is expanded as needed, and retains the final allocation.  
+// str is expanded as needed, and retains the final allocation.
 // If the input stream fails, str contains whatever characters were read.
 std::istream& operator>> (std::istream& is, String& str);
 
-// getline for String clears str to an empty String, then reads characters into str until it finds a '\n', 
+// getline for String clears str to an empty String, then reads characters into str until it finds a '\n',
 // which is left in the stream (this differs from the fgets and std::getline functions).
 // str's allocation is expanded as needed, and it retains the final allocation.
 // If the input stream fails, str contains whatever characters were read.

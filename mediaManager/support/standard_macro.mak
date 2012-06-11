@@ -264,7 +264,8 @@ endif
 ifeq ($(SYSTEM),Linux)
     ## -Wdouble-promotion:  Give a warning when a value of type float is implicitly promoted to double
     ## -Wtrampolines:  Warn about trampolines generated for pointers to nested functions
-    PLATFORM_CFLAGS += -Wdouble-promotion -Wtrampolines
+    ## -Wunused-local-typedefs:  This warning diagnoses typedefs locally defined in a function, and otherwise not used.
+    PLATFORM_CFLAGS += -Wdouble-promotion -Wtrampolines -Wunused-local-typedefs
 endif
 
 PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
