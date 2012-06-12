@@ -2,37 +2,83 @@
 #include <gtest/gtest.h>
 
 #include <cstddef>
-#include <iostream>
+#include <cstdio>
 #include <string>
-
-using std::cout;
-using std::ostream;
-using std::ostringstream;
-using std::streambuf;
 
 using std::string;
 
 
-// smart class that will swap streambufs and replace them
-// when object goes out of scope.
-//
-// MAINTENANCE
-//    This should be moved to a Google Test Utility file at some point
-//
-class StreamSwapper {
-public:
-    StreamSwapper(ostream& orig, ostream& replacement)
-      : buf(orig.rdbuf()), str(orig) {
-        orig.rdbuf(replacement.rdbuf());
+// class that captures stdout and stores it in a file
+class StreamDup {
+  public:
+    StreamDup()
+      :myNewFd(0) {
+        // make the tmp file unique
+        char buffer[50];
+        sprintf(buffer, "/tmp/gtest-%d.txt", getpid());
+        myTmpFile = buffer;
     }
 
-    ~StreamSwapper() {
-        str.rdbuf(buf);
+    void startCapture() {
+        // save position of current standard output
+        fgetpos(stdout, &stdoutPos);
+        myNewFd = dup(fileno(stdout));
+        freopen(myTmpFile.c_str(), "w", stdout);
     }
 
-private:
-    streambuf* buf;
-    ostream& str;
+    void stopCapture() {
+        // flush stdout so any buffered messages are delivered
+        fflush(stdout);
+
+        // close file and restore standard output to stdout - which should be the terminal
+        dup2(myNewFd, fileno(stdout));
+        close(myNewFd);
+        clearerr(stdout);
+        fsetpos(stdout, &stdoutPos);
+    }
+
+    string getCapture() {
+        FILE * file;
+        long size;
+        char* buffer;
+        long result;
+
+        file = fopen(myTmpFile.c_str(), "r");
+        if (0 == file) {
+            return "";
+        }
+
+        // obtain file size:
+        fseek(file, 0, SEEK_END);
+        size = ftell(file);
+        rewind(file);
+
+        // allocate memory to contain the whole file:
+        buffer = new char[sizeof(char) * size];
+        if (0 == buffer) {
+            return "";
+        }
+
+        // copy the file into the buffer:
+        result = fread(buffer, 1, size, file);
+        if (result != size) {
+            return "";
+        }
+
+        // get the return value
+        string val(buffer);
+
+        // clean up
+        fclose (file);
+        delete [] buffer;
+
+        return val;
+    }
+
+  private:
+    fpos_t stdoutPos;
+    int    myNewFd;
+    string myTmpFile;
 };
 
 
@@ -42,18 +88,17 @@ protected:
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.
-//    virtual void SetUp() { }
+/*    virtual void SetUp() { } */
 
     // virtual void TearDown() will be called after each test is run.
     // You should define it if there is cleanup work to do.  Otherwise,
     // you don't have to provide it.
-//    virtual void TearDown() { }
+/*    virtual void TearDown() { } */
 
     // Constructor Helper
     void ConstructorHelper(string in_string) {
         // capture the ouput to stdout
-        ostringstream output;
-        StreamSwapper swapper(cout, output);
+        StreamDup dup;
 
         // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
@@ -67,11 +112,13 @@ protected:
 
         // create the String instance
         String::set_messages_wanted(true);
+        dup.startCapture();
         String testStr(in_string.c_str());
+        dup.stopCapture();
         String::set_messages_wanted(false);
 
         // verify everything is correct
-        verifyStrings(result.c_str()        , output.str().c_str(),
+        verifyStrings(result.c_str()        , dup.getCapture().c_str(),
                       in_string.c_str()     , testStr.c_str(),
                       in_string.length()    , testStr.size(),
                       in_string.length() + 1, testStr.get_allocation(),
@@ -82,8 +129,7 @@ protected:
     // Copy Constructor Helper
     void CopyConstructorHelper(string in_string) {
         // capture the ouput to stdout
-        ostringstream output;
-        StreamSwapper swapper(cout, output);
+        StreamDup dup;
 
         // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
@@ -101,11 +147,13 @@ protected:
 
         // create the String instance
         String::set_messages_wanted(true);
+        dup.startCapture();
         String testStr(fromString);
+        dup.stopCapture();
         String::set_messages_wanted(false);
 
         // verify everything is correct
-        verifyStrings(result.c_str()        , output.str().c_str(),
+        verifyStrings(result.c_str()        , dup.getCapture().c_str(),
                       in_string.c_str()     , testStr.c_str(),
                       in_string.length()    , testStr.size(),
                       in_string.length() + 1, testStr.get_allocation(),
@@ -232,8 +280,7 @@ TEST_F(StringMemberTest, Destructor) {
     String::set_messages_wanted(false);
     {
         // capture the ouput to stdout
-        ostringstream output;
-        StreamSwapper swapper(cout, output);
+        StreamDup dup;
         string test1Val = "alpha";
 
         {
@@ -243,7 +290,10 @@ TEST_F(StringMemberTest, Destructor) {
 
             // turn on diagnostic messages
             String::set_messages_wanted(true);
+            dup.startCapture();
         }  // test1 goes out of scope - destructor called
+
+        dup.stopCapture();
 
         // MAINTENANCE
         //    I'm not sure how to convert std::endl to a character,
@@ -252,7 +302,7 @@ TEST_F(StringMemberTest, Destructor) {
         string result = "Dtor: \"" + test1Val + "\"" + newline;
 
         // message to cout is correct
-        EXPECT_STREQ(result.c_str(), output.str().c_str());
+        EXPECT_STREQ(result.c_str(), dup.getCapture().c_str());
 
         // number of strings is decremented
         EXPECT_EQ(0, String::get_number());

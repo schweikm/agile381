@@ -8,14 +8,12 @@ class StringNonMemberTest : public testing::Test {
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.
-    virtual void SetUp() {
-    }
+/*    virtual void SetUp() { } */
 
     // virtual void TearDown() will be called after each test is run.
     // You should define it if there is cleanup work to do.  Otherwise,
     // you don't have to provide it.
-    virtual void TearDown() {
-    }
+/*    virtual void TearDown() { } */
 
     // Declares the variables your tests want to use.
 };

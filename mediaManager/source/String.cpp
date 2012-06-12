@@ -1,11 +1,10 @@
 #include <String.h>
 
 #include <cstddef>
+#include <cstdio>
 #include <cstring>
 #include <iostream>
 
-using std::cout;
-using std::endl;
 using std::istream;
 using std::ostream;
 
@@ -19,7 +18,7 @@ bool String::ourMessagesWanted  = false;
 String::String(const char* in_cstr) {
     // output message if wanted
     if (true == ourMessagesWanted) {
-        cout << "Ctor: \"" << in_cstr << "\"" << endl;
+        printf("Ctor: \"%s\"\n", in_cstr);
     }
 
     // calculate the sizes
@@ -40,7 +39,7 @@ String::String(const char* in_cstr) {
 String::String(const String& copy) {
     // output message if wanted
     if (true == ourMessagesWanted) {
-        cout << "Copy ctor: \"" << copy.c_str() << "\"" << endl;
+        printf("Copy ctor: \"%s\"\n", copy.c_str());
     }
 
     // copy the primitives
@@ -57,18 +56,16 @@ String::String(const String& copy) {
 }
 
 String& String::operator=(const String& other) {
-
 }
 
 String& String::operator=(const char* other) {
-
 }
 
 // destructor
 String::~String() {
     // output message if wanted
     if (true == ourMessagesWanted) {
-        cout << "Dtor: \"" << myInternalCStr << "\"" << endl;
+        printf("Dtor: \"%s\"\n", myInternalCStr);
     }
 
     // free the allocated memory
@@ -80,74 +77,56 @@ String::~String() {
 }
 
 char& String::operator[] (int i) {
-
 }
 
 const char& String::operator[] (int i) const {
-
 }
 
 String String::substring(int i, int len) const {
-
 }
 
 void String::clear() {
-
 }
 
 void String::remove(int i, int len) {
-
 }
 
 void String::insert_before(int i, const String& src) {
-
 }
 
 String& String::operator += (char rhs) {
-
 }
 
 String& String::operator += (const char * rhs) {
-
 }
 
 String& String::operator += (const String& rhs) {
-
 }
 
 void String::swap(String& other) { // NOLINT
-
 }
 
 bool operator== (const String& lhs, const String& rhs) {
-
 }
 
 bool operator!= (const String& lhs, const String& rhs) {
-
 }
 
 bool operator< (const String& lhs, const String& rhs) {
-
 }
 
 bool operator> (const String& lhs, const String& rhs) {
-
 }
 
 String operator+ (const String& lhs, const String& rhs) {
-
 }
 
 ostream& operator<< (ostream& os, const String& str) {
-
 }
 
 istream& operator>> (istream& is, String& str) {
-
 }
 
 istream& getline(istream& is, String& str) {
-
 }
 
