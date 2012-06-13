@@ -9,8 +9,8 @@ struct Error {
     const char * msg;
 };
 
-// define a function template named "swapem" that interchanges the values of two variables
-// use in Ordered_list and String where convenient
+// define a function template named "swapem" that interchanges the values of
+// two variables use in Ordered_list and String where convenient
 
 /* add any other functions declarations here and define in Utility.cpp */
 

@@ -14,8 +14,9 @@ class StreamDup {
     StreamDup()
       :myNewFd(0) {
         // make the tmp file unique
-        char buffer[50];
-        sprintf(buffer, "/tmp/gtest-%d.txt", getpid());
+        const int bufSize = 50;
+        char buffer[bufSize];
+        snprintf(buffer, bufSize, "/tmp/gtest-%d.txt", getpid());
         myTmpFile = buffer;
     }
 
@@ -30,7 +31,7 @@ class StreamDup {
         // flush stdout so any buffered messages are delivered
         fflush(stdout);
 
-        // close file and restore standard output to stdout - which should be the terminal
+        // close file and restore standard output to stdout
         dup2(myNewFd, fileno(stdout));
         close(myNewFd);
         clearerr(stdout);
@@ -38,29 +39,24 @@ class StreamDup {
     }
 
     string getCapture() {
-        FILE * file;
-        long size;
-        char* buffer;
-        long result;
-
-        file = fopen(myTmpFile.c_str(), "r");
+        FILE* file = fopen(myTmpFile.c_str(), "r");
         if (0 == file) {
             return "";
         }
 
         // obtain file size:
         fseek(file, 0, SEEK_END);
-        size = ftell(file);
+        int size = ftell(file);
         rewind(file);
 
         // allocate memory to contain the whole file:
-        buffer = new char[sizeof(char) * size];
+        char* buffer = new char[sizeof(char) * size]; // NOLINT
         if (0 == buffer) {
             return "";
         }
 
         // copy the file into the buffer:
-        result = fread(buffer, 1, size, file);
+        int result = fread(buffer, 1, size, file);
         if (result != size) {
             return "";
         }
@@ -69,7 +65,7 @@ class StreamDup {
         string val(buffer);
 
         // clean up
-        fclose (file);
+        fclose(file);
         delete [] buffer;
 
         return val;
@@ -84,7 +80,7 @@ class StreamDup {
 
 // To use a test fixture, derive a class from testing::Test.
 class StringMemberTest : public testing::Test {
-protected:
+  protected:
     // virtual void SetUp() will be called before each test is run.  You
     // should define it if you need to initialize the varaibles.
     // Otherwise, this can be skipped.

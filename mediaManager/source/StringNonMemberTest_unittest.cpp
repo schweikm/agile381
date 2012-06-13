@@ -44,16 +44,6 @@ TEST_F(StringNonMemberTest, operatorAddition) {
     ASSERT_EQ(1, 1);
 }
 
-// operator<<
-TEST_F(StringNonMemberTest, operatorStreamInput) {
-    ASSERT_EQ(1, 1);
-}
-
-// operator<<
-TEST_F(StringNonMemberTest, operatorStreamOutput) {
-    ASSERT_EQ(1, 1);
-}
-
 // getline
 TEST_F(StringNonMemberTest, getline) {
     ASSERT_EQ(1, 1);

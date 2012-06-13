@@ -3,10 +3,6 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
-
-using std::istream;
-using std::ostream;
 
 
 // initialize static members
@@ -121,12 +117,6 @@ bool operator> (const String& lhs, const String& rhs) {
 String operator+ (const String& lhs, const String& rhs) {
 }
 
-ostream& operator<< (ostream& os, const String& str) {
-}
-
-istream& operator>> (istream& is, String& str) {
-}
-
-istream& getline(istream& is, String& str) {
+String getline(const int fd) {
 }
 
