@@ -1,3 +1,10 @@
+#ifndef TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_
+#define TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_
+
+/*
+ * Copyright 2012 Marc Schweikert
+ */
+
 /*
  * String class - a subset of the C++ Standard Library <string> class
  * String objects contain a C-string in a dynamically allocated piece of memory
@@ -58,8 +65,10 @@
 
 // Simple exception class for reporting String errors
 struct String_exception {
-    String_exception(const char * in_msg) : msg(in_msg)
-        {}
+    explicit String_exception(const char * in_msg)
+      :msg(in_msg) {
+    }
+
     const char * msg;
 };
 
@@ -68,7 +77,7 @@ class String {
   public:
     // Default initialization is to contain an empty string; if a non-empty
     // C-string is supplied, this String gets minimum allocation.
-    String(const char * in_cstr = "");
+    explicit String(const char * in_cstr = "");
 
     // The copy constructor initializes this String with the original's data,
     // and gets minimum allocation.
@@ -145,7 +154,7 @@ class String {
     // pointers to the allocated C-strings, but the two C-strings
     // are neither copied nor modified. No memory allocation/deallocation is
     // done.
-    void swap(String& other);
+    void swap(String& other); // NOLINT
 
     /* Monitoring functions - not part of a normal implementation */
     /*  used here for demonstration and testing purposes. */
@@ -225,3 +234,4 @@ String operator+ (const String& lhs, const String& rhs);
 /* std::istream& getline(std::istream& is, String& str); */
 String getline(const int fd);
 
+#endif  // TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_

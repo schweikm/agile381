@@ -1,3 +1,10 @@
+#ifndef TRUNK_MEDIAMANAGER_INCLUDE_RECORD_H_
+#define TRUNK_MEDIAMANAGER_INCLUDE_RECORD_H_
+
+/*
+ * Copyright 2012 Marc Schweikert
+ */
+
 /* A Record ontains a unique ID number, assigned when the record is created, a
  * rating, and a title and medium name as Strings. Once created, only the
  * rating be modified.
@@ -21,12 +28,12 @@ class Record {
     // Create a Record object suitable for use as a probe containing the
     // supplied title. The ID and rating are set to 0, and the medium is an
     // empty String.
-    Record(const String& title_);
+    explicit Record(const String& title_);
 
     // Create a Record object suitable for use as a probe containing the
     // supplied ID number - the static member variable is not modified.
     // The rating is set to 0, and the medium and title are empty Strings.
-    Record(int ID_);
+    explicit Record(int ID_);
 
     // Construct a Record object from a file stream in save format.
     // Throw Error exception if invalid data discovered in file.
@@ -36,7 +43,7 @@ class Record {
     // The static member variable used for new ID numbers will be set to the
     // saved record ID if the saved record ID is larger than the static member
     // variable value.
-    Record(std::ifstream& is);
+    explicit Record(const std::ifstream& is);
 
     // Accessors
     int get_ID() const
@@ -58,7 +65,7 @@ class Record {
 
     // Write a Record's data to a stream in save format with final endl.
     // The record number is saved.
-    void save(std::ostream& os) const;
+    void save(const std::ostream& os) const;
 
     // This operator defines the order relation between Records, based just on
     // the last title
@@ -75,7 +82,7 @@ class Record {
 
     // These declarations help ensure that Record objects are unique
     Record(const Record&);  // disallow copy
-    Record& operator= (const Record&); // disallow assignment
+    Record& operator= (const Record&);  // disallow assignment
 };
 
 
@@ -84,3 +91,5 @@ class Record {
 // separated by one space.  If the rating is zero, a 'u' is printed instead
 // of the rating.
 std::ostream& operator<< (std::ostream& os, const Record& record);
+
+#endif  // TRUNK_MEDIAMANAGER_INCLUDE_RECORD_H_

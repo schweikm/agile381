@@ -14,11 +14,11 @@ cd mediaManager/source
 ROOT=`pwd`
 
 # then run the tool
-cd ../../..
-trunk/mediaManager/support/gcovr.py --root=$ROOT --xml --output=trunk/mediaManager/test_reports/gcovr.xml
+cd ../..
+mediaManager/support/gcovr.py --root=$ROOT --xml --output=mediaManager/test_reports/gcovr.xml
 
 # manually change the paths - needs update
-sed --in-place "s/obj_lin64/source/g;s/obj-UT_lin64/source/g" trunk/mediaManager/test_reports/gcovr.xml
+sed --in-place "s/obj_lin64/source/g;s/obj-UT_lin64/source/g" mediaManager/test_reports/gcovr.xml
 
 echo Done!
 
@@ -31,7 +31,7 @@ echo "=========================="
 echo
 echo
 
-cppcheck --enable=all --std=posix -I trunk/mediaManager/include/ trunk/mediaManager/source/ --xml >& trunk/mediaManager/test_reports/cppcheck-mediaManager.xml
+cppcheck --enable=all --std=posix -I mediaManager/include/ mediaManager/source/ --xml >& mediaManager/test_reports/cppcheck-mediaManager.xml
 echo Done!
 
 
@@ -43,5 +43,5 @@ echo "========================="
 echo
 echo
 
-trunk/mediaManager/support/run_cpplint.pl
+mediaManager/support/run_cpplint.pl
 echo Done!

@@ -1,3 +1,7 @@
+/*
+ * Copyright 2012 Marc Schweikert
+ */
+
 #include <String.h>
 #include <gtest/gtest.h>
 
@@ -14,9 +18,9 @@ class StreamDup {
     StreamDup()
       :myNewFd(0) {
         // make the tmp file unique
-        const int bufSize = 50;
-        char buffer[bufSize];
-        snprintf(buffer, bufSize, "/tmp/gtest-%d.txt", getpid());
+        const int kBufSize = 50;
+        char buffer[kBufSize];
+        snprintf(buffer, kBufSize, "/tmp/gtest-%d.txt", getpid());
         myTmpFile = buffer;
     }
 
@@ -49,20 +53,18 @@ class StreamDup {
         int size = ftell(file);
         rewind(file);
 
+        // return value
+        string val;
+
         // allocate memory to contain the whole file:
         char* buffer = new char[sizeof(char) * size]; // NOLINT
-        if (0 == buffer) {
-            return "";
+        if (0 != buffer) {
+            // copy the file into the buffer:
+            int result = fread(buffer, 1, size, file);
+            if (result == size) {
+                val = buffer;
+            }
         }
-
-        // copy the file into the buffer:
-        int result = fread(buffer, 1, size, file);
-        if (result != size) {
-            return "";
-        }
-
-        // get the return value
-        string val(buffer);
 
         // clean up
         fclose(file);

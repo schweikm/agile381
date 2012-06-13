@@ -1,11 +1,18 @@
+#ifndef TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_
+#define TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_
+
+/*
+ * Copyright 2012 Marc Schweikert
+ */
 
 /* Utility functions, constants, and classes used by other modules */
 
 // a simple class for error exceptions - msg points to a C-string error message
 struct Error {
-    Error(const char * in_msg = "") :
-        msg(in_msg)
-        {}
+    explicit Error(const char * in_msg = "")
+      :msg(in_msg) {
+    }
+
     const char * msg;
 };
 
@@ -14,3 +21,4 @@ struct Error {
 
 /* add any other functions declarations here and define in Utility.cpp */
 
+#endif  // TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_

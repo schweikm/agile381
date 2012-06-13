@@ -34,6 +34,7 @@ echo "|  g++           |  `g++ --version | head -1`                             
 echo "|  Perl          |  `perl --version | head -2 | tail -1`      |"
 echo "|  Python        |  $PYVER                                                                                |"
 echo "|  Ruby          |  `ruby --version`                                   |"
+echo "|  Sed           |  `sed --version | head -1`                                                                       |"
 echo "|  Cucumber      |  `cucumber --version`                                                                                       |"
 echo "|  Google Test   |  $GTEST                                                                                 |"
 echo "|  gcov          |  `gcov --version | head -1`                                                 |"

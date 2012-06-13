@@ -1,3 +1,10 @@
+#ifndef TRUNK_MEDIAMANAGER_INCLUDE_ORDERED_LIST_H_
+#define TRUNK_MEDIAMANAGER_INCLUDE_ORDERED_LIST_H_
+
+/*
+ * Copyright 2012 Marc Schweikert
+ */
+
 /*
  * Ordered_list is a linked-list class template  with iterators similar to the
  * Standard Library std::list class.  The iterators encapsulate a pointer to
@@ -137,14 +144,16 @@ class Ordered_list {
     class Iterator {
       public:
         // default initialize to zero
-        Iterator() :
-          node_ptr(0)
-          {}
+        Iterator()
+          : node_ptr(0) {
+        }
 
         // Overloaded dereferencing operators
         // * returns a reference to the datum in the pointed-to node
-        T& operator* () const
-            {/* fill this in */}
+        T& operator* () const {
+            /* fill this in */
+        }
+
         // operator-> simply returns the address of the data in the pointed-to
         // node.  For this operator, the compiler reapplies the -> operator
         // with the returned pointer.
@@ -152,23 +161,28 @@ class Ordered_list {
         /* *** definition supplied here because it is a special-case of
          * operator overloading.
          */
-        T* operator-> () const
-            {assert(node_ptr); return &(node_ptr->datum);}
+        T* operator-> () const {
+            assert(node_ptr);
+            return &(node_ptr->datum);
+        }
 
         // ++ operator moves the iterator forward to point to the next node
-        Iterator operator++ ()  // prefix
-        {
+        Iterator operator++ () {
             /* fill this in */
         }
-        Iterator operator++ (int)   // postfix
-        {
+
+        Iterator operator++ (int) {  // NOLINT
             /* fill this in */
         }
+
         // Iterators ar equal if they point to the same node
-        bool operator== (Iterator rhs) const
-        {/* fill this in */}
-        bool operator!= (Iterator rhs) const
-        {/* fill this in */}
+        bool operator== (Iterator rhs) const {
+            /* fill this in */
+        }
+
+        bool operator!= (Iterator rhs) const {
+            /* fill this in */
+        }
 
         // *** here, declare the outer Ordered_list class is a friend
 
@@ -222,13 +236,13 @@ class Ordered_list {
     // argument, and iterates through the list calling this function or each
     // datum in the list. The function is not allowed to modify items in the
     // list or th.
-    void apply(void (*apply_function) (const T&)) const;
+    void apply(void (*apply_function) (const T&)) const; // NOLINT
 
     // The apply_if functions are like the apply functions in that they call
     // the supplied function for each item in the list, but stop the iteration
     // and return true if the function returns true.
     // The function is not allowed to modify items in the list.
-    bool apply_if(bool (*apply_function) (const T&)) const;
+    bool apply_if(bool (*apply_function) (const T&)) const; // NOLINT
 
     // The following are templated member functions - they have an additional
     // template argument fo the type of the additional function parameter.
@@ -250,20 +264,21 @@ class Ordered_list {
     // stream by reference:
     //   my_OL.apply_arg<ofstream&>(output_item, outfile);
     template <typename Arg>
-    void apply_arg(void (*apply_function) (const T&, Arg),
+    void apply_arg(void (*apply_function) (const T&, Arg), // NOLINT
                                            Arg apply_arg) const;
 
     template <typename Arg>
-    bool apply_if_arg(bool (*apply_function) (const T&, Arg),
+    bool apply_if_arg(bool (*apply_function) (const T&, Arg), // NOLINT
                                               Arg apply_arg) const;
 
     // interchange the member variable values of this list with the other list
-    void swap(Ordered_list & other);
+    void swap(Ordered_list & other); // NOLINT
 
   private:
     // *** this is the member variable declaration for the ordering function -
     // name is your choice.
-    bool (*ordering_function) (const T&, const T&);
+    bool (*ordering_function) (const T&, const T&); // NOLINT
     /* *** private member variables and functions are your choice. */
 };
 
+#endif  // TRUNK_MEDIAMANAGER_INCLUDE_ORDERED_LIST_H_

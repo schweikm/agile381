@@ -1,3 +1,10 @@
+#ifndef TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
+#define TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
+
+/*
+ * Copyright 2012 Marc Schweikert
+ */
+
 /* Collections contain a name and a container of members,
  * represented as pointers to Records.
  * Collection objects manage their own Record container.
@@ -13,7 +20,7 @@
 class Collection {
   public:
     // Construct a collection with the specified name and no members
-    Collection(const String& name_)
+    explicit Collection(const String& name_)
     /*fill this in*/
 
     // Construct a Collection from an input file stream in save format, using
@@ -44,7 +51,7 @@ class Collection {
 
     // Write a Collections's data to a stream in save format, with endl as
     // specified.
-    void save(std::ostream& os) const;
+    void save(const std::ostream& os) const;
 
     // This operator defines the order relation between Collections, based just
     // on the name
@@ -64,3 +71,5 @@ class Collection {
 
 // Print the Collection data
 std::ostream& operator<< (std::ostream& os, const Collection& Collection);
+
+#endif  // TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
