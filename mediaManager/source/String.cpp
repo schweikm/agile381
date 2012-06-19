@@ -2,7 +2,7 @@
  * Copyright 2012 Marc Schweikert
  */
 
-#include <String.h>
+#include "String.h"
 
 #include <cstddef>
 #include <cstdio>
@@ -15,20 +15,21 @@ int  String::ourTotalAllocation = 0;
 bool String::ourMessagesWanted  = false;
 
 // constructor
-String::String(const char* in_cstr) {
+String::String(const char* const in_cstr) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Ctor: \"%s\"\n", in_cstr);
     }
 
     // calculate the sizes
-    size_t strSize = strlen(in_cstr);
+    const int strSize = static_cast<int>(strlen(in_cstr));
     myInternalCStrSize = strSize;
     myInternalCStrAllocation = strSize + 1;
 
     // create the internal buffer and copy the data
     myInternalCStr = new char[myInternalCStrAllocation];
-    strncpy(myInternalCStr, in_cstr, myInternalCStrAllocation);
+    strncpy(myInternalCStr, in_cstr,
+              static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
     ourNumber++;
@@ -48,17 +49,18 @@ String::String(const String& copy) {
 
     // deep copy the internal C string
     myInternalCStr = new char[myInternalCStrAllocation];
-    strncpy(myInternalCStr, copy.c_str(), myInternalCStrAllocation);
+    strncpy(myInternalCStr, copy.c_str(),
+              static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
     ourNumber++;
     ourTotalAllocation += myInternalCStrAllocation;
 }
 
-String& String::operator=(const String& other) {
+const String& String::operator=(const String& other) {
 }
 
-String& String::operator=(const char* other) {
+const String& String::operator=(const char* const other) {
 }
 
 // destructor
@@ -76,34 +78,34 @@ String::~String() {
     ourTotalAllocation -= myInternalCStrAllocation;
 }
 
-char& String::operator[] (int i) {
+const char& String::operator[] (const int i) {
 }
 
-const char& String::operator[] (int i) const {
+const char& String::operator[] (const int i) const {
 }
 
-String String::substring(int i, int len) const {
+const String String::substring(const int i, const int len) const {
 }
 
 void String::clear() {
 }
 
-void String::remove(int i, int len) {
+void String::remove(const int i, const int len) {
 }
 
-void String::insert_before(int i, const String& src) {
+void String::insert_before(const int i, const String& src) {
 }
 
-String& String::operator += (char rhs) {
+const String& String::operator += (const char rhs) {
 }
 
-String& String::operator += (const char * rhs) {
+const String& String::operator += (const char* const rhs) {
 }
 
-String& String::operator += (const String& rhs) {
+const String& String::operator += (const String& rhs) {
 }
 
-void String::swap(String& other) { // NOLINT
+void String::swap(const String& other) { // NOLINT
 }
 
 bool operator== (const String& lhs, const String& rhs) {
@@ -118,9 +120,9 @@ bool operator< (const String& lhs, const String& rhs) {
 bool operator> (const String& lhs, const String& rhs) {
 }
 
-String operator+ (const String& lhs, const String& rhs) {
+const String operator+ (const String& lhs, const String& rhs) {
 }
 
-String getline(const int fd) {
+const String getline(const int fd) {
 }
 

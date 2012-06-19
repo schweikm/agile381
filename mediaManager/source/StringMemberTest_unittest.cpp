@@ -2,12 +2,13 @@
  * Copyright 2012 Marc Schweikert
  */
 
-#include <String.h>
-#include <gtest/gtest.h>
-
 #include <cstddef>
 #include <cstdio>
 #include <string>
+
+#include "gtest/gtest.h"
+
+#include "String.h"
 
 using std::string;
 
@@ -42,7 +43,7 @@ class StreamDup {
         fsetpos(stdout, &stdoutPos);
     }
 
-    string getCapture() {
+    const string getCapture() const {
         FILE* file = fopen(myTmpFile.c_str(), "r");
         if (0 == file) {
             return "";
@@ -50,17 +51,17 @@ class StreamDup {
 
         // obtain file size:
         fseek(file, 0, SEEK_END);
-        int size = ftell(file);
+        const int size = ftell(file);
         rewind(file);
 
         // return value
         string val;
 
-        // allocate memory to contain the whole file:
-        char* buffer = new char[sizeof(char) * size]; // NOLINT
+        // allocate memory to contain the whole file
+        char* buffer = new char[sizeof(buffer) * size];
         if (0 != buffer) {
             // copy the file into the buffer:
-            int result = fread(buffer, 1, size, file);
+            const int result = fread(buffer, 1, size, file);
             if (result == size) {
                 val = buffer;
             }
@@ -94,15 +95,12 @@ class StringMemberTest : public testing::Test {
 /*    virtual void TearDown() { } */
 
     // Constructor Helper
-    void ConstructorHelper(string in_string) {
+    void ConstructorHelper(const string& in_string) {
         // capture the ouput to stdout
         StreamDup dup;
 
-        // MAINTENANCE
-        //    I'm not sure how to convert std::endl to a character,
-        //    so I'll do this hack instead
-        char newline = '\n';
-        string result = "Ctor: \"" + in_string + "\"" + newline;
+        // expected output
+        const string result = "Ctor: \"" + in_string + "\"\n";
 
         // capture the statics before creating the String instance
         const int numStrings = String::get_number();
@@ -125,15 +123,12 @@ class StringMemberTest : public testing::Test {
     }
 
     // Copy Constructor Helper
-    void CopyConstructorHelper(string in_string) {
+    void CopyConstructorHelper(const string& in_string) {
         // capture the ouput to stdout
         StreamDup dup;
 
-        // MAINTENANCE
-        //    I'm not sure how to convert std::endl to a character,
-        //    so I'll do this hack instead
-        char newline = '\n';
-        string result = "Copy ctor: \"" + in_string + "\"" + newline;
+        // expected output
+        const string result = "Copy ctor: \"" + in_string + "\"\n";
 
         // create the String to copy from
         String::set_messages_wanted(false);
@@ -160,10 +155,10 @@ class StringMemberTest : public testing::Test {
     }
 
     // utility method to compare the String data
-    void verifyStrings(const char* expected_stdout_cstr,
-                       const char* actual_stdout_cstr,
-                       const char* expected_cstr,
-                       const char* actual_cstr,
+    void verifyStrings(const char* const expected_stdout_cstr,
+                       const char* const actual_stdout_cstr,
+                       const char* const expected_cstr,
+                       const char* const actual_cstr,
                        const int expected_length,
                        const int actual_length,
                        const int expected_allocation,
@@ -292,12 +287,7 @@ TEST_F(StringMemberTest, Destructor) {
         }  // test1 goes out of scope - destructor called
 
         dup.stopCapture();
-
-        // MAINTENANCE
-        //    I'm not sure how to convert std::endl to a character,
-        //    so I'll do this hack instead
-        char newline = '\n';
-        string result = "Dtor: \"" + test1Val + "\"" + newline;
+        const string result = "Dtor: \"" + test1Val + "\"\n";
 
         // message to cout is correct
         EXPECT_STREQ(result.c_str(), dup.getCapture().c_str());

@@ -2,8 +2,8 @@
  * Copyright 2012 Marc Schweikert
  */
 
-#include <String.h>
-#include <gtest/gtest.h>
+#include "String.h"
+#include "gtest/gtest.h"
 
 
 // To use a test fixture, derive a class from testing::Test.
