@@ -9,7 +9,7 @@ use Data::Dumper;
 
 # directories
 my $UT_DIR = "../bin/UnitTest";
-my $TEST_REP_DIR = "../test_reports";
+my $REP_DIR = "../reports";
 
 # executables
 my $valgrind = "/usr/bin/valgrind";
@@ -26,12 +26,12 @@ my $namePrefix = "xunit";
         if($file =~ m/[.]*_UT.exe$/) {
             # define the local variables
             my $testName = substr($file, 0, length($file) - 7);
-            my $valgrindFile = $TEST_REP_DIR . "/valgrind_$testName" . ".xml";
-            my $xUnitFile = $TEST_REP_DIR . "/" . $namePrefix . "-" .$testName . "Valgrind.xml";
+            my $valgrindFile = $REP_DIR . "/valgrind_$testName" . ".xml";
+            my $xUnitFile = $REP_DIR . "/" . $namePrefix . "-" .$testName . "Valgrind.xml";
 
             # run the Unit Test
             system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=$valgrindFile " .
-                   "$UT_DIR/$file --gtest_output=xml:$TEST_REP_DIR/" . $namePrefix . "-" . $testName . ".xml")
+                   "$UT_DIR/$file --gtest_output=xml:$REP_DIR/" . $namePrefix . "-" . $testName . ".xml")
               && die "Could not execute Unit Test \"$file\": $!\n";
 
             # then convert the valgrind XML file

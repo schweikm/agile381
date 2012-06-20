@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
-#define TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
+#ifndef TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
+#define TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
 
 /*
  * Copyright 2012 Marc Schweikert
@@ -72,4 +72,4 @@ class Collection {
 // Print the Collection data
 std::ostream& operator<< (std::ostream& os, const Collection& Collection);
 
-#endif  // TRUNK_MEDIAMANAGER_INCLUDE_COLLECTION_H_
+#endif  // TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_

@@ -1,24 +1,24 @@
 include support/standard_macro.mak
 
 #### Objects to Build ####
-SUB_DIRS = .
+SUB_DIRS = manager test
 
 
 #### Module-specific macros ####
-TEST_REP_DIR = test_reports
-BIN_DIR      = bin
+REP_DIR = reports
+BIN_DIR = bin
 
 
 #### Targets ####
 all:
 	@for dir in $(SUB_DIRS); do \
-		$(MAKE) -C $$dir/source all; \
+		$(MAKE) -C $$dir all; \
 	done
 
 clean:
 	@for dir in $(SUB_DIRS); do \
-		$(MAKE) -C $$dir/source clean; \
+		$(MAKE) -C $$dir clean; \
 	done
-	@$(RM) $(TEST_REP_DIR)/*
+	@$(RM) $(REP_DIR)/*
 	@$(RMDIR) $(BIN_DIR)/$(UT_DIR)
 

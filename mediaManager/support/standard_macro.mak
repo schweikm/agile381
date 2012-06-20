@@ -68,7 +68,7 @@ endif
 #### COMMON MACROS ####
 #######################
 OBJ_DIR    = obj_$(ARCH)
-INC_DIRS   = -I ../include
+INC_DIRS   = -I .
 BIN_DIR    =
 
 GCC_VER = $(shell $(CC)  --version | head -1 | cut -d ' ' -f 3)
@@ -93,7 +93,7 @@ endif
 GTEST_GENERIC_FLAGS = -Wall -Wextra
 GTEST_OBJ_DIR       = obj-UT_$(ARCH)
 UT_DIR              = UnitTest
-GTEST_INC_DIRS      =
+GTEST_INC_DIRS      = -I .
 
 
 ########################

@@ -2,7 +2,7 @@
  * Copyright 2012 Marc Schweikert
  */
 
-#include "String.h"
+#include "manager/String.h"
 
 #include <cstddef>
 #include <cstdio>

@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 # directories
-my $INC_DIR = "mediaManager/include";
-my $SRC_DIR = "mediaManager/source";
-my $TEST_REP_DIR = "mediaManager/test_reports";
+my $SRC_DIR = "mediaManager/manager";
+my $INC_DIR = $SRC_DIR;
+my $REP_DIR = "mediaManager/reports";
 
 # scripts
 my $cpplint_exe = "mediaManager/support/cpplint.py";
@@ -30,7 +30,7 @@ sub runCpplint {
 
     foreach my $file (@files) {
         if($file =~ m/[.]*$ext$/) {
-            system("$cpplint_exe $dir/$file >& $TEST_REP_DIR/cpplint-$file.log");
+            system("$cpplint_exe $dir/$file >& $REP_DIR/cpplint-$file.log");
         }
     } 
     closedir(DIR);

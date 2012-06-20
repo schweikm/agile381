@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_
-#define TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_
+#ifndef TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_
+#define TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_
 
 /*
  * Copyright 2012 Marc Schweikert
@@ -21,4 +21,4 @@ struct Error {
 
 /* add any other functions declarations here and define in Utility.cpp */
 
-#endif  // TRUNK_MEDIAMANAGER_INCLUDE_UTILITY_H_
+#endif  // TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_

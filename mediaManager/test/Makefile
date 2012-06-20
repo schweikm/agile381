@@ -14,21 +14,22 @@ GTEST_DIR    = ../../gtest-1.6.0
 
 
 #### Module-specific Options ####
+SRC_DIR        =  ../manager
+GTEST_INC_DIRS += -I $(SRC_DIR)
 
 #### Objects to Build ####
-OBJS       = $(OBJ_DIR)/String.o
 GTEST_OBJS = $(GTEST_OBJ_DIR)/StringMemberTest_unittest.o \
              $(GTEST_OBJ_DIR)/StringNonMemberTest_unittest.o
 
 # Google Test targets
 GTEST_STRING_MEMBER      = $(BIN_DIR)/$(UT_DIR)/StringMemberTest_UT.exe
-GTEST_STRING_MEMBER_OBJS = $(OBJ_DIR)/String.o $(GTEST_OBJ_DIR)/StringMemberTest_unittest.o
+GTEST_STRING_MEMBER_OBJS = $(SRC_DIR)/$(OBJ_DIR)/String.o $(GTEST_OBJ_DIR)/StringMemberTest_unittest.o
 
 GTEST_STRING_NONMEMBER      = $(BIN_DIR)/$(UT_DIR)/StringNonMemberTest_UT.exe
-GTEST_STRING_NONMEMBER_OBJS = $(OBJ_DIR)/String.o $(GTEST_OBJ_DIR)/StringNonMemberTest_unittest.o
+GTEST_STRING_NONMEMBER_OBJS = $(SRC_DIR)/$(OBJ_DIR)/String.o $(GTEST_OBJ_DIR)/StringNonMemberTest_unittest.o
 
 #### Targets ####
-all: $(OBJS) $(GTEST_OBJS) $(GTEST_STRING_MEMBER) $(GTEST_STRING_NONMEMBER)
+all: $(GTEST_OBJS) $(GTEST_STRING_MEMBER) $(GTEST_STRING_NONMEMBER)
     # handled by standard_rules.mak
 
 
@@ -57,7 +58,6 @@ $(GTEST_DIR)/src/gtest-all.o $(GTEST_DIR)/src/gtest_main.o -pthread -o $@
 
 
 clean:
-	@$(RMDIR) $(OBJ_DIR)
 	@$(RMDIR) $(GTEST_OBJ_DIR)
 	@$(RM) $(GTEST_STRING_MEMBER)
 	@$(RM) $(GTEST_STRING_NONMEMBER)

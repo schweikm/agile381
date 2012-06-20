@@ -59,7 +59,7 @@ $(GTEST_OBJ_DIR)/%.o: %.cpp
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
 	@$(MKDIR) $(GTEST_OBJ_DIR)
-	$(CXX) $(GTEST_C_FLAGS) $(INC_DIRS) -I $(GTEST_DIR)/include -o $@ $<
+	$(CXX) $(GTEST_C_FLAGS) $(GTEST_INC_DIRS) -I $(GTEST_DIR)/include -o $@ $<
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
 	@$(ECHO) "================================================================================"

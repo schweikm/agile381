@@ -31,5 +31,5 @@ export DEBUG=on
 export RELEASE=off
 export COVERAGE=on
 export PROFILE=off
-make -wB |& tee test_reports/gcc-mediaManager.log
+make -wB |& tee reports/gcc-mediaManager.log
 cd ..

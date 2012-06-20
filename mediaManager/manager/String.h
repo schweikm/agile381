@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_
-#define TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_
+#ifndef TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
+#define TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
 
 /*
  * Copyright 2012 Marc Schweikert
@@ -233,4 +233,4 @@ const String operator+ (const String& lhs, const String& rhs);
 /* std::istream& getline(std::istream& is, String& str); */
 const String getline(const int fd);
 
-#endif  // TRUNK_MEDIAMANAGER_INCLUDE_STRING_H_
+#endif  // TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
