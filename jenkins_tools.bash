@@ -18,7 +18,7 @@ cd ../..
 mediaManager/support/gcovr.py --root=$ROOT --xml --output=mediaManager/reports/gcovr.xml
 
 # manually change the paths - needs update
-sed --in-place "s/obj_lin64/manager/g;s/obj-UT_lin64/manager/g" mediaManager/reports/gcovr.xml
+sed --in-place "s/obj_lin64\///g;s/manager\///g" mediaManager/reports/gcovr.xml
 
 echo Done!
 
