@@ -5,12 +5,12 @@
 #include <cstddef>
 #include <cstdio>
 #include <string>
+    using std::string;
 
 #include "gtest/gtest.h"
 
 #include "String.h"
 
-using std::string;
 
 
 // class that captures stdout and stores it in a file
@@ -193,14 +193,6 @@ class StringMemberTest : public testing::Test {
 //
 // Constructor
 //
-//    DEPENDS ON:
-//      - c_str()
-//      - size()
-//      - get_allocation()
-//      - String::get_number()
-//      - String::get_total_allocation()
-//      - String::set_messages_wanted()
-//
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Contructor) {
     // TEST 1
@@ -224,15 +216,6 @@ TEST_F(StringMemberTest, Contructor) {
 //
 // Copy Constructor
 //
-//    DEPENDS ON:
-//      - String()
-//      - c_str()
-//      - size()
-//      - get_allocation()
-//      - String::get_number()
-//      - String::get_total_allocation()
-//      - String::set_messages_wanted()
-//
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, CopyContructor) {
     // TEST 1
@@ -252,8 +235,29 @@ TEST_F(StringMemberTest, CopyContructor) {
     CopyConstructorHelper("");
 }
 
-// assignment operator
-TEST_F(StringMemberTest, AssignmentOperator) {
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator= (String)
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, AssignmentOperatorString) {
+    String::set_messages_wanted(false);
+    String test1("1 - from String");
+    String test2;
+    test2 = test1;
+    ASSERT_EQ(1, 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator= (char)
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, AssignmentOperatorChar) {
+    String::set_messages_wanted(false);
+    const char* const test1 = "1 - from C string";
+    String test2;
+    test2 = test1;
     ASSERT_EQ(1, 1);
 }
 
@@ -261,86 +265,128 @@ TEST_F(StringMemberTest, AssignmentOperator) {
 //
 // Destructor
 //
-//    DEPENDS ON:
-//      - String()
-//      - String::get_number()
-//      - String::set_messages_wanted()
-//      - String::get_total_allocation()
-//
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, Destructor) {
     // turn off diagnostic messages
     String::set_messages_wanted(false);
+
+    // capture the statics before creating the String instance
+    const int numStrings = String::get_number();
+    const int totalAllocation = String::get_total_allocation();
+
+    // capture the ouput to stdout
+    StreamDup dup;
+    string test1Val = "alpha";
+
     {
-        // capture the ouput to stdout
-        StreamDup dup;
-        string test1Val = "alpha";
+        String test1(test1Val.c_str());
+        EXPECT_EQ(numStrings + 1, String::get_number());
+        EXPECT_EQ(test1Val.length() + 1, totalAllocation + String::get_total_allocation());
 
-        {
-            String test1(test1Val.c_str());
-            EXPECT_EQ(1, String::get_number());
-            EXPECT_EQ(test1Val.length() + 1, String::get_total_allocation());
+        // turn on diagnostic messages
+        String::set_messages_wanted(true);
+        dup.startCapture();
+    }  // test1 goes out of scope - destructor called
 
-            // turn on diagnostic messages
-            String::set_messages_wanted(true);
-            dup.startCapture();
-        }  // test1 goes out of scope - destructor called
+    dup.stopCapture();
+    const string result = "Dtor: \"" + test1Val + "\"\n";
 
-        dup.stopCapture();
-        const string result = "Dtor: \"" + test1Val + "\"\n";
+    // message to cout is correct
+    EXPECT_STREQ(result.c_str(), dup.getCapture().c_str());
 
-        // message to cout is correct
-        EXPECT_STREQ(result.c_str(), dup.getCapture().c_str());
+    // number of strings is decremented
+    EXPECT_EQ(numStrings, String::get_number());
 
-        // number of strings is decremented
-        EXPECT_EQ(0, String::get_number());
-
-        // allocation is decreased
-        EXPECT_EQ(0, String::get_total_allocation());
-    }
+    // allocation is decreased
+    EXPECT_EQ(totalAllocation, String::get_total_allocation());
 }
 
-// c_str()
-TEST_F(StringMemberTest, cStr) {
-    ASSERT_EQ(1, 1);
-}
-
-// size
-TEST_F(StringMemberTest, size) {
-    ASSERT_EQ(1, 1);
-}
-
+///////////////////////////////////////////////////////////////////////////////
+//
 // operator[]
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, OperatorAccessor) {
     ASSERT_EQ(1, 1);
 }
 
-// substring
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator[] const
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, OperatorAccessorConst) {
+    ASSERT_EQ(1, 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// substring()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, substring) {
     ASSERT_EQ(1, 1);
 }
 
-// clear
+///////////////////////////////////////////////////////////////////////////////
+//
+// clear()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, clear) {
     ASSERT_EQ(1, 1);
 }
 
-// remove
+///////////////////////////////////////////////////////////////////////////////
+//
+// remove()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, remove) {
     ASSERT_EQ(1, 1);
 }
 
-// insert_before
+///////////////////////////////////////////////////////////////////////////////
+//
+// insert_before()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, insertBefore) {
     ASSERT_EQ(1, 1);
 }
 
-// operator+=
-TEST_F(StringMemberTest, operatorConcatenation) {
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator+= (char)
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, operatorConcatenationChar) {
     ASSERT_EQ(1, 1);
 }
 
-// swap
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator+= (char const)
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, operatorConcatenationCharConst) {
+    ASSERT_EQ(1, 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// operator+= (String)
+//
+///////////////////////////////////////////////////////////////////////////////
+TEST_F(StringMemberTest, operatorConcatenationString) {
+    ASSERT_EQ(1, 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// swap()
+//
+///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, swap) {
     ASSERT_EQ(1, 1);
 }

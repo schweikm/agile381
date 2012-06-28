@@ -58,9 +58,11 @@ String::String(const String& copy) {
 }
 
 const String& String::operator=(const String& other) {
+//    printf("Assign from String:  \"%s\"\n", other.c_str());
 }
 
 const String& String::operator=(const char* const other) {
+//    printf("Assign from C-string:  \"%s\"\n", other);
 }
 
 // destructor

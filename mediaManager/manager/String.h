@@ -96,16 +96,13 @@ class String {
 
     // Accesssors
     // Return a pointer to the internal C-string
-    char* c_str() const
-        { return myInternalCStr; }
+    char* c_str() const;
 
     // Return size of internal C-string in this String
-    int size() const
-        { return myInternalCStrSize; }
+    int size() const;
 
     // Return current allocation for this String
-    int get_allocation() const
-        { return myInternalCStrAllocation; }
+    int get_allocation() const;
 
     // Return a reference to character i in the string.
     // Throw exception if 0 <= i < size is false.
@@ -159,18 +156,15 @@ class String {
     /*  used here for demonstration and testing purposes. */
 
     // Return the total number of Strings in existence
-    static int get_number()
-        { return ourNumber; }
+    static int get_number();
 
     // Return total bytes allocated for all Strings in existence
-    static int get_total_allocation()
-        { return ourTotalAllocation; }
+    static int get_total_allocation();
 
     // Call with true to cause ctor, assignment, and dtor messages to be
     // output.  These messages are output from each function before it does
     // anything else.
-    static void set_messages_wanted(const bool in_messagesWanted)
-        { ourMessagesWanted = in_messagesWanted; }
+    static void set_messages_wanted(const bool in_messagesWanted);
 
   private:
     // internal C string
@@ -232,5 +226,43 @@ const String operator+ (const String& lhs, const String& rhs);
 // str contains whatever characters were read.
 /* std::istream& getline(std::istream& is, String& str); */
 const String getline(const int fd);
+
+
+////////////////////////
+//  INLINE FUNCTIONS  //
+////////////////////////
+
+
+// Return a pointer to the internal C-string
+inline char* String::c_str() const {
+    return myInternalCStr;
+}
+
+// Return size of internal C-string in this String
+inline int String::size() const {
+    return myInternalCStrSize;
+}
+
+// Return current allocation for this String
+inline int String::get_allocation() const {
+    return myInternalCStrAllocation;
+}
+
+// Return the total number of Strings in existence
+inline int String::get_number() {
+    return ourNumber;
+}
+
+// Return total bytes allocated for all Strings in existence
+inline int String::get_total_allocation() {
+    return ourTotalAllocation;
+}
+
+// Call with true to cause ctor, assignment, and dtor messages to be
+// output.  These messages are output from each function before it does
+// anything else.
+inline void String::set_messages_wanted(const bool in_messagesWanted) {
+    ourMessagesWanted = in_messagesWanted;
+}
 
 #endif  // TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
