@@ -46,9 +46,11 @@ endif
 
 ARCH = $(SYS)$(MACH)
 
+
 #######################
 #### SYSTEM MACROS ####
 #######################
+
 CC    = /usr/bin/gcc
 CXX   = /usr/bin/g++
 AR    = /usr/bin/ar
@@ -67,30 +69,16 @@ endif
 #######################
 #### COMMON MACROS ####
 #######################
+
 OBJ_DIR    = obj_$(ARCH)
 INC_DIRS   = -I .
-BIN_DIR    =
-
-GCC_VER = $(shell $(CC)  --version | head -1 | cut -d ' ' -f 3)
-OLD_GCC = undef
-
-ifeq ($(SYSTEM),Linux)
-    OLD_GCC = 4.6.1
-endif
-
-ifeq ($(SYSTEM),Darwin)
-    OLD_GCC = 4.2.1
-endif
-
-ifeq ($(SYSTEM),SunOS)
-    OLD_GCC = 4.5.2
-endif
+BIN_DIR    = bin
 
 
 #############################
 #### GOOGLE TEST OPTIONS ####
 #############################
-GTEST_GENERIC_FLAGS = -Wall -Wextra
+
 GTEST_OBJ_DIR       = obj-UT_$(ARCH)
 UT_DIR              = UnitTest
 GTEST_INC_DIRS      = -I .
@@ -176,6 +164,7 @@ GTEST_INC_DIRS      = -I .
 ## -Winvalid-pch:  Warn if a precompiled header is found in the search path but can't be used
 ## -Wdisabled-optimization:  Warn if a requested optimization pass is disabled
 ## -Wstack-protector:  Warns about functions that will not be protected against stack smashing
+
 GENERIC_CFLAGS  = -ansi -pedantic -Wall -Wextra -Wformat=2 \
                   -Winit-self -Wmissing-include-dirs -Wswitch-default -Wswitch-enum \
                   -Wunused-parameter -Wunknown-pragmas -Wfloat-equal \
@@ -195,6 +184,7 @@ GENERIC_CFLAGS  = -ansi -pedantic -Wall -Wextra -Wformat=2 \
 ## -Wmissing-prototypes:  Warn if a global function is defined without a previous prototype declaration
 ## -Wnested-externs:  Warn if an extern declaration is encountered within a function
 ## -Wunsuffixed-float-constants:  GCC will issue a warning for any floating constant that does not have a suffix
+
 C_WARN_CFLAGS   = -Wdeclaration-after-statement -Wbad-function-cast -Wc++-compat \
                   -Wstrict-prototypes -Wold-style-definition -Wmissing-prototypes \
                   -Wnested-externs -Wunsuffixed-float-constants
@@ -207,6 +197,7 @@ C_WARN_CFLAGS   = -Wdeclaration-after-statement -Wbad-function-cast -Wc++-compat
 ## -Wold-style-cast:  Warn if an old-style (C-style) cast to a non-void type is used within a C++ program
 ## -Woverloaded-virtual:  Warn when a function declaration hides virtual functions from a base class
 ## -Wsign-promo:  Warn when overload resolution chooses a promotion from unsigned or enumerated type to a signed type
+
 C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel \
                   -Wold-style-cast -Woverloaded-virtual -Wsign-promo
 
@@ -217,7 +208,6 @@ C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel
 
 ifeq ($(DEBUG),on)
     GENERIC_CFLAGS      += -g3 -ggdb3 -DDEBUG
-    GTEST_GENERIC_FLAGS += -g3 -ggdb3 -DDEBUG
 endif
 
 
@@ -227,7 +217,6 @@ endif
 
 ifeq ($(RELEASE),on)
     GENERIC_CFLAGS      += -O3
-    GTEST_GENERIC_FLAGS += -O3
 endif
 
 
@@ -237,7 +226,6 @@ endif
 
 ifeq ($(PROFILE),on)
     GENERIC_CFLAGS      += -pg
-    GTEST_GENERIC_FLAGS += -pg
 endif
 
 
@@ -247,7 +235,6 @@ endif
 
 ifeq ($(COVERAGE),on)
     GENERIC_CFLAGS      += -fprofile-arcs -ftest-coverage
-    GTEST_GENERIC_FLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 
@@ -268,23 +255,20 @@ ifeq ($(SYSTEM),Linux)
     PLATFORM_CFLAGS += -Wdouble-promotion -Wtrampolines -Wunused-local-typedefs
 endif
 
-PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
-PLATFORM_C_C++FLAGS = $(PLATFORM_CFLAGS)
-
 ifneq ($(SYSTEM),Darwin)
     ## -Wmissing-declarations:  Warn if a global function is defined without a previous declaration
-    PLATFORM_C_CFLAGS   += -Wmissing-declarations
+    PLATFORM_CFLAGS   += -Wmissing-declarations
 endif
 
 #### Build the combined flags ####
+PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
+PLATFORM_C_C++FLAGS = $(PLATFORM_CFLAGS)
+
 BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_FLAGS) $(PLATFORM_C_CFLAGS)
 BASE_C++FLAGS = $(GENERIC_CFLAGS) $(C++_WARN_FLAGS) $(PLATFORM_C_C++FLAGS)
 
 CFLAGS   = -c $(BASE_CFLAGS)
 C++FLAGS = -c $(BASE_C++FLAGS)
-
-GTEST_C_FLAGS = $(GTEST_GENERIC_FLAGS) -c
-GTEST_L_FLAGS = $(GTEST_GENERIC_FLAGS)
 
 
 #######################

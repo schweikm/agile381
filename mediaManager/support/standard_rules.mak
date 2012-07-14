@@ -2,7 +2,6 @@
 #### C LANGUAGE TARGETS ####
 ############################
 
-
 $(OBJ_DIR)/%.o: %.c ../include/%.h
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
@@ -27,7 +26,6 @@ $(OBJ_DIR)/%.o: %.c
 ##############################
 #### C++ LANGUAGE TARGETS ####
 ##############################
-
 
 $(OBJ_DIR)/%.o: %.cpp ../include/%.h
 	@$(ECHO)
@@ -54,12 +52,11 @@ $(OBJ_DIR)/%.o: %.cpp
 #### GOOGLE C++ TESTING FRAMEWORK TARGETS ####
 ##############################################
 
-
 $(GTEST_OBJ_DIR)/%.o: %.cpp
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
 	@$(MKDIR) $(GTEST_OBJ_DIR)
-	$(CXX) $(GTEST_C_FLAGS) $(GTEST_INC_DIRS) -I $(GTEST_DIR)/include -o $@ $<
+	$(CXX) $(C++FLAGS) $(GTEST_INC_DIRS) -I $(GTEST_DIR)/include -o $@ $<
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
 	@$(ECHO) "================================================================================"

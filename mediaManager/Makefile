@@ -8,12 +8,19 @@ SUB_DIRS = manager test
 REP_DIR = reports
 BIN_DIR = bin
 
+.PHONY: manager test
 
 #### Targets ####
 all:
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir all; \
 	done
+
+manager:
+	$(MAKE) -C manager all
+
+test:
+	$(MAKE) -C test all
 
 clean:
 	@for dir in $(SUB_DIRS); do \
