@@ -37,7 +37,7 @@ $(GTEST_STRING_MEMBER): $(GTEST_STRING_MEMBER_OBJS)
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
 	@$(MKDIR) $(BIN_DIR)/$(UT_DIR)
-	$(CXX) $(GTEST_L_FLAGS) $(GTEST_STRING_MEMBER_OBJS) \
+	$(CXX) $(L++FLAGS) $(GTEST_STRING_MEMBER_OBJS) \
 $(GTEST_DIR)/src/gtest-all.o $(GTEST_DIR)/src/gtest_main.o -pthread -o $@
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
@@ -49,7 +49,7 @@ $(GTEST_STRING_NONMEMBER): $(GTEST_STRING_NONMEMBER_OBJS)
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
 	@$(MKDIR) $(BIN_DIR)/$(UT_DIR)
-	$(CXX) $(GTEST_L_FLAGS) $(GTEST_STRING_NONMEMBER_OBJS) \
+	$(CXX) $(L++FLAGS) $(GTEST_STRING_NONMEMBER_OBJS) \
 $(GTEST_DIR)/src/gtest-all.o $(GTEST_DIR)/src/gtest_main.o -pthread -o $@
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""

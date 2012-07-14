@@ -207,7 +207,7 @@ C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel
 #####################
 
 ifeq ($(DEBUG),on)
-    GENERIC_CFLAGS      += -g3 -ggdb3 -DDEBUG
+    GENERIC_CFLAGS += -g3 -ggdb3 -DDEBUG
 endif
 
 
@@ -216,7 +216,7 @@ endif
 #######################
 
 ifeq ($(RELEASE),on)
-    GENERIC_CFLAGS      += -O3
+    GENERIC_CFLAGS += -O3
 endif
 
 
@@ -225,7 +225,7 @@ endif
 #######################
 
 ifeq ($(PROFILE),on)
-    GENERIC_CFLAGS      += -pg
+    GENERIC_CFLAGS += -pg
 endif
 
 
@@ -234,7 +234,7 @@ endif
 ########################
 
 ifeq ($(COVERAGE),on)
-    GENERIC_CFLAGS      += -fprofile-arcs -ftest-coverage
+    GENERIC_CFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 
