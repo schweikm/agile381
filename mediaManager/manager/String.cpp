@@ -4,6 +4,7 @@
 
 #include "manager/String.h"
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
@@ -58,11 +59,23 @@ String::String(const String& copy) {
 }
 
 const String& String::operator=(const String& other) {
-//    printf("Assign from String:  \"%s\"\n", other.c_str());
+    if (true == ourMessagesWanted) {
+        printf("Assign from String:  \"%s\"\n", other.c_str());
+    }
+
+    String temp(other);  // Copy-constructor -- RAII
+    temp.swap(*this);    // Non-throwing swap
+    return *this;
 }
 
 const String& String::operator=(const char* const other) {
-//    printf("Assign from C-string:  \"%s\"\n", other);
+    if (true == ourMessagesWanted) {
+        printf("Assign from C-string:  \"%s\"\n", other);
+    }
+
+    String temp(other);  // Copy-constructor -- RAII
+    temp.swap(*this);    // Non-throwing swap
+    return *this;
 }
 
 // destructor
@@ -107,7 +120,10 @@ const String& String::operator += (const char* const rhs) {
 const String& String::operator += (const String& rhs) {
 }
 
-void String::swap(const String& other) { // NOLINT
+void String::swap(String& other) { // NOLINT
+    std::swap(myInternalCStr,           other.myInternalCStr);
+    std::swap(myInternalCStrSize,       other.myInternalCStrSize);
+    std::swap(myInternalCStrAllocation, other.myInternalCStrAllocation);
 }
 
 bool operator== (const String& lhs, const String& rhs) {

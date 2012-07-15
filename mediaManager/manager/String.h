@@ -150,7 +150,7 @@ class String {
     // pointers to the allocated C-strings, but the two C-strings
     // are neither copied nor modified. No memory allocation/deallocation is
     // done.
-    void swap(const String& other); // NOLINT
+    void swap(String& other); // NOLINT
 
     /* Monitoring functions - not part of a normal implementation */
     /*  used here for demonstration and testing purposes. */

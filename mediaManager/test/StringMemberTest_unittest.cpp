@@ -184,6 +184,18 @@ class StringMemberTest : public testing::Test {
         EXPECT_EQ(expected_totalAllocation, String::get_total_allocation());
     }
 
+    // utility method to verify equality of String and string
+    void compareStrings(const string& a, const String& b) {
+        // String value is correct
+        EXPECT_STREQ(a.c_str(), b.c_str());
+
+        // the length is correct
+        EXPECT_EQ(a.length(), b.size());
+
+        // the allocation is correct
+        EXPECT_EQ(a.length() + 1, b.get_allocation());
+    }
+
 
     // Declares the variables your tests want to use.
 };
@@ -241,11 +253,30 @@ TEST_F(StringMemberTest, CopyContructor) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, AssignmentOperatorString) {
-    String::set_messages_wanted(false);
-    String test1("1 - from String");
+    const string test = "operator= - from String";
+    const string expectedStdout = "Assign from String:  \"" + test + "\"\n" +
+                                  "Copy ctor: \"" + test + "\"\n" +
+                                  "Dtor: \"\"\n";
+    StreamDup dup;
+
+    String test1(test.c_str());
     String test2;
+
+    // turn on diagnostic messages
+    String::set_messages_wanted(true);
+
+    dup.startCapture();
     test2 = test1;
-    ASSERT_EQ(1, 1);
+    dup.stopCapture();
+
+    // turn off diagnostic messages
+    String::set_messages_wanted(false);
+
+    // message to stdout is correct
+    EXPECT_STREQ(expectedStdout.c_str(), dup.getCapture().c_str());
+
+    // strings are equivalent
+    compareStrings(test, test2);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -254,11 +285,28 @@ TEST_F(StringMemberTest, AssignmentOperatorString) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, AssignmentOperatorChar) {
+    const char* const test = "operator= - from C-string";
+    const string expectedStdout = "Assign from C-string:  \"" + string(test) + "\"\n" +
+                                  "Ctor: \"" + string(test) + "\"\n" +
+                                  "Dtor: \"\"\n";
+    StreamDup dup;
+    String test1;
+
+    // turn on diagnostic messages
+    String::set_messages_wanted(true);
+
+    dup.startCapture();
+    test1 = test;
+    dup.stopCapture();
+
+    // turn off diagnostic messages
     String::set_messages_wanted(false);
-    const char* const test1 = "1 - from C string";
-    String test2;
-    test2 = test1;
-    ASSERT_EQ(1, 1);
+
+    // message to stdout is correct
+    EXPECT_STREQ(expectedStdout.c_str(), dup.getCapture().c_str());
+
+    // strings are equivalent
+    compareStrings(string(test), test1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -290,6 +338,9 @@ TEST_F(StringMemberTest, Destructor) {
 
     dup.stopCapture();
     const string result = "Dtor: \"" + test1Val + "\"\n";
+
+    // turn off diagnostic messages
+    String::set_messages_wanted(false);
 
     // message to cout is correct
     EXPECT_STREQ(result.c_str(), dup.getCapture().c_str());
@@ -388,6 +439,44 @@ TEST_F(StringMemberTest, operatorConcatenationString) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, swap) {
-    ASSERT_EQ(1, 1);
+    // turn off messages
+    String::set_messages_wanted(false);
+
+    // make two different Strings
+    String a("alpha beta");
+    String b("charlie delta");
+
+    // store the values of the member variables
+    const char* const a_cstr = a.c_str();
+    const int a_size = a.size();
+    const int a_alloc = a.get_allocation();
+
+    const char* const b_cstr = b.c_str();
+    const int b_size = b.size();
+    const int b_alloc = b.get_allocation();
+
+    // now swap the string contents
+    a.swap(b);
+
+    //
+    // and verify that the contents were swapped
+    // and no heap allocation / deallocation occurred
+    //
+
+    // string values
+    EXPECT_STREQ(a_cstr, b.c_str());
+    EXPECT_STREQ(b_cstr, a.c_str());
+
+    // pointer values (no heap move)
+    EXPECT_EQ(a_cstr, b.c_str());
+    EXPECT_EQ(b_cstr, a.c_str());
+
+    // size
+    EXPECT_EQ(a_size, b.size());
+    EXPECT_EQ(b_size, a.size());
+
+    // allocation
+    EXPECT_EQ(a_alloc, b.get_allocation());
+    EXPECT_EQ(b_alloc, a.get_allocation());
 }
 

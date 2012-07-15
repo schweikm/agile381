@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o errexit
 
 
 # find the google test directory
