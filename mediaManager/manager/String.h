@@ -87,8 +87,8 @@ class String {
     // The assign from String must use the "copy-swap" idiom; you should use
     // the obvious "construct and swap" variation on this for assigning from a
     // C-string.
-    const String& operator=(const String& other);
-    const String& operator=(const char* const other);
+    String& operator=(const String& other);
+    String& operator=(const char* const other);
 
     // destructor
     ~String();
@@ -117,7 +117,7 @@ class String {
     // If both i = size and len = 0, the input is valid and the result is an
     // empty string.
     // Throw exception if the input is invalid.
-    const String substring(const int i, const int len) const;
+    String substring(const int i, const int len) const;
 
     // Modifiers
     // Set to an empty string with minimum allocation by create/swap with an
@@ -205,7 +205,7 @@ bool operator> (const String& lhs, const String& rhs);
 // if the String constructor was declared "explicit".  This function constructs
 // a copy of the lhs, then concatenates the rhs to it with operator +=, and
 // returns it.
-const String operator+ (const String& lhs, const String& rhs);
+String operator+ (const String& lhs, const String& rhs);
 
 // input and output operators and functions
 // The output operator writes the contents of the String to the stream
@@ -225,7 +225,7 @@ const String operator+ (const String& lhs, const String& rhs);
 // needed, and it retains the final allocation.  If the input stream fails,
 // str contains whatever characters were read.
 /* std::istream& getline(std::istream& is, String& str); */
-const String getline(const int fd);
+String getline(const int fd);
 
 
 ////////////////////////

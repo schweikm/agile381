@@ -58,7 +58,7 @@ String::String(const String& copy) {
     ourTotalAllocation += myInternalCStrAllocation;
 }
 
-const String& String::operator=(const String& other) {
+String& String::operator=(const String& other) {
     if (true == ourMessagesWanted) {
         printf("Assign from String:  \"%s\"\n", other.c_str());
     }
@@ -68,7 +68,7 @@ const String& String::operator=(const String& other) {
     return *this;
 }
 
-const String& String::operator=(const char* const other) {
+String& String::operator=(const char* const other) {
     if (true == ourMessagesWanted) {
         printf("Assign from C-string:  \"%s\"\n", other);
     }
@@ -99,7 +99,7 @@ const char& String::operator[] (const int i) {
 const char& String::operator[] (const int i) const {
 }
 
-const String String::substring(const int i, const int len) const {
+String String::substring(const int i, const int len) const {
 }
 
 void String::clear() {
@@ -138,9 +138,9 @@ bool operator< (const String& lhs, const String& rhs) {
 bool operator> (const String& lhs, const String& rhs) {
 }
 
-const String operator+ (const String& lhs, const String& rhs) {
+String operator+ (const String& lhs, const String& rhs) {
 }
 
-const String getline(const int fd) {
+String getline(const int fd) {
 }
 
