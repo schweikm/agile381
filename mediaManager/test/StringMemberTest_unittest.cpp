@@ -94,6 +94,12 @@ class StringMemberTest : public testing::Test {
     // you don't have to provide it.
 /*    virtual void TearDown() { } */
 
+
+    //////////////////////
+    // HELPER FUNCTIONS //
+    //////////////////////
+
+
     // Constructor Helper
     void ConstructorHelper(const string& in_string) {
         // capture the ouput to stdout
@@ -153,6 +159,12 @@ class StringMemberTest : public testing::Test {
                       numStrings + 1        , totalAllocation +
                                                 testStr.get_allocation());
     }
+
+
+    /////////////////////
+    // UTILITY METHODS //
+    /////////////////////
+
 
     // utility method to compare the String data
     void verifyStrings(const char* const expected_stdout_cstr,
@@ -358,7 +370,12 @@ TEST_F(StringMemberTest, Destructor) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, OperatorAccessor) {
-    ASSERT_EQ(1, 1);
+    const string a("all your base are belong to us");
+    String b(a.c_str());
+
+    for(size_t i = 0; i < a.length(); i++) {
+        EXPECT_EQ(a[i], b[i]);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -367,7 +384,12 @@ TEST_F(StringMemberTest, OperatorAccessor) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, OperatorAccessorConst) {
-    ASSERT_EQ(1, 1);
+    const string a("all your base are belong to us");
+    const String b(a.c_str());
+
+    for(size_t i = 0; i < a.length(); i++) {
+        EXPECT_EQ(a[i], b[i]);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -41,7 +41,7 @@ echo "|  Google Test   |  $GTEST                                                
 echo "|  gcov          |  `gcov --version | head -1`                                                 |"
 echo "|  gcovr.py      |  `mediaManager/support/gcovr.py --version | head -1`                                                                |"
 echo "|  Cppcheck      |  `cppcheck --version`                                                                               |"
-echo "|  Cpplint       |  google-styleguide - Revision 83                                                             |"
+echo "|  Cpplint       |  google-styleguide - Revision 86                                                             |"
 echo "-----------------------------------------------------------------------------------------------------------------"
 
 

@@ -8,6 +8,8 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <new>
+  using std::bad_alloc;
 
 
 // initialize static members
@@ -16,7 +18,7 @@ int  String::ourTotalAllocation = 0;
 bool String::ourMessagesWanted  = false;
 
 // constructor
-String::String(const char* const in_cstr) {
+String::String(const char* const in_cstr) throw(bad_alloc) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Ctor: \"%s\"\n", in_cstr);
@@ -28,9 +30,16 @@ String::String(const char* const in_cstr) {
     myInternalCStrAllocation = strSize + 1;
 
     // create the internal buffer and copy the data
-    myInternalCStr = new char[myInternalCStrAllocation];
-    strncpy(myInternalCStr, in_cstr,
-              static_cast<size_t>(myInternalCStrAllocation));
+    try {
+        myInternalCStr = new char[myInternalCStrAllocation];
+        strncpy(myInternalCStr, in_cstr,
+                  static_cast<size_t>(myInternalCStrAllocation));
+    }
+    catch(const bad_alloc& ex) {
+        fprintf(stderr, "Caught exception while allocating String!\n");
+        fprintf(stderr, "%s\n", ex.what());
+        throw ex;
+    }
 
     // update the static members
     ourNumber++;
@@ -38,7 +47,7 @@ String::String(const char* const in_cstr) {
 }
 
 // copy constructor
-String::String(const String& copy) {
+String::String(const String& copy) throw(bad_alloc) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Copy ctor: \"%s\"\n", copy.c_str());
@@ -49,16 +58,23 @@ String::String(const String& copy) {
     myInternalCStrAllocation = copy.get_allocation();
 
     // deep copy the internal C string
-    myInternalCStr = new char[myInternalCStrAllocation];
-    strncpy(myInternalCStr, copy.c_str(),
-              static_cast<size_t>(myInternalCStrAllocation));
+    try {
+        myInternalCStr = new char[myInternalCStrAllocation];
+        strncpy(myInternalCStr, copy.c_str(),
+                  static_cast<size_t>(myInternalCStrAllocation));
+    }
+    catch(const bad_alloc& ex) {
+        fprintf(stderr, "Caught exception while allocating String!\n");
+        fprintf(stderr, "%s\n", ex.what());
+        throw ex;
+    }
 
     // update the static members
     ourNumber++;
     ourTotalAllocation += myInternalCStrAllocation;
 }
 
-String& String::operator=(const String& other) {
+String& String::operator=(const String& other) throw() {
     if (true == ourMessagesWanted) {
         printf("Assign from String:  \"%s\"\n", other.c_str());
     }
@@ -68,7 +84,7 @@ String& String::operator=(const String& other) {
     return *this;
 }
 
-String& String::operator=(const char* const other) {
+String& String::operator=(const char* const other) throw() {
     if (true == ourMessagesWanted) {
         printf("Assign from C-string:  \"%s\"\n", other);
     }
@@ -79,7 +95,7 @@ String& String::operator=(const char* const other) {
 }
 
 // destructor
-String::~String() {
+String::~String() throw() {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Dtor: \"%s\"\n", myInternalCStr);
@@ -87,60 +103,57 @@ String::~String() {
 
     // free the allocated memory
     delete [] myInternalCStr;
+    myInternalCStr = 0;
 
     // update the static members
     ourNumber--;
     ourTotalAllocation -= myInternalCStrAllocation;
 }
 
-const char& String::operator[] (const int i) {
+String String::substring(const int i, const int len) const
+  throw(String_exception) {
 }
 
-const char& String::operator[] (const int i) const {
+void String::clear() throw() {
 }
 
-String String::substring(const int i, const int len) const {
+void String::remove(const int i, const int len) throw(String_exception) {
 }
 
-void String::clear() {
+void String::insert_before(const int i, const String& src)
+  throw(String_exception) {
 }
 
-void String::remove(const int i, const int len) {
+const String& String::operator += (const char rhs) throw() {
 }
 
-void String::insert_before(const int i, const String& src) {
+const String& String::operator += (const char* const rhs) throw() {
 }
 
-const String& String::operator += (const char rhs) {
+const String& String::operator += (const String& rhs) throw() {
 }
 
-const String& String::operator += (const char* const rhs) {
-}
-
-const String& String::operator += (const String& rhs) {
-}
-
-void String::swap(String& other) { // NOLINT
+void String::swap(String& other) throw() { // NOLINT
     std::swap(myInternalCStr,           other.myInternalCStr);
     std::swap(myInternalCStrSize,       other.myInternalCStrSize);
     std::swap(myInternalCStrAllocation, other.myInternalCStrAllocation);
 }
 
-bool operator== (const String& lhs, const String& rhs) {
+bool operator== (const String& lhs, const String& rhs) throw() {
 }
 
-bool operator!= (const String& lhs, const String& rhs) {
+bool operator!= (const String& lhs, const String& rhs) throw() {
 }
 
-bool operator< (const String& lhs, const String& rhs) {
+bool operator< (const String& lhs, const String& rhs) throw() {
 }
 
-bool operator> (const String& lhs, const String& rhs) {
+bool operator> (const String& lhs, const String& rhs) throw() {
 }
 
-String operator+ (const String& lhs, const String& rhs) {
+String operator+ (const String& lhs, const String& rhs) throw() {
 }
 
-String getline(const int fd) {
+String getline(const int fd) throw() {
 }
 
