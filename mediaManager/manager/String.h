@@ -61,11 +61,10 @@
  * Constructor, Destructor, or Assignment operator as part of their work.
  */
 
-#include <new>
 
 // Simple exception class for reporting String errors
 struct String_exception {
-    explicit String_exception(const char* const in_msg) throw()
+    explicit String_exception(const char* const in_msg)
       :msg(in_msg) { }
 
     const char* msg;
@@ -76,11 +75,11 @@ class String {
   public:
     // Default initialization is to contain an empty string; if a non-empty
     // C-string is supplied, this String gets minimum allocation.
-    explicit String(const char* const in_cstr = "") throw(std::bad_alloc);
+    explicit String(const char* const in_cstr = "");
 
     // The copy constructor initializes this String with the original's data,
     // and gets minimum allocation.
-    String(const String& copy) throw(std::bad_alloc);
+    String(const String& copy);
 
     // There are two assignment operators: one has a String on the right-hand
     // side, the other a C-string (char *). In both cases, the left-hand-side
@@ -88,27 +87,27 @@ class String {
     // The assign from String must use the "copy-swap" idiom; you should use
     // the obvious "construct and swap" variation on this for assigning from a
     // C-string.
-    String& operator=(const String& other) throw();
-    String& operator=(const char* const other) throw();
+    String& operator=(const String& other);
+    String& operator=(const char* const other);
 
     // destructor
-    ~String() throw();
+    ~String();
 
     // Accesssors
     // Return a pointer to the internal C-string
-    char* c_str() const throw();
+    char* c_str() const;
 
     // Return size of internal C-string in this String
-    int size() const throw();
+    int size() const;
 
     // Return current allocation for this String
-    int get_allocation() const throw();
+    int get_allocation() const;
 
     // Return a reference to character i in the string.
     // Throw exception if 0 <= i < size is false.
-    const char& operator[] (const int i) throw(String_exception);
+    const char& operator[] (const int i);
     // const version for const Strings
-    const char& operator[] (const int i) const throw(String_exception);
+    const char& operator[] (const int i) const;
 
     // Return a String starting with i and extending for len characters
     // The substring must be contained within the string.
@@ -117,54 +116,54 @@ class String {
     // If both i = size and len = 0, the input is valid and the result is an
     // empty string.
     // Throw exception if the input is invalid.
-    String substring(const int i, const int len) const throw(String_exception);
+    String substring(const int i, const int len) const;
 
     // Modifiers
     // Set to an empty string with minimum allocation by create/swap with an
     // empty string.
-    void clear() throw();
+    void clear();
 
     // Remove the len characters starting at i; allocation is unchanged.
     // The removed characters must be contained within the String.
     // Valid values for i and len are the same as for substring.
-    void remove(const int i, const int len) throw(String_exception);
+    void remove(const int i, const int len);
 
     // Insert the supplied source String before character i
     // Pushing the rest of the contents back, reallocating as needed.
     // If i == size, the inserted string is added to the end of this String.
     // This String retains the final allocation.
     // Throw exception if 0 <= i <= size is false
-    void insert_before(const int i, const String& src) throw(String_exception);
+    void insert_before(const int i, const String& src);
 
     // These concatenation operators add the rhs string data to the lhs object.
     // They do not create any temporary String objects. They either directly
     // copy the rhs data into the lhs space if it is big enough to hold the
     // rhs, or allocate new space and copy the old lhs data into it followed by
     // the rhs data. The lhs object retains the final memory allocation.
-    const String& operator += (const char rhs) throw();
-    const String& operator += (const char* const rhs) throw();
-    const String& operator += (const String& rhs) throw();
+    const String& operator += (const char rhs);
+    const String& operator += (const char* const rhs);
+    const String& operator += (const String& rhs);
 
     // Swap the contents of this String with another one.
     // The member variable values are interchanged, along with the
     // pointers to the allocated C-strings, but the two C-strings
     // are neither copied nor modified. No memory allocation/deallocation is
     // done.
-    void swap(String& other) throw(); // NOLINT
+    void swap(String& other); // NOLINT
 
     /* Monitoring functions - not part of a normal implementation */
     /*  used here for demonstration and testing purposes. */
 
     // Return the total number of Strings in existence
-    static int get_number() throw();
+    static int get_number();
 
     // Return total bytes allocated for all Strings in existence
-    static int get_total_allocation() throw();
+    static int get_total_allocation();
 
     // Call with true to cause ctor, assignment, and dtor messages to be
     // output.  These messages are output from each function before it does
     // anything else.
-    static void set_messages_wanted(const bool in_messagesWanted) throw();
+    static void set_messages_wanted(const bool in_messagesWanted);
 
   private:
     // internal C string
@@ -193,10 +192,10 @@ class String {
 
 // compare lhs and rhs strings; constructor will convert a C-string literal to
 // a String.  Comparison is based on std::strcmp result compared to 0
-bool operator== (const String& lhs, const String& rhs) throw();
-bool operator!= (const String& lhs, const String& rhs) throw();
-bool operator< (const String& lhs, const String& rhs) throw();
-bool operator> (const String& lhs, const String& rhs) throw();
+bool operator== (const String& lhs, const String& rhs);
+bool operator!= (const String& lhs, const String& rhs);
+bool operator< (const String& lhs, const String& rhs);
+bool operator> (const String& lhs, const String& rhs);
 
 // Concatenate a String with another String.
 // If one of the arguments is a C-string, the String constructor will
@@ -205,7 +204,7 @@ bool operator> (const String& lhs, const String& rhs) throw();
 // if the String constructor was declared "explicit".  This function constructs
 // a copy of the lhs, then concatenates the rhs to it with operator +=, and
 // returns it.
-String operator+ (const String& lhs, const String& rhs) throw();
+String operator+ (const String& lhs, const String& rhs);
 
 // input and output operators and functions
 // The output operator writes the contents of the String to the stream
@@ -225,7 +224,7 @@ String operator+ (const String& lhs, const String& rhs) throw();
 // needed, and it retains the final allocation.  If the input stream fails,
 // str contains whatever characters were read.
 /* std::istream& getline(std::istream& is, String& str); */
-String getline(const int fd) throw();
+String getline(const int fd);
 
 
 ////////////////////////
@@ -233,36 +232,35 @@ String getline(const int fd) throw();
 ////////////////////////
 
 
-inline char* String::c_str() const throw() {
+inline char* String::c_str() const {
     return myInternalCStr;
 }
 
-inline int String::size() const throw() {
+inline int String::size() const {
     return myInternalCStrSize;
 }
 
-inline int String::get_allocation() const throw() {
+inline int String::get_allocation() const {
     return myInternalCStrAllocation;
 }
 
-inline const char& String::operator[] (const int i) throw(String_exception) {
+inline const char& String::operator[] (const int i) {
     return myInternalCStr[i];
 }
 
-inline const char& String::operator[] (const int i) const
-  throw(String_exception) {
+inline const char& String::operator[] (const int i) const {
     return myInternalCStr[i];
 }
 
-inline int String::get_number() throw() {
+inline int String::get_number() {
     return ourNumber;
 }
 
-inline int String::get_total_allocation() throw() {
+inline int String::get_total_allocation() {
     return ourTotalAllocation;
 }
 
-inline void String::set_messages_wanted(const bool in_messagesWanted) throw() {
+inline void String::set_messages_wanted(const bool in_messagesWanted) {
     ourMessagesWanted = in_messagesWanted;
 }
 

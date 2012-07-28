@@ -2,10 +2,6 @@
 set -o errexit
 
 
-# find the google test directory
-GTEST=`ls | grep gtest`
-
-
 echo
 echo
 echo "============================="

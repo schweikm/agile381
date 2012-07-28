@@ -18,7 +18,7 @@ int  String::ourTotalAllocation = 0;
 bool String::ourMessagesWanted  = false;
 
 // constructor
-String::String(const char* const in_cstr) throw(bad_alloc) {
+String::String(const char* const in_cstr) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Ctor: \"%s\"\n", in_cstr);
@@ -38,7 +38,7 @@ String::String(const char* const in_cstr) throw(bad_alloc) {
     catch(const bad_alloc& ex) {
         fprintf(stderr, "Caught exception while allocating String!\n");
         fprintf(stderr, "%s\n", ex.what());
-        throw ex;
+        throw bad_alloc(ex);
     }
 
     // update the static members
@@ -47,7 +47,7 @@ String::String(const char* const in_cstr) throw(bad_alloc) {
 }
 
 // copy constructor
-String::String(const String& copy) throw(bad_alloc) {
+String::String(const String& copy) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Copy ctor: \"%s\"\n", copy.c_str());
@@ -66,7 +66,7 @@ String::String(const String& copy) throw(bad_alloc) {
     catch(const bad_alloc& ex) {
         fprintf(stderr, "Caught exception while allocating String!\n");
         fprintf(stderr, "%s\n", ex.what());
-        throw ex;
+        throw bad_alloc(ex);
     }
 
     // update the static members
@@ -74,7 +74,7 @@ String::String(const String& copy) throw(bad_alloc) {
     ourTotalAllocation += myInternalCStrAllocation;
 }
 
-String& String::operator=(const String& other) throw() {
+String& String::operator=(const String& other) {
     if (true == ourMessagesWanted) {
         printf("Assign from String:  \"%s\"\n", other.c_str());
     }
@@ -84,7 +84,7 @@ String& String::operator=(const String& other) throw() {
     return *this;
 }
 
-String& String::operator=(const char* const other) throw() {
+String& String::operator=(const char* const other) {
     if (true == ourMessagesWanted) {
         printf("Assign from C-string:  \"%s\"\n", other);
     }
@@ -95,7 +95,7 @@ String& String::operator=(const char* const other) throw() {
 }
 
 // destructor
-String::~String() throw() {
+String::~String() {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Dtor: \"%s\"\n", myInternalCStr);
@@ -110,50 +110,48 @@ String::~String() throw() {
     ourTotalAllocation -= myInternalCStrAllocation;
 }
 
-String String::substring(const int i, const int len) const
-  throw(String_exception) {
+String String::substring(const int i, const int len) const {
 }
 
-void String::clear() throw() {
+void String::clear() {
 }
 
-void String::remove(const int i, const int len) throw(String_exception) {
+void String::remove(const int i, const int len) {
 }
 
-void String::insert_before(const int i, const String& src)
-  throw(String_exception) {
+void String::insert_before(const int i, const String& src) {
 }
 
-const String& String::operator += (const char rhs) throw() {
+const String& String::operator += (const char rhs) {
 }
 
-const String& String::operator += (const char* const rhs) throw() {
+const String& String::operator += (const char* const rhs) {
 }
 
-const String& String::operator += (const String& rhs) throw() {
+const String& String::operator += (const String& rhs) {
 }
 
-void String::swap(String& other) throw() { // NOLINT
+void String::swap(String& other) { // NOLINT
     std::swap(myInternalCStr,           other.myInternalCStr);
     std::swap(myInternalCStrSize,       other.myInternalCStrSize);
     std::swap(myInternalCStrAllocation, other.myInternalCStrAllocation);
 }
 
-bool operator== (const String& lhs, const String& rhs) throw() {
+bool operator== (const String& lhs, const String& rhs) {
 }
 
-bool operator!= (const String& lhs, const String& rhs) throw() {
+bool operator!= (const String& lhs, const String& rhs) {
 }
 
-bool operator< (const String& lhs, const String& rhs) throw() {
+bool operator< (const String& lhs, const String& rhs) {
 }
 
-bool operator> (const String& lhs, const String& rhs) throw() {
+bool operator> (const String& lhs, const String& rhs) {
 }
 
-String operator+ (const String& lhs, const String& rhs) throw() {
+String operator+ (const String& lhs, const String& rhs) {
 }
 
-String getline(const int fd) throw() {
+String getline(const int fd) {
 }
 

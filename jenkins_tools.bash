@@ -12,7 +12,7 @@ echo
 
 # set the root for code coverage
 cd mediaManager/manager
-ROOT=`pwd`
+readonly ROOT=`pwd`
 
 # then run the tool
 cd ../..
