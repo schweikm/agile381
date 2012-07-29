@@ -5,6 +5,7 @@ use warnings;
 
 # directories
 my $SRC_DIR = "mediaManager/manager";
+my $TST_DIR = "mediaManager/test";
 my $INC_DIR = $SRC_DIR;
 my $REP_DIR = "mediaManager/reports";
 
@@ -19,6 +20,7 @@ my $SRC_EXT = ".cpp";
 {
     &runCpplint($INC_DIR, $INC_EXT);
     &runCpplint($SRC_DIR, $SRC_EXT);
+    &runCpplint($TST_DIR, $SRC_EXT);
 }
 
 sub runCpplint {

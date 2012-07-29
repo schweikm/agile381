@@ -245,10 +245,13 @@ inline int String::get_allocation() const {
 }
 
 inline const char& String::operator[] (const int i) {
-    return myInternalCStr[i];
+    return (const_cast<const String*>(this))->operator[](i);
 }
 
 inline const char& String::operator[] (const int i) const {
+    if ((i < 0) || (i >= myInternalCStrSize)) {
+        throw String_exception("Subscript out of range");
+    }
     return myInternalCStr[i];
 }
 

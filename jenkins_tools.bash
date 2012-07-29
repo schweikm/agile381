@@ -32,7 +32,7 @@ echo "=========================="
 echo
 echo
 
-cppcheck --enable=all --std=posix -I mediaManager/manager/ -I mediaManager/ mediaManager/manager/*.cpp --xml >& mediaManager/reports/cppcheck-mediaManager.xml
+cppcheck --enable=all --std=posix -I mediaManager mediaManager/manager/ --xml >& mediaManager/reports/cppcheck-manager.xml
 echo Done!
 
 

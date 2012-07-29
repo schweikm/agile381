@@ -16,8 +16,8 @@ set -o errexit
 
 #### Versions that cannot be found normally ####
 
-# Google Test - this is used in subsequent scripts
-readonly GTEST=`ls | grep gtest`
+# Google Test
+GTEST=`ls | grep gtest`
 
 # Cpplint
 readonly CPPLINTVER="google-styleguide - Revision 86"

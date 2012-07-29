@@ -15,7 +15,7 @@ GTEST_DIR    = ../../gtest-1.6.0
 
 #### Module-specific Options ####
 SRC_DIR        =  ../manager
-GTEST_INC_DIRS += -I $(SRC_DIR)
+GTEST_INC_DIRS += -I $(SRC_DIR) -I ..
 
 #### Objects to Build ####
 GTEST_OBJS = $(GTEST_OBJ_DIR)/StringMemberTest_unittest.o \

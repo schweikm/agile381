@@ -9,7 +9,7 @@
 
 #include "gtest/gtest.h"
 
-#include "String.h"
+#include "manager/String.h"
 
 
 
@@ -298,7 +298,8 @@ TEST_F(StringMemberTest, AssignmentOperatorString) {
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, AssignmentOperatorChar) {
     const char* const test = "operator= - from C-string";
-    const string expectedStdout = "Assign from C-string:  \"" + string(test) + "\"\n" +
+    const string expectedStdout = "Assign from C-string:  \"" + string(test) +
+                                    "\"\n" +
                                   "Ctor: \"" + string(test) + "\"\n" +
                                   "Dtor: \"\"\n";
     StreamDup dup;
@@ -341,7 +342,8 @@ TEST_F(StringMemberTest, Destructor) {
     {
         String test1(test1Val.c_str());
         EXPECT_EQ(numStrings + 1, String::get_number());
-        EXPECT_EQ(test1Val.length() + 1, totalAllocation + String::get_total_allocation());
+        EXPECT_EQ(test1Val.length() + 1, totalAllocation +
+                                           String::get_total_allocation());
 
         // turn on diagnostic messages
         String::set_messages_wanted(true);
@@ -366,30 +368,43 @@ TEST_F(StringMemberTest, Destructor) {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// operator[]
+// operator[] and operator[] const
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, OperatorAccessor) {
     const string a("all your base are belong to us");
     String b(a.c_str());
+    const String c(a.c_str());
 
-    for(size_t i = 0; i < a.length(); i++) {
+    // normal case
+    for (size_t i = 0; i < a.length(); i++) {
         EXPECT_EQ(a[i], b[i]);
+        EXPECT_EQ(a[i], c[i]);
     }
-}
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// operator[] const
-//
-///////////////////////////////////////////////////////////////////////////////
-TEST_F(StringMemberTest, OperatorAccessorConst) {
-    const string a("all your base are belong to us");
-    const String b(a.c_str());
+    // non-const less than zero
+    try {
+        b[-1];
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
 
-    for(size_t i = 0; i < a.length(); i++) {
-        EXPECT_EQ(a[i], b[i]);
-    }
+    // const less than zero
+    try {
+        c[-1];
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const greater than size
+    try {
+        b[a.length() + 1];
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const greater than size
+    try {
+        c[a.length() + 1];
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

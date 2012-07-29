@@ -10,6 +10,7 @@ echo "============================="
 echo
 echo
 
+GTEST=`ls | grep gtest`
 cd $GTEST
 ./configure
 make -wB
