@@ -14,10 +14,9 @@ GTEST_DIR    = ../../gtest-1.6.0
 
 
 #### Module-specific Options ####
-INC_DIRS += -I ..
 
 #### Objects to Build ####
-OBJS       = $(OBJ_DIR)/String.o
+OBJS       = String.o
 
 #### Targets ####
 all: $(OBJS)
@@ -25,9 +24,11 @@ all: $(OBJS)
 
 
 clean:
-	@$(RMDIR) $(OBJ_DIR)
+	@$(RM) *.o
 	@$(RM) gmon.out
 	@$(RM) *.gcov
+	@$(RM) *.gcno
+	@$(RM) *.gcda
 
 
 include ../support/standard_rules.mak

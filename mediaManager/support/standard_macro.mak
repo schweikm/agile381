@@ -70,18 +70,9 @@ endif
 #### COMMON MACROS ####
 #######################
 
-OBJ_DIR    = obj_$(ARCH)
-INC_DIRS   = -I .
-BIN_DIR    = bin
-
-
-#############################
-#### GOOGLE TEST OPTIONS ####
-#############################
-
-GTEST_OBJ_DIR       = obj-UT_$(ARCH)
-UT_DIR              = UnitTest
-GTEST_INC_DIRS      = -I .
+INC_DIRS = -I . -I ..
+BIN_DIR  = bin
+UT_DIR   = UnitTest
 
 
 ########################
@@ -198,7 +189,7 @@ C_WARN_CFLAGS   = -Wdeclaration-after-statement -Wbad-function-cast -Wc++-compat
 ## -Woverloaded-virtual:  Warn when a function declaration hides virtual functions from a base class
 ## -Wsign-promo:  Warn when overload resolution chooses a promotion from unsigned or enumerated type to a signed type
 
-C++_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel \
+CXX_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel \
                   -Wold-style-cast -Woverloaded-virtual -Wsign-promo
 
 
@@ -262,13 +253,13 @@ endif
 
 #### Build the combined flags ####
 PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
-PLATFORM_C_C++FLAGS = $(PLATFORM_CFLAGS)
+PLATFORM_C_CXXFLAGS = $(PLATFORM_CFLAGS)
 
 BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_FLAGS) $(PLATFORM_C_CFLAGS)
-BASE_C++FLAGS = $(GENERIC_CFLAGS) $(C++_WARN_FLAGS) $(PLATFORM_C_C++FLAGS)
+BASE_CXXFLAGS = $(GENERIC_CFLAGS) $(CXX_WARN_FLAGS) $(PLATFORM_C_CXXFLAGS)
 
 CFLAGS   = -c $(BASE_CFLAGS)
-C++FLAGS = -c $(BASE_C++FLAGS)
+CXXFLAGS = -c $(BASE_CXXFLAGS)
 
 
 #######################
@@ -283,5 +274,5 @@ ARFLAGS = crv
 ######################
 
 LFLAGS   = $(BASE_CFLAGS)
-L++FLAGS = $(BASE_C++FLAGS)
+LXXFLAGS = $(BASE_CXXFLAGS)
 

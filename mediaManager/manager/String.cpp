@@ -117,8 +117,9 @@ String String::substring(const int i, const int len) const {
     }
 
     // create a buffer and copy the chars
-    char* buffer = new char[len + 1];
-    strncpy(buffer, myInternalCStr + i, len);
+    const size_t buffSize = static_cast<size_t>(len) + 1;
+    char* const buffer = new char[buffSize];
+    strncpy(buffer, myInternalCStr + i, static_cast<size_t>(len));
     buffer[len] = '\0';
 
     // create a new String and delete the buffer

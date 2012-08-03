@@ -11,16 +11,12 @@ echo
 echo
 
 # set the root for code coverage
-cd mediaManager/manager
+cd mediaManager
 readonly ROOT=`pwd`
 
 # then run the tool
-cd ../..
+cd ..
 mediaManager/support/gcovr.py --root=$ROOT --xml --output=mediaManager/reports/gcovr.xml
-
-# manually change the paths - needs update
-sed --in-place "s/obj_lin64\///g;s/manager\///g" mediaManager/reports/gcovr.xml
-
 echo Done!
 
 
