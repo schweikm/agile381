@@ -105,8 +105,6 @@ class String {
 
     // Return a reference to character i in the string.
     // Throw exception if 0 <= i < size is false.
-    const char& operator[] (const int i);
-    // const version for const Strings
     const char& operator[] (const int i) const;
 
     // Return a String starting with i and extending for len characters
@@ -242,10 +240,6 @@ inline int String::size() const {
 
 inline int String::get_allocation() const {
     return myInternalCStrAllocation;
-}
-
-inline const char& String::operator[] (const int i) {
-    return (const_cast<const String*>(this))->operator[](i);
 }
 
 inline const char& String::operator[] (const int i) const {

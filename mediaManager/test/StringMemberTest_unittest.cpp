@@ -115,7 +115,7 @@ class StringMemberTest : public testing::Test {
         // create the String instance
         String::set_messages_wanted(true);
         dup.startCapture();
-        String testStr(in_string.c_str());
+        const String testStr(in_string.c_str());
         dup.stopCapture();
         String::set_messages_wanted(false);
 
@@ -138,7 +138,7 @@ class StringMemberTest : public testing::Test {
 
         // create the String to copy from
         String::set_messages_wanted(false);
-        String fromString(in_string.c_str());
+        const String fromString(in_string.c_str());
 
         // capture the statics before creating the String instance
         const int numStrings = String::get_number();
@@ -147,7 +147,7 @@ class StringMemberTest : public testing::Test {
         // create the String instance
         String::set_messages_wanted(true);
         dup.startCapture();
-        String testStr(fromString);
+        const String testStr(fromString);
         dup.stopCapture();
         String::set_messages_wanted(false);
 
@@ -271,7 +271,7 @@ TEST_F(StringMemberTest, AssignmentOperatorString) {
                                   "Dtor: \"\"\n";
     StreamDup dup;
 
-    String test1(test.c_str());
+    const String test1(test.c_str());
     String test2;
 
     // turn on diagnostic messages
@@ -337,10 +337,10 @@ TEST_F(StringMemberTest, Destructor) {
 
     // capture the ouput to stdout
     StreamDup dup;
-    string test1Val = "alpha";
+    const string test1Val = "alpha";
 
     {
-        String test1(test1Val.c_str());
+        const String test1(test1Val.c_str());
         EXPECT_EQ(numStrings + 1, String::get_number());
         EXPECT_EQ(test1Val.length() + 1, totalAllocation +
                                            String::get_total_allocation());
@@ -413,7 +413,88 @@ TEST_F(StringMemberTest, OperatorAccessor) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, substring) {
-    ASSERT_EQ(1, 1);
+    const string fullString = "All your base are belong to us";
+    const string subString = "your base are belong";
+    const int subStringLen = 20;
+
+    // normal case
+    const String test(fullString.c_str());
+    String test2 = test.substring(4, subStringLen);
+    const String test3 = test.substring(4, subStringLen);
+    compareStrings(subString, test2);
+    compareStrings(subString, test3);
+
+    // corner case, both zero
+    String test4 = test.substring(0, 0);
+    compareStrings("", test4);
+
+    //
+    // index
+    //
+
+    // non-const index less than zero
+    try {
+        test2.substring(-1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const index less than zero
+    try {
+        test3.substring(-1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const index greater than size 
+    try {
+        test2.substring(test.size() + 1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const index greater than size
+    try {
+        test3.substring(test.size() + 1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    //
+    // length
+    //
+
+    // non-const length less than zero
+    try {
+        test2.substring(0, -1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const length less than zero
+    try {
+        test3.substring(0, -1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const length greater than size 
+    try {
+        test2.substring(0, test.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const length greater than size
+    try {
+        test3.substring(0, test.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const index + length greater than size 
+    try {
+        test2.substring(subStringLen, test.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // const length greater than size
+    try {
+        test3.substring(subStringLen, test.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -422,7 +503,9 @@ TEST_F(StringMemberTest, substring) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, clear) {
-    ASSERT_EQ(1, 1);
+    String test("trololololololo");
+    test.clear();
+    compareStrings("", test);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

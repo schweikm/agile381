@@ -111,9 +111,26 @@ String::~String() {
 }
 
 String String::substring(const int i, const int len) const {
+    if ((i < 0) || (len < 0) || (i > myInternalCStrSize) ||
+       ((i + len) > myInternalCStrSize)) {
+        throw String_exception("Substring bounds invalid");
+    }
+
+    // create a buffer and copy the chars
+    char* buffer = new char[len + 1];
+    strncpy(buffer, myInternalCStr + i, len);
+    buffer[len] = '\0';
+
+    // create a new String and delete the buffer
+    String temp(buffer);
+    delete [] buffer;
+
+    return temp;
 }
 
 void String::clear() {
+    String temp("");
+    swap(temp);
 }
 
 void String::remove(const int i, const int len) {
