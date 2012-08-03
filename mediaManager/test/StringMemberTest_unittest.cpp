@@ -444,7 +444,7 @@ TEST_F(StringMemberTest, substring) {
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const index greater than size 
+    // non-const index greater than size
     try {
         test2.substring(test.size() + 1, 1);
         ASSERT_EQ(1, 0);
@@ -472,7 +472,7 @@ TEST_F(StringMemberTest, substring) {
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const length greater than size 
+    // non-const length greater than size
     try {
         test2.substring(0, test.size() + 1);
         ASSERT_EQ(1, 0);
@@ -484,7 +484,7 @@ TEST_F(StringMemberTest, substring) {
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const index + length greater than size 
+    // non-const index + length greater than size
     try {
         test2.substring(subStringLen, test.size() + 1);
         ASSERT_EQ(1, 0);
