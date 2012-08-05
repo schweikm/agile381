@@ -18,7 +18,10 @@ int  String::ourTotalAllocation = 0;
 bool String::ourMessagesWanted  = false;
 
 // constructor
-String::String(const char* const in_cstr) {
+String::String(const char* const in_cstr)
+          : myInternalCStr(0),
+            myInternalCStrSize(0),
+            myInternalCStrAllocation(0) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Ctor: \"%s\"\n", in_cstr);
@@ -47,15 +50,14 @@ String::String(const char* const in_cstr) {
 }
 
 // copy constructor
-String::String(const String& copy) {
+String::String(const String& copy)
+          : myInternalCStr(0),
+            myInternalCStrSize(copy.myInternalCStrSize),
+            myInternalCStrAllocation(copy.myInternalCStrAllocation) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Copy ctor: \"%s\"\n", copy.c_str());
     }
-
-    // copy the primitives
-    myInternalCStrSize = copy.size();
-    myInternalCStrAllocation = copy.get_allocation();
 
     // deep copy the internal C string
     try {
@@ -135,6 +137,19 @@ void String::clear() {
 }
 
 void String::remove(const int i, const int len) {
+    if ((i < 0) || (len < 0) || (i > myInternalCStrSize) ||
+       ((i + len) > myInternalCStrSize)) {
+        throw String_exception("Remove bounds invalid");
+    }
+
+    // move the characters down starting at i len times
+    for (int index = 0; index < myInternalCStrSize - len - i; index++) {
+        myInternalCStr[index + i] = myInternalCStr[index + i + len];
+    }
+
+    // update the size and restore the NULL character
+    myInternalCStrSize -= len;
+    myInternalCStr[myInternalCStrSize] = '\0';
 }
 
 void String::insert_before(const int i, const String& src) {

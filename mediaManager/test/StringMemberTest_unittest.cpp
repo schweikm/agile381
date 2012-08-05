@@ -208,6 +208,19 @@ class StringMemberTest : public testing::Test {
         EXPECT_EQ(a.length() + 1, b.get_allocation());
     }
 
+    // utility method to verify equality of String and string with allocation
+    void compareStringsWithAlloc(const string& a, const String& b,
+                                 const int alloc) {
+        // String value is correct
+        EXPECT_STREQ(a.c_str(), b.c_str());
+
+        // the length is correct
+        EXPECT_EQ(a.length(), b.size());
+
+        // the allocation is correct
+        EXPECT_EQ(alloc, b.get_allocation());
+    }
+
 
     // Declares the variables your tests want to use.
 };
@@ -514,7 +527,61 @@ TEST_F(StringMemberTest, clear) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, remove) {
-    ASSERT_EQ(1, 1);
+    // normal case
+    const string fullString = "All your base are belong to us";
+    const string subString = "All your belong to us";
+    String test(fullString.c_str());
+    test.remove(9, 9);
+    compareStringsWithAlloc(subString, test, fullString.length() + 1);
+
+    // normal case 2
+    const string subString1 = "All your o us";
+    String test1(fullString.c_str());
+    test1.remove(9, 17);
+    compareStringsWithAlloc(subString1, test1, fullString.length() + 1);
+
+    // corner case, both zero
+    String test2(fullString.c_str());
+    test2.remove(0, 0);
+    compareStringsWithAlloc(fullString, test2, fullString.length() + 1);
+
+    //
+    // index
+    //
+
+    // non-const index less than zero
+    try {
+        test2.remove(-1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const index greater than size
+    try {
+        test2.remove(test2.size() + 1, 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    //
+    // length
+    //
+
+    // non-const length less than zero
+    try {
+        test2.remove(0, -1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const length greater than size
+    try {
+        test2.remove(0, test2.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // non-const index + length greater than size
+    try {
+        test2.remove(8, test2.size() + 1);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

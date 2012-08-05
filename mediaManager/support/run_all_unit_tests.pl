@@ -31,8 +31,7 @@ my $namePrefix = "xunit";
 
             # run the Unit Test
             system("$valgrind --leak-check=full --show-reachable=yes --xml=yes --xml-file=$valgrindFile " .
-                   "$UT_DIR/$file --gtest_output=xml:$REP_DIR/" . $namePrefix . "-" . $testName . ".xml")
-              && die "Error while executing Unit Test \"$file\": $!\n";
+                   "$UT_DIR/$file --gtest_output=xml:$REP_DIR/" . $namePrefix . "-" . $testName . ".xml");
 
             # then convert the valgrind XML file
             &convertValgrindXML($valgrindFile, $xUnitFile, $testName);

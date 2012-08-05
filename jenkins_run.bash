@@ -73,7 +73,7 @@ printEnds
 # print the versions
 printVersion "Cppcheck" "$(cppcheck --version)"
 printVersion "Cpplint" "$CPPLINTVER"
-printVersion "Cucumber" "$(cucumber --version)"
+#printVersion "Cucumber" "$(cucumber --version)"
 printVersion "G++" "$(g++ --version | head -1)"
 printVersion "Gcov" "$(gcov --version | head -1)"
 printVersion "gcovr.py" "$(mediaManager/support/gcovr.py --version | head -1)"
@@ -82,8 +82,7 @@ printVersion "Linux Kernel" "$(uname -r)"
 printVersion "Make" "$(make --version | head -1)"
 printVersion "Perl" "$(perl --version | head -2 | tail -1)"
 printVersion "Python" "$(python --version 2>&1 > /dev/null)"
-printVersion "Ruby" "$(ruby --version)"
-printVersion "Sed" "$(sed --version | head -1)"
+#printVersion "Ruby" "$(ruby --version)"
 
 # footer
 printEnds

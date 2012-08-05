@@ -85,49 +85,50 @@ UT_DIR   = UnitTest
 ## -pedantic:  Issue all the warnings demanded by strict ISO C and ISO C++
 ##
 ## -Wall:
-##         -Waddress   
-##         -Warray-bounds (only with -O2)  
-##         -Wc++0x-compat  
-##         -Wchar-subscripts  
-##         -Wenum-compare (in C/Objc; this is on by default in C++) 
-##         -Wimplicit-int (C and Objective-C only) 
-##         -Wimplicit-function-declaration (C and Objective-C only) 
-##         -Wcomment  
-##         -Wformat   
-##         -Wmain (only for C/ObjC and unless -ffreestanding)  
-##         -Wmissing-braces  
-##         -Wnonnull  
-##         -Wparentheses  
-##         -Wpointer-sign  
-##         -Wreorder   
-##         -Wreturn-type  
-##         -Wsequence-point  
-##         -Wsign-compare (only in C++)  
-##         -Wstrict-aliasing  
-##         -Wstrict-overflow=1  
-##         -Wswitch  
-##         -Wtrigraphs  
-##         -Wuninitialized  
-##         -Wunknown-pragmas  
-##         -Wunused-function  
-##         -Wunused-label     
-##         -Wunused-value     
-##         -Wunused-variable  
-##         -Wvolatile-register-var 
+##         -Waddress                                                   (since 4.2)
+##         -Warray-bounds (only with -O2)                              (since 4.3)
+##         -Wc++0x-compat
+##         -Wchar-subscripts
+##         -Wenum-compare (in C/Objc; this is on by default in C++)
+##         -Wimplicit-int (C and Objective-C only)
+##         -Wimplicit-function-declaration (C and Objective-C only)
+##         -Wcomment
+##         -Wformat
+##         -Wmain (only for C/ObjC and unless -ffreestanding)
+##         -Wmaybe-uninitialized                                       (since 4.7)
+##         -Wmissing-braces
+##         -Wnonnull
+##         -Wparentheses
+##         -Wpointer-sign
+##         -Wreorder
+##         -Wreturn-type
+##         -Wsequence-point
+##         -Wsign-compare (only in C++)
+##         -Wstrict-aliasing                                           (since 4.0)
+##         -Wstrict-overflow=1
+##         -Wswitch
+##         -Wtrigraphs
+##         -Wuninitialized
+##         -Wunknown-pragmas
+##         -Wunused-function
+##         -Wunused-label
+##         -Wunused-value
+##         -Wunused-variable
+##         -Wvolatile-register-var
 ##
 ## -Wextra:
-##           -Wclobbered  
-##           -Wempty-body  
-##           -Wignored-qualifiers 
-##           -Wmissing-field-initializers  
-##           -Wmissing-parameter-type (C only)  
-##           -Wold-style-declaration (C only)  
-##           -Woverride-init  
-##           -Wsign-compare  
-##           -Wtype-limits  
-##           -Wuninitialized  
-##           -Wunused-parameter (only with -Wunused or -Wall) 
-##           -Wunused-but-set-parameter (only with -Wunused or -Wall)  
+##           -Wclobbered
+##           -Wempty-body
+##           -Wignored-qualifiers
+##           -Wmissing-field-initializers
+##           -Wmissing-parameter-type (C only)
+##           -Wold-style-declaration (C only)
+##           -Woverride-init
+##           -Wsign-compare
+##           -Wtype-limits
+##           -Wuninitialized
+##           -Wunused-parameter (only with -Wunused or -Wall)
+##           -Wunused-but-set-parameter (only with -Wunused or -Wall)
 ##
 ## -Wformat=2:
 ##              -Wformat
@@ -155,15 +156,19 @@ UT_DIR   = UnitTest
 ## -Winvalid-pch:  Warn if a precompiled header is found in the search path but can't be used
 ## -Wdisabled-optimization:  Warn if a requested optimization pass is disabled
 ## -Wstack-protector:  Warns about functions that will not be protected against stack smashing
+## -Wdouble-promotion:  Give a warning when a value of type float is implicitly promoted to double (since 4.6)
+## -Wsign-conversion:  Warn for implicit conversions that may change the sign of an integer value
+## -Wlogical-op:  Warn about suspicious uses of logical operators in expressions
+## -Wtrampolines:  Warn about trampolines generated for pointers to nested functions
+## -Wunused-local-typedefs:  This warning diagnoses typedefs locally defined in a function, and otherwise not used. (since 4.7)
+## -Wmissing-declarations:  Warn if a global function is defined without a previous declaration
 
-GENERIC_CFLAGS  = -ansi -pedantic -Wall -Wextra -Wformat=2 \
-                  -Winit-self -Wmissing-include-dirs -Wswitch-default -Wswitch-enum \
-                  -Wunused-parameter -Wunknown-pragmas -Wfloat-equal \
-                  -Wundef -Wshadow -Wunsafe-loop-optimizations  -Wcast-qual \
-                  -Wcast-align -Wconversion \
-                  -Wmissing-format-attribute -Wpacked \
-                  -Wpadded -Wredundant-decls -Winline -Winvalid-pch -Wdisabled-optimization \
-                  -Wstack-protector
+GENERIC_CFLAGS  = -ansi -pedantic -Wall -Wextra -Wformat=2 -Winit-self -Wmissing-include-dirs -Wswitch-default \
+                  -Wswitch-enum -Wunused-parameter -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow \
+                  -Wunsafe-loop-optimizations -Wcast-qual -Wcast-align -Wconversion -Wmissing-format-attribute \
+                  -Wpacked -Wpadded -Wredundant-decls -Winline -Winvalid-pch -Wdisabled-optimization \
+                  -Wstack-protector -Wdouble-promotion -Wsign-conversion -Wlogical-op -Wtrampolines \
+                  -Wunused-local-typedefs -Wmissing-declarations
 
 
 #### Language-specific warning flags ####
@@ -189,8 +194,8 @@ C_WARN_CFLAGS   = -Wdeclaration-after-statement -Wbad-function-cast -Wc++-compat
 ## -Woverloaded-virtual:  Warn when a function declaration hides virtual functions from a base class
 ## -Wsign-promo:  Warn when overload resolution chooses a promotion from unsigned or enumerated type to a signed type
 
-CXX_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel \
-                  -Wold-style-cast -Woverloaded-virtual -Wsign-promo
+CXX_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel -Wold-style-cast \
+                  -Woverloaded-virtual -Wsign-promo
 
 
 #####################
@@ -233,30 +238,14 @@ endif
 #### PLAFORM FLAGS ####
 #######################
 
-ifneq ($(SYSTEM),Darwin)
-    ## -Wsign-conversion:  Warn for implicit conversions that may change the sign of an integer value
-    ## -Wlogical-op:  Warn about suspicious uses of logical operators in expressions
-    PLATFORM_CFLAGS += -Wsign-conversion -Wlogical-op
-endif
-
-ifeq ($(SYSTEM),Linux)
-    ## -Wdouble-promotion:  Give a warning when a value of type float is implicitly promoted to double
-    ## -Wtrampolines:  Warn about trampolines generated for pointers to nested functions
-    ## -Wunused-local-typedefs:  This warning diagnoses typedefs locally defined in a function, and otherwise not used.
-    PLATFORM_CFLAGS += -Wdouble-promotion -Wtrampolines -Wunused-local-typedefs
-endif
-
-ifneq ($(SYSTEM),Darwin)
-    ## -Wmissing-declarations:  Warn if a global function is defined without a previous declaration
-    PLATFORM_CFLAGS   += -Wmissing-declarations
-endif
-
-#### Build the combined flags ####
+PLATFORM_CFLAGS     =
 PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
 PLATFORM_C_CXXFLAGS = $(PLATFORM_CFLAGS)
 
-BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_FLAGS) $(PLATFORM_C_CFLAGS)
-BASE_CXXFLAGS = $(GENERIC_CFLAGS) $(CXX_WARN_FLAGS) $(PLATFORM_C_CXXFLAGS)
+
+#### Build the combined flags ####
+BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_CFLAGS) $(PLATFORM_C_CFLAGS)
+BASE_CXXFLAGS = $(GENERIC_CFLAGS) $(CXX_WARN_CFLAGS) $(PLATFORM_C_CXXFLAGS)
 
 CFLAGS   = -c $(BASE_CFLAGS)
 CXXFLAGS = -c $(BASE_CXXFLAGS)
