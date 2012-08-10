@@ -549,13 +549,13 @@ TEST_F(StringMemberTest, remove) {
     // index
     //
 
-    // non-const index less than zero
+    // index less than zero
     try {
         test2.remove(-1, 1);
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const index greater than size
+    // index greater than size
     try {
         test2.remove(test2.size() + 1, 1);
         ASSERT_EQ(1, 0);
@@ -565,19 +565,19 @@ TEST_F(StringMemberTest, remove) {
     // length
     //
 
-    // non-const length less than zero
+    // length less than zero
     try {
         test2.remove(0, -1);
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const length greater than size
+    // length greater than size
     try {
         test2.remove(0, test2.size() + 1);
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
-    // non-const index + length greater than size
+    // index + length greater than size
     try {
         test2.remove(8, test2.size() + 1);
         ASSERT_EQ(1, 0);
@@ -590,7 +590,40 @@ TEST_F(StringMemberTest, remove) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, insertBefore) {
-    ASSERT_EQ(1, 1);
+    const string full1 = "|the quick brown fox|";
+    const string full2 = "^jumps over the lazy dog^";
+    const int alloc1 = 2 * (full1.length() + full2.length() + 1);
+
+    // normal case - from front
+    String test1(full1.c_str());
+    String test2(full2.c_str());
+    test1.insert_before(0, test2);
+    compareStringsWithAlloc(full2 + full1, test1, alloc1);
+
+    // normal case - from end
+    String test3(full1.c_str());
+    String test4(full2.c_str());
+    test3.insert_before(test3.size(), test4);
+    compareStringsWithAlloc(full1 + full2, test3, alloc1);
+
+    // normal case - from middle
+    String test5("alpha");
+    String test6("beta");
+    const int alloc2 = 2 * (test5.size() + test6.size() + 1);
+    test5.insert_before(2, test6);
+    compareStringsWithAlloc("albetapha", test5, alloc2);
+
+    // index less than zero
+    try {
+        test1.insert_before(-1, test2);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
+
+    // index greater than size
+    try {
+        test1.insert_before(test1.size() + 1, test2);
+        ASSERT_EQ(1, 0);
+    } catch(const String_exception&) { }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -599,7 +632,18 @@ TEST_F(StringMemberTest, insertBefore) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, operatorConcatenationChar) {
-    ASSERT_EQ(1, 1);
+    string orig("|The cases are rea");
+    String test(orig.c_str());
+    const int testAlloc = test.get_allocation();
+
+    const char addChar1 = 'l';
+    const int totalAlloc = 2 * (test.size() + 1 + 1);
+    test += addChar1;
+    compareStringsWithAlloc(orig += addChar1, test, totalAlloc);
+
+    const char addChar2 = '|';
+    test += addChar2;
+    compareStringsWithAlloc(orig += addChar2, test, totalAlloc);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -608,7 +652,18 @@ TEST_F(StringMemberTest, operatorConcatenationChar) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, operatorConcatenationCharConst) {
-    ASSERT_EQ(1, 1);
+    string orig("|The people ");
+    String test(orig.c_str());
+    const int testAlloc = test.get_allocation();
+
+    const char* const addCStr1 = "are ";
+    const int totalAlloc = 2 * (test.size() + strlen(addCStr1) + 1);
+    test += addCStr1;
+    compareStringsWithAlloc(orig += addCStr1, test, totalAlloc);
+
+    const char* const addCStr2 = "real|";
+    test += addCStr2;
+    compareStringsWithAlloc(orig += addCStr2, test, totalAlloc);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -617,7 +672,19 @@ TEST_F(StringMemberTest, operatorConcatenationCharConst) {
 //
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringMemberTest, operatorConcatenationString) {
-    ASSERT_EQ(1, 1);
+    string orig("|This ");
+    String test(orig.c_str());
+    const int testAlloc = test.get_allocation();
+
+    const String addStr1("is ");
+    int totalAlloc = 2 * (test.size() + addStr1.size() + 1);
+    test += addStr1;
+    compareStringsWithAlloc(orig += addStr1.c_str(), test, totalAlloc);
+
+    const String addStr2("Judge Judy|");
+    totalAlloc = 2 * (test.size() + addStr2.size() + 1);
+    test += addStr2;
+    compareStringsWithAlloc(orig += addStr2.c_str(), test, totalAlloc);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -666,4 +733,3 @@ TEST_F(StringMemberTest, swap) {
     EXPECT_EQ(a_alloc, b.get_allocation());
     EXPECT_EQ(b_alloc, a.get_allocation());
 }
-

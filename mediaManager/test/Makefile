@@ -16,6 +16,7 @@ GTEST_DIR    = ../../gtest-1.6.0
 #### Module-specific Options ####
 SRC_DIR   = ../manager
 INC_DIRS += -I $(GTEST_DIR)/include
+SRC_OBJS  = $(SRC_DIR)/String.o $(SRC_DIR)/Utility.o
 
 #### Objects to Build ####
 GTEST_OBJS = StringMemberTest_unittest.o \
@@ -23,10 +24,10 @@ GTEST_OBJS = StringMemberTest_unittest.o \
 
 # Google Test targets
 GTEST_STRING_MEMBER      = $(BIN_DIR)/$(UT_DIR)/StringMemberTest_UT.exe
-GTEST_STRING_MEMBER_OBJS = $(SRC_DIR)/String.o StringMemberTest_unittest.o
+GTEST_STRING_MEMBER_OBJS = $(SRC_OBJS) StringMemberTest_unittest.o
 
 GTEST_STRING_NONMEMBER      = $(BIN_DIR)/$(UT_DIR)/StringNonMemberTest_UT.exe
-GTEST_STRING_NONMEMBER_OBJS = $(SRC_DIR)/String.o StringNonMemberTest_unittest.o
+GTEST_STRING_NONMEMBER_OBJS = $(SRC_OBJS) StringNonMemberTest_unittest.o
 
 #### Targets ####
 all: $(GTEST_STRING_MEMBER) $(GTEST_STRING_NONMEMBER)
@@ -58,7 +59,7 @@ $(GTEST_DIR)/src/gtest-all.o $(GTEST_DIR)/src/gtest_main.o -pthread -o $@
 
 
 clean:
-	@$(RM) *.o
+	@$(RM) $(GTEST_OBJS)
 	@$(RM) $(GTEST_STRING_MEMBER)
 	@$(RM) $(GTEST_STRING_NONMEMBER)
 	@$(RM) gmon.out

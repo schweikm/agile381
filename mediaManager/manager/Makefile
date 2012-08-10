@@ -16,7 +16,8 @@ GTEST_DIR    = ../../gtest-1.6.0
 #### Module-specific Options ####
 
 #### Objects to Build ####
-OBJS       = String.o
+OBJS       = String.o \
+             Utility.o
 
 #### Targets ####
 all: $(OBJS)
@@ -24,7 +25,7 @@ all: $(OBJS)
 
 
 clean:
-	@$(RM) *.o
+	@$(RM) $(OBJS)
 	@$(RM) gmon.out
 	@$(RM) *.gcov
 	@$(RM) *.gcno

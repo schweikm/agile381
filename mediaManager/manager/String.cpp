@@ -11,6 +11,8 @@
 #include <new>
   using std::bad_alloc;
 
+#include "manager/Utility.h"
+
 
 // initialize static members
 int  String::ourNumber          = 0;
@@ -27,22 +29,11 @@ String::String(const char* const in_cstr)
         printf("Ctor: \"%s\"\n", in_cstr);
     }
 
-    // calculate the sizes
-    const int strSize = static_cast<int>(strlen(in_cstr));
-    myInternalCStrSize = strSize;
-    myInternalCStrAllocation = strSize + 1;
-
     // create the internal buffer and copy the data
-    try {
-        myInternalCStr = new char[myInternalCStrAllocation];
-        strncpy(myInternalCStr, in_cstr,
-                  static_cast<size_t>(myInternalCStrAllocation));
-    }
-    catch(const bad_alloc& ex) {
-        fprintf(stderr, "Caught exception while allocating String!\n");
-        fprintf(stderr, "%s\n", ex.what());
-        throw bad_alloc(ex);
-    }
+    myInternalCStrSize = static_cast<int>(strlen(in_cstr));
+    resizeCStrBuffer(myInternalCStrSize + 1);
+    strncpy(myInternalCStr, in_cstr,
+            static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
     ourNumber++;
@@ -52,24 +43,18 @@ String::String(const char* const in_cstr)
 // copy constructor
 String::String(const String& copy)
           : myInternalCStr(0),
-            myInternalCStrSize(copy.myInternalCStrSize),
-            myInternalCStrAllocation(copy.myInternalCStrAllocation) {
+            myInternalCStrSize(0),
+            myInternalCStrAllocation(0) {
     // output message if wanted
     if (true == ourMessagesWanted) {
         printf("Copy ctor: \"%s\"\n", copy.c_str());
     }
 
     // deep copy the internal C string
-    try {
-        myInternalCStr = new char[myInternalCStrAllocation];
-        strncpy(myInternalCStr, copy.c_str(),
-                  static_cast<size_t>(myInternalCStrAllocation));
-    }
-    catch(const bad_alloc& ex) {
-        fprintf(stderr, "Caught exception while allocating String!\n");
-        fprintf(stderr, "%s\n", ex.what());
-        throw bad_alloc(ex);
-    }
+    resizeCStrBuffer(copy.myInternalCStrAllocation);
+    myInternalCStrSize = copy.myInternalCStrSize;
+    strncpy(myInternalCStr, copy.c_str(),
+            static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
     ourNumber++;
@@ -115,7 +100,9 @@ String::~String() {
 String String::substring(const int i, const int len) const {
     if ((i < 0) || (len < 0) || (i > myInternalCStrSize) ||
        ((i + len) > myInternalCStrSize)) {
-        throw String_exception("Substring bounds invalid");
+        const String_exception ex("Substring bounds invalid");
+        printError(__FILE__, __LINE__, ex);
+        throw ex;
     }
 
     // create a buffer and copy the chars
@@ -139,7 +126,9 @@ void String::clear() {
 void String::remove(const int i, const int len) {
     if ((i < 0) || (len < 0) || (i > myInternalCStrSize) ||
        ((i + len) > myInternalCStrSize)) {
-        throw String_exception("Remove bounds invalid");
+        const String_exception ex("Remove bounds invalid");
+        printError(__FILE__, __LINE__, ex);
+        throw ex;
     }
 
     // move the characters down starting at i len times
@@ -153,21 +142,86 @@ void String::remove(const int i, const int len) {
 }
 
 void String::insert_before(const int i, const String& src) {
+    if ((i < 0) || (i > myInternalCStrSize)) {
+        const String_exception ex("Insertion point out of range");
+        printError(__FILE__, __LINE__, ex);
+        throw ex;
+    }
+    // create a new buffer if needed
+    const int alloc = myInternalCStrSize + src.size() + 1;
+    if (alloc >= myInternalCStrAllocation) {
+        resizeCStrBuffer(2 * alloc);
+    }
+
+    // make space for the new chars
+    for (int index = 0; index < myInternalCStrSize - i; index++) {
+        myInternalCStr[index + i + src.myInternalCStrSize] =
+          myInternalCStr[index + i];
+    }
+
+    // then copy the src characters
+    strncpy(myInternalCStr + (sizeof(char) * i), src.myInternalCStr,  // NOLINT
+              src.myInternalCStrSize);
+
+    // then change the instance variables
+    myInternalCStrSize += src.myInternalCStrSize;
+    myInternalCStr[myInternalCStrSize] = '\0';
 }
 
 const String& String::operator += (const char rhs) {
+    char str[2];
+    str[0] = rhs;
+    str[1] = '\0';
+    this->operator+=(str);
 }
 
 const String& String::operator += (const char* const rhs) {
+    // resize the buffer if needed
+    const int alloc = myInternalCStrSize + strlen(rhs) + 1;
+    if (alloc >= myInternalCStrAllocation) {
+        resizeCStrBuffer(2 * alloc);
+    }
+
+    // then add the chars to the end
+    strncpy(myInternalCStr + (sizeof(char) * myInternalCStrSize), rhs,  // NOLINT
+              strlen(rhs));
+    myInternalCStrSize += strlen(rhs);
 }
 
 const String& String::operator += (const String& rhs) {
+    this->operator+=(rhs.c_str());
 }
 
 void String::swap(String& other) { // NOLINT
     std::swap(myInternalCStr,           other.myInternalCStr);
     std::swap(myInternalCStrSize,       other.myInternalCStrSize);
     std::swap(myInternalCStrAllocation, other.myInternalCStrAllocation);
+}
+
+void String::resizeCStrBuffer(const int alloc) {
+    // redundant - but faster than reallocating a buffer
+    if (alloc == myInternalCStrAllocation) {
+        return;
+    }
+
+    try {
+        myInternalCStrAllocation = alloc;
+        char* buffer = new char[myInternalCStrAllocation];
+
+        // copy the chars over
+        if (0 != myInternalCStr) {
+            strncpy(buffer, myInternalCStr,
+                    static_cast<size_t>(myInternalCStrAllocation));
+            delete [] myInternalCStr;
+        }
+
+        myInternalCStr = buffer;
+    }
+    catch(const bad_alloc& ex) {
+        printError(__FILE__, __LINE__,
+                   "Caught exception while resizing internal c string!", ex);
+        throw bad_alloc(ex);
+    }
 }
 
 bool operator== (const String& lhs, const String& rhs) {

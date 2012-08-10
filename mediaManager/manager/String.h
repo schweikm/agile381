@@ -5,6 +5,8 @@
  * Copyright 2012 Marc Schweikert
  */
 
+#include "manager/Utility.h"
+
 /*
  * String class - a subset of the C++ Standard Library <string> class
  * String objects contain a C-string in a dynamically allocated piece of memory
@@ -173,6 +175,9 @@ class String {
     // total bytes allocated for the internal C string
     int myInternalCStrAllocation;
 
+    // resize the internal c string
+    void resizeCStrBuffer(const int alloc);
+
     /* Variables for monitoring functions - not part of a normal
      * implementation.
      * But used here for demonstration and testing purposes.
@@ -244,7 +249,9 @@ inline int String::get_allocation() const {
 
 inline const char& String::operator[] (const int i) const {
     if ((i < 0) || (i >= myInternalCStrSize)) {
-        throw String_exception("Subscript out of range");
+        const String_exception ex("Subscript out of range");
+        printError(__FILE__, __LINE__, ex);
+        throw ex;
     }
     return myInternalCStr[i];
 }
