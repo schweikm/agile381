@@ -159,9 +159,13 @@ void String::insert_before(const int i, const String& src) {
           myInternalCStr[index + i];
     }
 
+    // need a little magic to suppress a compiler warning
+    const size_t sizetI = static_cast<size_t>(i);
+
     // then copy the src characters
-    strncpy(myInternalCStr + (sizeof(char) * i), src.myInternalCStr,  // NOLINT
-              static_cast<size_t>(src.myInternalCStrSize));
+    strncpy(myInternalCStr + (sizeof(char) * sizetI),  // NOLINT
+            src.myInternalCStr,
+            static_cast<size_t>(src.myInternalCStrSize));
 
     // then change the instance variables
     myInternalCStrSize += src.myInternalCStrSize;
@@ -182,9 +186,13 @@ const String& String::operator += (const char* const rhs) {
         resizeCStrBuffer(2 * alloc);
     }
 
+    // need a little magic to suppress a compiler warning
+    const size_t cStrSizet = static_cast<size_t>(myInternalCStrSize);
+
     // then add the chars to the end
-    strncpy(myInternalCStr + (sizeof(char) * myInternalCStrSize), rhs,  // NOLINT
-              strlen(rhs));
+    strncpy(myInternalCStr + (sizeof(char) * cStrSizet),  // NOLINT
+            rhs,
+            strlen(rhs));
     myInternalCStrSize += static_cast<int>(strlen(rhs));
     return *this;
 }
