@@ -161,7 +161,7 @@ void String::insert_before(const int i, const String& src) {
 
     // then copy the src characters
     strncpy(myInternalCStr + (sizeof(char) * i), src.myInternalCStr,  // NOLINT
-              src.myInternalCStrSize);
+              static_cast<size_t>(src.myInternalCStrSize));
 
     // then change the instance variables
     myInternalCStrSize += src.myInternalCStrSize;
@@ -172,12 +172,12 @@ const String& String::operator += (const char rhs) {
     char str[2];
     str[0] = rhs;
     str[1] = '\0';
-    this->operator+=(str);
+    return this->operator+=(str);
 }
 
 const String& String::operator += (const char* const rhs) {
     // resize the buffer if needed
-    const int alloc = myInternalCStrSize + strlen(rhs) + 1;
+    const int alloc = myInternalCStrSize + static_cast<int>(strlen(rhs)) + 1;
     if (alloc >= myInternalCStrAllocation) {
         resizeCStrBuffer(2 * alloc);
     }
@@ -185,11 +185,12 @@ const String& String::operator += (const char* const rhs) {
     // then add the chars to the end
     strncpy(myInternalCStr + (sizeof(char) * myInternalCStrSize), rhs,  // NOLINT
               strlen(rhs));
-    myInternalCStrSize += strlen(rhs);
+    myInternalCStrSize += static_cast<int>(strlen(rhs));
+    return *this;
 }
 
 const String& String::operator += (const String& rhs) {
-    this->operator+=(rhs.c_str());
+    return this->operator+=(rhs.c_str());
 }
 
 void String::swap(String& other) { // NOLINT
@@ -225,20 +226,39 @@ void String::resizeCStrBuffer(const int alloc) {
 }
 
 bool operator== (const String& lhs, const String& rhs) {
+    int val = strcmp(lhs.c_str(), rhs.c_str());
+    if (0 == val) {
+        return true;
+    }
+    return false;
 }
 
 bool operator!= (const String& lhs, const String& rhs) {
+    int val = strcmp(lhs.c_str(), rhs.c_str());
+    if (0 != val) {
+        return true;
+    }
+    return false;
 }
 
 bool operator< (const String& lhs, const String& rhs) {
+    int val = strcmp(lhs.c_str(), rhs.c_str());
+    if (val < 0) {
+        return true;
+    }
+    return false;
 }
 
 bool operator> (const String& lhs, const String& rhs) {
+    int val = strcmp(lhs.c_str(), rhs.c_str());
+    if (val > 0) {
+        return true;
+    }
+    return false;
 }
 
 String operator+ (const String& lhs, const String& rhs) {
+    String temp(lhs);
+    temp += rhs;
+    return temp;
 }
-
-String getline(const int fd) {
-}
-

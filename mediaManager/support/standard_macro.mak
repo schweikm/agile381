@@ -149,8 +149,6 @@ UT_DIR   = UnitTest
 ## -Wcast-align:  Warn whenever a pointer is cast such that the required alignment of the target is increased
 ## -Wconversion:  Warn for implicit conversions that may alter a value
 ## -Wmissing-format-attribute:  Warn about function pointers which might be candidates for format attributes
-## -Wpacked:  Warn if a structure is given the packed attribute, but the packed attribute has no effect on the layout or size of the structure
-## -Wpadded:  Warn if padding is included in a structure, either to align an element of the structure or to align the whole structure
 ## -Wredundant-decls:  Warn if anything is declared more than once in the same scope
 ## -Winline:  Warn if a function can not be inlined and it was declared as inline
 ## -Winvalid-pch:  Warn if a precompiled header is found in the search path but can't be used
@@ -166,7 +164,7 @@ UT_DIR   = UnitTest
 GENERIC_CFLAGS  = -ansi -pedantic -Wall -Wextra -Wformat=2 -Winit-self -Wmissing-include-dirs -Wswitch-default \
                   -Wswitch-enum -Wunused-parameter -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow \
                   -Wunsafe-loop-optimizations -Wcast-qual -Wcast-align -Wconversion -Wmissing-format-attribute \
-                  -Wpacked -Wpadded -Wredundant-decls -Winline -Winvalid-pch -Wdisabled-optimization \
+                  -Wredundant-decls -Winline -Winvalid-pch -Wdisabled-optimization \
                   -Wstack-protector -Wdouble-promotion -Wsign-conversion -Wlogical-op -Wtrampolines \
                   -Wunused-local-typedefs -Wmissing-declarations
 

@@ -209,26 +209,6 @@ bool operator> (const String& lhs, const String& rhs);
 // returns it.
 String operator+ (const String& lhs, const String& rhs);
 
-// input and output operators and functions
-// The output operator writes the contents of the String to the stream
-/* std::ostream& operator<< (std::ostream& os, const String& str); */
-
-// The input operator clears the supplied String, then starts reading the
-// stream.  It skips initial whitespace, then copies characters into
-// the supplied str until whitespace is encountered again. The terminating
-// whitespace remains in the input stream, analogous to how input normally
-// works.  str is expanded as needed, and retains the final allocation.
-// If the input stream fails, str contains whatever characters were read.
-/* std::istream& operator>> (std::istream& is, String& str); */
-
-// getline for String clears str to an empty String, then reads characters into
-// str until it finds a '\n', which is left in the stream (this differs from
-// the fgets and std::getline functions).  str's allocation is expanded as
-// needed, and it retains the final allocation.  If the input stream fails,
-// str contains whatever characters were read.
-/* std::istream& getline(std::istream& is, String& str); */
-String getline(const int fd);
-
 
 ////////////////////////
 //  INLINE FUNCTIONS  //
