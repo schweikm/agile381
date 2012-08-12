@@ -20,19 +20,26 @@ set -o errexit
 if [ `hostname` = megatron ]
 then
     GTEST=/opt/COTS/defaults/gtest
-else
-    GTEST=
-fi
-
-if [ $GTEST != "" ]
-then
     GTESTVER=`head -1 $GTEST/CHANGES | cut -d ' ' -f 3`
+    GTESTVER=${GTESTVER%?}  # remove last character
 else
     GTESTVER="Google Test is not installed on `hostname`!"
 fi
 
-# Cpplint
+
+## Boost ##
+if [ `hostname` = megatron ]
+then
+    BOOST=/opt/COTS/defaults/boost
+    BOOSTVER=`grep BOOST_VERSION $BOOST/Jamroot | head -1 | cut -d ' ' -f 4`
+else
+    BOOSTVER="Boost is not installed on `hostname`!"
+fi
+
+
+## Cpplint ##
 readonly CPPLINTVER="google-styleguide - Revision 86"
+
 
 # set the column widths
 readonly COL1SIZE=12
@@ -83,6 +90,7 @@ echo
 printEnds
 
 # print the versions
+printVersion "Boost" "$BOOSTVER"
 printVersion "Cpplint" "$CPPLINTVER"
 #printVersion "Cucumber" "$(cucumber --version)"
 printVersion "G++" "$(g++ --version | head -1)"

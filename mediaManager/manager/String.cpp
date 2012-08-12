@@ -4,6 +4,9 @@
 
 #include "manager/String.h"
 
+#include <boost/shared_array.hpp>
+  using boost::shared_array;
+
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
@@ -32,7 +35,7 @@ String::String(const char* const in_cstr)
     // create the internal buffer and copy the data
     myInternalCStrSize = static_cast<int>(strlen(in_cstr));
     resizeCStrBuffer(myInternalCStrSize + 1);
-    strncpy(myInternalCStr, in_cstr,
+    strncpy(myInternalCStr.get(), in_cstr,
             static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
@@ -53,7 +56,7 @@ String::String(const String& copy)
     // deep copy the internal C string
     resizeCStrBuffer(copy.myInternalCStrAllocation);
     myInternalCStrSize = copy.myInternalCStrSize;
-    strncpy(myInternalCStr, copy.c_str(),
+    strncpy(myInternalCStr.get(), copy.c_str(),
             static_cast<size_t>(myInternalCStrAllocation));
 
     // update the static members
@@ -85,12 +88,10 @@ String& String::operator=(const char* const other) {
 String::~String() {
     // output message if wanted
     if (true == ourMessagesWanted) {
-        printf("Dtor: \"%s\"\n", myInternalCStr);
+        printf("Dtor: \"%s\"\n", myInternalCStr.get());
     }
 
-    // free the allocated memory
-    delete [] myInternalCStr;
-    myInternalCStr = 0;
+    // no need to delete the array - hooray Boost!
 
     // update the static members
     ourNumber--;
@@ -108,7 +109,7 @@ String String::substring(const int i, const int len) const {
     // create a buffer and copy the chars
     const size_t buffSize = static_cast<size_t>(len) + 1;
     char* const buffer = new char[buffSize];
-    strncpy(buffer, myInternalCStr + i, static_cast<size_t>(len));
+    strncpy(buffer, myInternalCStr.get() + i, static_cast<size_t>(len));
     buffer[len] = '\0';
 
     // create a new String and delete the buffer
@@ -163,8 +164,8 @@ void String::insert_before(const int i, const String& src) {
     const size_t sizetI = static_cast<size_t>(i);
 
     // then copy the src characters
-    strncpy(myInternalCStr + (sizeof(char) * sizetI),  // NOLINT
-            src.myInternalCStr,
+    strncpy(myInternalCStr.get() + (sizeof(char) * sizetI),  // NOLINT
+            src.myInternalCStr.get(),
             static_cast<size_t>(src.myInternalCStrSize));
 
     // then change the instance variables
@@ -190,7 +191,7 @@ const String& String::operator += (const char* const rhs) {
     const size_t cStrSizet = static_cast<size_t>(myInternalCStrSize);
 
     // then add the chars to the end
-    strncpy(myInternalCStr + (sizeof(char) * cStrSizet),  // NOLINT
+    strncpy(myInternalCStr.get() + (sizeof(char) * cStrSizet),  // NOLINT
             rhs,
             strlen(rhs));
     myInternalCStrSize += static_cast<int>(strlen(rhs));
@@ -215,13 +216,13 @@ void String::resizeCStrBuffer(const int alloc) {
 
     try {
         myInternalCStrAllocation = alloc;
-        char* buffer = new char[myInternalCStrAllocation];
+        shared_array<char> buffer =
+          shared_array<char>(new char[myInternalCStrAllocation]);
 
         // copy the chars over
         if (0 != myInternalCStr) {
-            strncpy(buffer, myInternalCStr,
+            strncpy(buffer.get(), myInternalCStr.get(),
                     static_cast<size_t>(myInternalCStrAllocation));
-            delete [] myInternalCStr;
         }
 
         myInternalCStr = buffer;

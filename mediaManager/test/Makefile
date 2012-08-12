@@ -15,7 +15,7 @@ GTEST_DIR    = /opt/COTS/defaults/gtest
 
 #### Module-specific Options ####
 SRC_DIR   = ../manager
-INC_DIRS += -I $(GTEST_DIR)/include
+INC_DIRS += -I $(GTEST_DIR)/include -I /opt/COTS/defaults/boost
 SRC_OBJS  = $(SRC_DIR)/String.o $(SRC_DIR)/Utility.o
 
 #### Objects to Build ####

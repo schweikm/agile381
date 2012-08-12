@@ -5,6 +5,7 @@
  * Copyright 2012 Marc Schweikert
  */
 
+#include <boost/shared_array.hpp>
 #include "manager/Utility.h"
 
 /*
@@ -167,7 +168,7 @@ class String {
 
   private:
     // internal C string
-    char* myInternalCStr;
+    boost::shared_array<char> myInternalCStr;
 
     // size of internal C string
     int myInternalCStrSize;
@@ -216,7 +217,7 @@ String operator+ (const String& lhs, const String& rhs);
 
 
 inline char* String::c_str() const {
-    return myInternalCStr;
+    return myInternalCStr.get();
 }
 
 inline int String::size() const {
