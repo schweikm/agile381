@@ -17,8 +17,7 @@
 class StreamDup {
   public:
     StreamDup()
-      : myStdoutPos(0),
-        myNewFd(0),
+      : myNewFd(0),
         myTmpFile("") {
         // make the tmp file unique
         const int kBufSize = 50;
@@ -29,7 +28,7 @@ class StreamDup {
 
     void startCapture() {
         // save position of current standard output
-        fgetpos(stdout, myStdoutPos);
+        fgetpos(stdout, &myStdoutPos);
         myNewFd = dup(fileno(stdout));
         freopen(myTmpFile.c_str(), "w", stdout);
     }
@@ -42,7 +41,7 @@ class StreamDup {
         dup2(myNewFd, fileno(stdout));
         close(myNewFd);
         clearerr(stdout);
-        fsetpos(stdout, myStdoutPos);
+        fsetpos(stdout, &myStdoutPos);
     }
 
     const string getCapture() const {
@@ -82,9 +81,9 @@ class StreamDup {
     StreamDup& operator=(const StreamDup&);
 
 
-    fpos_t* myStdoutPos;
-    int     myNewFd;
-    string  myTmpFile;
+    fpos_t myStdoutPos;
+    int    myNewFd;
+    string myTmpFile;
 };
 
 
