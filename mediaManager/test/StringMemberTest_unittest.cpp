@@ -17,7 +17,9 @@
 class StreamDup {
   public:
     StreamDup()
-      :myNewFd(0) {
+      : myStdoutPos(0),
+        myNewFd(0),
+        myTmpFile("") {
         // make the tmp file unique
         const int kBufSize = 50;
         char buffer[kBufSize];
@@ -27,7 +29,7 @@ class StreamDup {
 
     void startCapture() {
         // save position of current standard output
-        fgetpos(stdout, &stdoutPos);
+        fgetpos(stdout, myStdoutPos);
         myNewFd = dup(fileno(stdout));
         freopen(myTmpFile.c_str(), "w", stdout);
     }
@@ -40,7 +42,7 @@ class StreamDup {
         dup2(myNewFd, fileno(stdout));
         close(myNewFd);
         clearerr(stdout);
-        fsetpos(stdout, &stdoutPos);
+        fsetpos(stdout, myStdoutPos);
     }
 
     const string getCapture() const {
@@ -51,18 +53,19 @@ class StreamDup {
 
         // obtain file size:
         fseek(file, 0, SEEK_END);
-        const int size = ftell(file);
+        const long size = ftell(file);  // NOLINT
         rewind(file);
 
         // return value
         string val;
 
         // allocate memory to contain the whole file
-        char* buffer = new char[sizeof(buffer) * size];
+        char* buffer = new char[sizeof(buffer) * static_cast<size_t>(size)];
         if (0 != buffer) {
             // copy the file into the buffer:
-            const int result = fread(buffer, 1, size, file);
-            if (result == size) {
+            const size_t result =
+              fread(buffer, 1, static_cast<size_t>(size), file);
+            if (result == static_cast<size_t>(size)) {
                 val = buffer;
             }
         }
@@ -75,9 +78,13 @@ class StreamDup {
     }
 
   private:
-    fpos_t stdoutPos;
-    int    myNewFd;
-    string myTmpFile;
+    StreamDup(const StreamDup&);
+    StreamDup& operator=(const StreamDup&);
+
+
+    fpos_t* myStdoutPos;
+    int     myNewFd;
+    string  myTmpFile;
 };
 
 
@@ -120,12 +127,16 @@ class StringMemberTest : public testing::Test {
         String::set_messages_wanted(false);
 
         // verify everything is correct
-        verifyStrings(result.c_str()        , dup.getCapture().c_str(),
-                      in_string.c_str()     , testStr.c_str(),
-                      in_string.length()    , testStr.size(),
-                      in_string.length() + 1, testStr.get_allocation(),
-                      numStrings + 1        , totalAllocation +
-                                                testStr.get_allocation());
+        verifyStrings(result.c_str(),
+                      dup.getCapture().c_str(),
+                      in_string.c_str(),
+                      testStr.c_str(),
+                      static_cast<int>(in_string.length()),
+                      testStr.size(),
+                      static_cast<int>(in_string.length()) + 1,
+                      testStr.get_allocation(),
+                      numStrings + 1,
+                      totalAllocation + testStr.get_allocation());
     }
 
     // Copy Constructor Helper
@@ -152,12 +163,16 @@ class StringMemberTest : public testing::Test {
         String::set_messages_wanted(false);
 
         // verify everything is correct
-        verifyStrings(result.c_str()        , dup.getCapture().c_str(),
-                      in_string.c_str()     , testStr.c_str(),
-                      in_string.length()    , testStr.size(),
-                      in_string.length() + 1, testStr.get_allocation(),
-                      numStrings + 1        , totalAllocation +
-                                                testStr.get_allocation());
+        verifyStrings(result.c_str(),
+                      dup.getCapture().c_str(),
+                      in_string.c_str(),
+                      testStr.c_str(),
+                      static_cast<int>(in_string.length()),
+                      testStr.size(),
+                      static_cast<int>(in_string.length()) + 1,
+                      testStr.get_allocation(),
+                      numStrings + 1,
+                      totalAllocation + testStr.get_allocation());
     }
 
 
@@ -390,9 +405,9 @@ TEST_F(StringMemberTest, OperatorAccessor) {
     const String c(a.c_str());
 
     // normal case
-    for (size_t i = 0; i < a.length(); i++) {
-        EXPECT_EQ(a[i], b[i]);
-        EXPECT_EQ(a[i], c[i]);
+    for (int i = 0; i < static_cast<int>(a.length()); i++) {
+        EXPECT_EQ(a[static_cast<size_t>(i)], b[i]);
+        EXPECT_EQ(a[static_cast<size_t>(i)], c[i]);
     }
 
     // non-const less than zero
@@ -409,13 +424,13 @@ TEST_F(StringMemberTest, OperatorAccessor) {
 
     // non-const greater than size
     try {
-        b[a.length() + 1];
+        b[static_cast<int>(a.length()) + 1];
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 
     // const greater than size
     try {
-        c[a.length() + 1];
+        c[static_cast<int>(a.length()) + 1];
         ASSERT_EQ(1, 0);
     } catch(const String_exception&) { }
 }
@@ -532,18 +547,24 @@ TEST_F(StringMemberTest, remove) {
     const string subString = "All your belong to us";
     String test(fullString.c_str());
     test.remove(9, 9);
-    compareStringsWithAlloc(subString, test, fullString.length() + 1);
+    compareStringsWithAlloc(subString,
+                            test,
+                            static_cast<int>(fullString.length()) + 1);
 
     // normal case 2
     const string subString1 = "All your o us";
     String test1(fullString.c_str());
     test1.remove(9, 17);
-    compareStringsWithAlloc(subString1, test1, fullString.length() + 1);
+    compareStringsWithAlloc(subString1,
+                            test1,
+                            static_cast<int>(fullString.length()) + 1);
 
     // corner case, both zero
     String test2(fullString.c_str());
     test2.remove(0, 0);
-    compareStringsWithAlloc(fullString, test2, fullString.length() + 1);
+    compareStringsWithAlloc(fullString,
+                            test2,
+                            static_cast<int>(fullString.length()) + 1);
 
     //
     // index
@@ -592,7 +613,8 @@ TEST_F(StringMemberTest, remove) {
 TEST_F(StringMemberTest, insertBefore) {
     const string full1 = "|the quick brown fox|";
     const string full2 = "^jumps over the lazy dog^";
-    const int alloc1 = 2 * (full1.length() + full2.length() + 1);
+    const int alloc1 = 2 * (static_cast<int>(full1.length()) +
+                              static_cast<int>(full2.length()) + 1);
 
     // normal case - from front
     String test1(full1.c_str());
@@ -634,7 +656,6 @@ TEST_F(StringMemberTest, insertBefore) {
 TEST_F(StringMemberTest, operatorConcatenationChar) {
     string orig("|The cases are rea");
     String test(orig.c_str());
-    const int testAlloc = test.get_allocation();
 
     const char addChar1 = 'l';
     const int totalAlloc = 2 * (test.size() + 1 + 1);
@@ -654,10 +675,10 @@ TEST_F(StringMemberTest, operatorConcatenationChar) {
 TEST_F(StringMemberTest, operatorConcatenationCharConst) {
     string orig("|The people ");
     String test(orig.c_str());
-    const int testAlloc = test.get_allocation();
 
     const char* const addCStr1 = "are ";
-    const int totalAlloc = 2 * (test.size() + strlen(addCStr1) + 1);
+    const int totalAlloc = 2 * (static_cast<int>(test.size()) +
+                                  static_cast<int>(strlen(addCStr1)) + 1);
     test += addCStr1;
     compareStringsWithAlloc(orig += addCStr1, test, totalAlloc);
 
@@ -674,7 +695,6 @@ TEST_F(StringMemberTest, operatorConcatenationCharConst) {
 TEST_F(StringMemberTest, operatorConcatenationString) {
     string orig("|This ");
     String test(orig.c_str());
-    const int testAlloc = test.get_allocation();
 
     const String addStr1("is ");
     int totalAlloc = 2 * (test.size() + addStr1.size() + 1);
