@@ -83,7 +83,6 @@ echo
 printEnds
 
 # print the versions
-printVersion "Cppcheck" "$(cppcheck --version)"
 printVersion "Cpplint" "$CPPLINTVER"
 #printVersion "Cucumber" "$(cucumber --version)"
 printVersion "G++" "$(g++ --version | head -1)"

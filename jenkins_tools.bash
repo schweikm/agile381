@@ -22,20 +22,8 @@ echo Done!
 
 echo
 echo
-echo "=========================="
-echo "==== Step 5: Cppcheck ===="
-echo "=========================="
-echo
-echo
-
-cppcheck --enable=all --std=posix -I mediaManager mediaManager/manager/ --xml >& mediaManager/reports/cppcheck-manager.xml
-echo Done!
-
-
-echo
-echo
 echo "========================="
-echo "==== Step 6: Cpplint ===="
+echo "==== Step 5: Cpplint ===="
 echo "========================="
 echo
 echo
