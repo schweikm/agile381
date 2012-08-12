@@ -14,10 +14,22 @@ set -o errexit
 ###############################################################################
 
 
-#### Versions that cannot be found normally ####
+#### These products need to be defined for every machine ####
 
-# Google Test
-GTEST=`ls | grep gtest`
+## Google Test ##
+if [ `hostname` = megatron ]
+then
+    GTEST=/opt/COTS/defaults/gtest
+else
+    GTEST=
+fi
+
+if [ $GTEST != "" ]
+then
+    GTESTVER=`head -1 $GTEST/CHANGES | cut -d ' ' -f 3`
+else
+    GTESTVER="Google Test is not installed on `hostname`!"
+fi
 
 # Cpplint
 readonly CPPLINTVER="google-styleguide - Revision 86"
@@ -77,7 +89,7 @@ printVersion "Cpplint" "$CPPLINTVER"
 printVersion "G++" "$(g++ --version | head -1)"
 printVersion "Gcov" "$(gcov --version | head -1)"
 printVersion "gcovr.py" "$(mediaManager/support/gcovr.py --version | head -1)"
-printVersion "Google Test" "$GTEST"
+printVersion "Google Test" "$GTESTVER"
 printVersion "Linux Kernel" "$(uname -r)"
 printVersion "Make" "$(make --version | head -1)"
 printVersion "Perl" "$(perl --version | head -2 | tail -1)"

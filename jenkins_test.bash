@@ -5,7 +5,7 @@ set -o errexit
 echo
 echo
 echo "============================"
-echo "==== Step 4: Unit Tests ===="
+echo "==== Step 3: Unit Tests ===="
 echo "============================"
 echo
 echo

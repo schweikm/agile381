@@ -5,7 +5,7 @@ set -o errexit
 echo
 echo
 echo "==============================="
-echo "==== Step 5: Code Coverage ===="
+echo "==== Step 4: Code Coverage ===="
 echo "==============================="
 echo
 echo
@@ -23,7 +23,7 @@ echo Done!
 echo
 echo
 echo "=========================="
-echo "==== Step 6: Cppcheck ===="
+echo "==== Step 5: Cppcheck ===="
 echo "=========================="
 echo
 echo
@@ -35,7 +35,7 @@ echo Done!
 echo
 echo
 echo "========================="
-echo "==== Step 7: Cpplint ===="
+echo "==== Step 6: Cpplint ===="
 echo "========================="
 echo
 echo
