@@ -2,6 +2,9 @@
  * Copyright 2012 Marc Schweikert
  */
 
+#include <boost/shared_ptr.hpp>
+  using boost::shared_ptr;
+
 #include <cstddef>
 #include <cstdio>
 #include <string>
@@ -17,7 +20,8 @@
 class StreamDup {
   public:
     StreamDup()
-      : myNewFd(0),
+      : myStdoutPos(new fpos_t),
+        myNewFd(0),
         myTmpFile("") {
         // make the tmp file unique
         const int kBufSize = 50;
@@ -28,7 +32,7 @@ class StreamDup {
 
     void startCapture() {
         // save position of current standard output
-        fgetpos(stdout, &myStdoutPos);
+        fgetpos(stdout, myStdoutPos.get());
         myNewFd = dup(fileno(stdout));
         freopen(myTmpFile.c_str(), "w", stdout);
     }
@@ -41,7 +45,7 @@ class StreamDup {
         dup2(myNewFd, fileno(stdout));
         close(myNewFd);
         clearerr(stdout);
-        fsetpos(stdout, &myStdoutPos);
+        fsetpos(stdout, myStdoutPos.get());
     }
 
     const string getCapture() const {
@@ -81,7 +85,7 @@ class StreamDup {
     StreamDup& operator=(const StreamDup&);
 
 
-    fpos_t myStdoutPos;
+    shared_ptr<fpos_t> myStdoutPos;
     int    myNewFd;
     string myTmpFile;
 };
