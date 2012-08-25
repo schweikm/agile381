@@ -27,15 +27,10 @@ else
 fi
 
 
-## Boost ##
-if [ `hostname` = megatron ]
-then
-    BOOST=/opt/COTS/defaults/boost
-    BOOSTVER=`grep BOOST_VERSION $BOOST/Jamroot | head -1 | cut -d ' ' -f 4`
-else
-    BOOSTVER="Boost is not installed on `hostname`!"
-fi
+#### These products have to be hard-coded ####
 
+## Boost ##
+readonly BOOSTVER="1.51.0"
 
 ## Cpplint ##
 readonly CPPLINTVER="google-styleguide - Revision 86"

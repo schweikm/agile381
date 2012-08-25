@@ -14,7 +14,7 @@ GTEST_DIR    = ../../gtest-1.6.0
 
 
 #### Module-specific Options ####
-INC_DIRS += -I /opt/COTS/defaults/boost
+INC_DIRS += -I /opt/COTS/defaults/boost/include
 
 #### Objects to Build ####
 OBJS       = String.o \
