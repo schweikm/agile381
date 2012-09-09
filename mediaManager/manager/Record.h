@@ -1,9 +1,11 @@
 #ifndef TRUNK_MEDIAMANAGER_MANAGER_RECORD_H_
 #define TRUNK_MEDIAMANAGER_MANAGER_RECORD_H_
 
+
 /*
  * Copyright 2012 Marc Schweikert
  */
+
 
 /* A Record ontains a unique ID number, assigned when the record is created, a
  * rating, and a title and medium name as Strings. Once created, only the

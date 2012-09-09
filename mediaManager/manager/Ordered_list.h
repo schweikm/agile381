@@ -1,9 +1,11 @@
 #ifndef TRUNK_MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
 #define TRUNK_MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
 
+
 /*
  * Copyright 2012 Marc Schweikert
  */
+
 
 /*
  * Ordered_list is a linked-list class template  with iterators similar to the

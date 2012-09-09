@@ -14,11 +14,11 @@ GTEST_DIR    = ../../gtest-1.6.0
 
 
 #### Module-specific Options ####
-INC_DIRS += -I /opt/COTS/defaults/boost/include
+INC_DIRS += -I /opt/COTS/defaults/boost/include \
+            -I /opt/COTS/defaults/glog/include
 
 #### Objects to Build ####
-OBJS       = String.o \
-             Utility.o
+OBJS       = String.o
 
 #### Targets ####
 all: $(OBJS)

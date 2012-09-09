@@ -14,20 +14,52 @@ set -o errexit
 ###############################################################################
 
 
-#### These products need to be defined for every machine ####
+# get the verbose level for glog
+VLVL=0
 
-## Google Test ##
+while getopts ":v:" opt; do
+    case $opt in
+    v)
+        VLVL=$OPTARG
+        ;;
+    \?)
+        echo "Invalid option: -$OPTARG" >&2
+        exit 1
+        ;;
+    :)
+        echo "Option -$OPTARG requires an argument." >&2
+        exit 1
+        ;;
+    esac
+done
+
+
+#### These variables need to be defined for every machine ####
+BOOST_DIR=
+GLOG_DIR=
+GTEST_DIR=
+
 if [ `hostname` = megatron ]
 then
-    GTEST=/opt/COTS/defaults/gtest
-    GTESTVER=`head -1 $GTEST/CHANGES | cut -d ' ' -f 3`
-    GTESTVER=${GTESTVER%?}  # remove last character
-else
-    GTESTVER="Google Test is not installed on `hostname`!"
+    BOOST_DIR=/opt/COTS/defaults/boost
+    GLOG_DIR=/opt/COTS/defaults/glog
+    GTEST_DIR=/opt/COTS/defaults/gtest
 fi
 
 
-#### These products have to be hard-coded ####
+#### Environment Variables ####
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$BOOST_DIR/lib
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$GLOG_DIR/lib
+
+export GLOG_log_dir=`pwd`/mediaManager/log
+export GLOG_v=$VLVL
+
+
+#### These product versions are special ####
+
+## Google Test ##
+GTESTVER=`head -1 $GTEST_DIR/CHANGES | cut -d ' ' -f 3`
+GTESTVER=${GTESTVER%?}  # remove last character
 
 ## Boost ##
 readonly BOOSTVER="1.51.0"
@@ -91,6 +123,7 @@ printVersion "Cpplint" "$CPPLINTVER"
 printVersion "G++" "$(g++ --version | head -1)"
 printVersion "Gcov" "$(gcov --version | head -1)"
 printVersion "gcovr.py" "$(mediaManager/support/gcovr.py --version | head -1)"
+printVersion "Google Log" "$(head -3 $GLOG_DIR/share/doc/glog*/ChangeLog | grep google-glog | cut -d ' ' -f 4)"
 printVersion "Google Test" "$GTESTVER"
 printVersion "Linux Kernel" "$(uname -r)"
 printVersion "Make" "$(make --version | head -1)"

@@ -1,9 +1,11 @@
 #ifndef TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
 #define TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
 
+
 /*
  * Copyright 2012 Marc Schweikert
  */
+
 
 /* Collections contain a name and a container of members,
  * represented as pointers to Records.

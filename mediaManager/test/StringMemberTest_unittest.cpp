@@ -2,18 +2,18 @@
  * Copyright 2012 Marc Schweikert
  */
 
-#include <boost/shared_ptr.hpp>
-  using boost::shared_ptr;
 
 #include <cstddef>
 #include <cstdio>
 #include <string>
     using std::string;
 
+#include "boost/shared_ptr.hpp"
+  using boost::shared_ptr;
+
 #include "gtest/gtest.h"
 
 #include "manager/String.h"
-
 
 
 // class that captures stdout and stores it in a file

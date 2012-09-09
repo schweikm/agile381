@@ -1,11 +1,14 @@
 #ifndef TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
 #define TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
 
+
 /*
  * Copyright 2012 Marc Schweikert
  */
 
-#include <boost/shared_array.hpp>
+
+#include "boost/shared_array.hpp"
+#include "glog/logging.h"
 #include "manager/Utility.h"
 
 /*
@@ -217,36 +220,57 @@ String operator+ (const String& lhs, const String& rhs);
 
 
 inline char* String::c_str() const {
+    VLOG(1) << "Method Entry:  String::c_str";
+    VLOG(1) << "Method Exit :  String::c_str";
     return myInternalCStr.get();
 }
 
 inline int String::size() const {
+    VLOG(1) << "Method Entry:  String::size";
+    VLOG(1) << "Method Exit :  String::size";
     return myInternalCStrSize;
 }
 
 inline int String::get_allocation() const {
+    VLOG(1) << "Method Entry:  String::get_allocation";
+    VLOG(1) << "Method Exit :  String::get_allocation";
     return myInternalCStrAllocation;
 }
 
 inline const char& String::operator[] (const int i) const {
+    VLOG(1) << "Method Entry:  String::operator[]";
+    VLOG(2) << "Called with arguments\ti = ->" << i << "<-";
+
     if ((i < 0) || (i >= myInternalCStrSize)) {
         const String_exception ex("Subscript out of range");
-        printError(__FILE__, __LINE__, ex);
+        LOG(ERROR) << ex.msg;
         throw ex;
     }
+
+    VLOG(1) << "Method Exit :  String::operator[]";
     return myInternalCStr[i];
 }
 
 inline int String::get_number() {
+    VLOG(1) << "Method Entry:  String::get_number";
+    VLOG(1) << "Method Exit :  String::get_number";
     return ourNumber;
 }
 
 inline int String::get_total_allocation() {
+    VLOG(1) << "Method Entry:  String::get_total_allocation";
+    VLOG(1) << "Method Exit :  String::get_total_allocation";
     return ourTotalAllocation;
 }
 
 inline void String::set_messages_wanted(const bool in_messagesWanted) {
+    VLOG(1) << "Method Entry:  String::set_messages_wanted";
+    VLOG(2) << "Called with arguments\tin_messagesWanted = ->"
+            << in_messagesWanted << "<-";
+
     ourMessagesWanted = in_messagesWanted;
+
+    VLOG(1) << "Method Exit :  String::set_messages_wanted";
 }
 
 #endif  // TRUNK_MEDIAMANAGER_MANAGER_STRING_H_
