@@ -65,7 +65,7 @@ GTESTVER=${GTESTVER%?}  # remove last character
 readonly BOOSTVER="1.51.0"
 
 ## Cpplint ##
-readonly CPPLINTVER="google-styleguide - Revision 86"
+readonly CPPLINTVER="google-styleguide - Revision 87"
 
 
 # set the column widths

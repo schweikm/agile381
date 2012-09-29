@@ -11,6 +11,7 @@
 #include "glog/logging.h"
 #include "manager/Utility.h"
 
+
 /*
  * String class - a subset of the C++ Standard Library <string> class
  * String objects contain a C-string in a dynamically allocated piece of memory
@@ -68,33 +69,18 @@
  */
 
 
-// Simple exception class for reporting String errors
-struct String_exception {
-    explicit String_exception(const char* const in_msg)
-      :msg(in_msg) { }
-
-    const char* msg;
-};
+// enum values for signalling error
+enum StringStatus { OK, ERROR };
 
 
 class String {
   public:
     // Default initialization is to contain an empty string; if a non-empty
     // C-string is supplied, this String gets minimum allocation.
-    explicit String(const char* const in_cstr = "");
+    String();
 
-    // The copy constructor initializes this String with the original's data,
-    // and gets minimum allocation.
-    String(const String& copy);
-
-    // There are two assignment operators: one has a String on the right-hand
-    // side, the other a C-string (char *). In both cases, the left-hand-side
-    // gets a copy of the right-hand-side data and gets minimum allocation.
-    // The assign from String must use the "copy-swap" idiom; you should use
-    // the obvious "construct and swap" variation on this for assigning from a
-    // C-string.
-    String& operator=(const String& other);
-    String& operator=(const char* const other);
+    // method to perform complex initialization of constructor
+    StringStatus init(const char* const in_cstr = "");
 
     // destructor
     ~String();
@@ -111,7 +97,7 @@ class String {
 
     // Return a reference to character i in the string.
     // Throw exception if 0 <= i < size is false.
-    const char& operator[] (const int i) const;
+    StringStatus get(const int i, char* val) const;
 
     // Return a String starting with i and extending for len characters
     // The substring must be contained within the string.
@@ -120,7 +106,7 @@ class String {
     // If both i = size and len = 0, the input is valid and the result is an
     // empty string.
     // Throw exception if the input is invalid.
-    String substring(const int i, const int len) const;
+    StringStatus substring(const int i, const int len, String* str) const;
 
     // Modifiers
     // Set to an empty string with minimum allocation by create/swap with an
@@ -130,33 +116,21 @@ class String {
     // Remove the len characters starting at i; allocation is unchanged.
     // The removed characters must be contained within the String.
     // Valid values for i and len are the same as for substring.
-    void remove(const int i, const int len);
+    StringStatus remove(const int i, const int len);
 
     // Insert the supplied source String before character i
     // Pushing the rest of the contents back, reallocating as needed.
     // If i == size, the inserted string is added to the end of this String.
     // This String retains the final allocation.
     // Throw exception if 0 <= i <= size is false
-    void insert_before(const int i, const String& src);
-
-    // These concatenation operators add the rhs string data to the lhs object.
-    // They do not create any temporary String objects. They either directly
-    // copy the rhs data into the lhs space if it is big enough to hold the
-    // rhs, or allocate new space and copy the old lhs data into it followed by
-    // the rhs data. The lhs object retains the final memory allocation.
-    const String& operator += (const char rhs);
-    const String& operator += (const char* const rhs);
-    const String& operator += (const String& rhs);
+    StringStatus insert_before(const int i, const String& src);
 
     // Swap the contents of this String with another one.
     // The member variable values are interchanged, along with the
     // pointers to the allocated C-strings, but the two C-strings
     // are neither copied nor modified. No memory allocation/deallocation is
     // done.
-    void swap(String& other); // NOLINT
-
-    /* Monitoring functions - not part of a normal implementation */
-    /*  used here for demonstration and testing purposes. */
+    void swap(String& other);  // NOLINT(build/include_what_you_use)
 
     // Return the total number of Strings in existence
     static int get_number();
@@ -164,12 +138,11 @@ class String {
     // Return total bytes allocated for all Strings in existence
     static int get_total_allocation();
 
-    // Call with true to cause ctor, assignment, and dtor messages to be
-    // output.  These messages are output from each function before it does
-    // anything else.
-    static void set_messages_wanted(const bool in_messagesWanted);
-
   private:
+    // resize the internal c string
+    StringStatus resizeCStrBuffer(const int alloc);
+
+
     // internal C string
     boost::shared_array<char> myInternalCStr;
 
@@ -179,39 +152,15 @@ class String {
     // total bytes allocated for the internal C string
     int myInternalCStrAllocation;
 
-    // resize the internal c string
-    void resizeCStrBuffer(const int alloc);
-
-    /* Variables for monitoring functions - not part of a normal
-     * implementation.
-     * But used here for demonstration and testing purposes.
-     */
-
     // counts number of String objects in existence
     static int ourNumber;
+
     // counts total amount of memory allocated
     static int ourTotalAllocation;
-    // whether to output ctor/dtor/operator= messages, initially false
-    static bool ourMessagesWanted;
+
+    // remove copy constructor and assignment operator
+    DISALLOW_COPY_AND_ASSIGN(String);
 };
-
-// non-member overloaded operators
-
-// compare lhs and rhs strings; constructor will convert a C-string literal to
-// a String.  Comparison is based on std::strcmp result compared to 0
-bool operator== (const String& lhs, const String& rhs);
-bool operator!= (const String& lhs, const String& rhs);
-bool operator< (const String& lhs, const String& rhs);
-bool operator> (const String& lhs, const String& rhs);
-
-// Concatenate a String with another String.
-// If one of the arguments is a C-string, the String constructor will
-// automatically create a temporary String for it to match this function
-// (inefficient, but instructive).  This automatic behavior would be disabled
-// if the String constructor was declared "explicit".  This function constructs
-// a copy of the lhs, then concatenates the rhs to it with operator +=, and
-// returns it.
-String operator+ (const String& lhs, const String& rhs);
 
 
 ////////////////////////
@@ -237,20 +186,6 @@ inline int String::get_allocation() const {
     return myInternalCStrAllocation;
 }
 
-inline const char& String::operator[] (const int i) const {
-    VLOG(1) << "Method Entry:  String::operator[]";
-    VLOG(2) << "Called with arguments\ti = ->" << i << "<-";
-
-    if ((i < 0) || (i >= myInternalCStrSize)) {
-        const String_exception ex("Subscript out of range");
-        LOG(ERROR) << ex.msg;
-        throw ex;
-    }
-
-    VLOG(1) << "Method Exit :  String::operator[]";
-    return myInternalCStr[i];
-}
-
 inline int String::get_number() {
     VLOG(1) << "Method Entry:  String::get_number";
     VLOG(1) << "Method Exit :  String::get_number";
@@ -263,14 +198,5 @@ inline int String::get_total_allocation() {
     return ourTotalAllocation;
 }
 
-inline void String::set_messages_wanted(const bool in_messagesWanted) {
-    VLOG(1) << "Method Entry:  String::set_messages_wanted";
-    VLOG(2) << "Called with arguments\tin_messagesWanted = ->"
-            << in_messagesWanted << "<-";
-
-    ourMessagesWanted = in_messagesWanted;
-
-    VLOG(1) << "Method Exit :  String::set_messages_wanted";
-}
 
 #endif  // TRUNK_MEDIAMANAGER_MANAGER_STRING_H_

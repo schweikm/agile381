@@ -1,24 +1,13 @@
 include ../support/standard_macro.mak
 
 
-############################################################
-#### THESE MACROS MUST BE SPECIFIED IN EVERY MAKEFILE!! ####
-############################################################
-
-BIN_DIR      = ../bin
-GTEST_DIR    = ../../gtest-1.6.0
-
-############################################################
-############################################################
-############################################################
-
-
 #### Module-specific Options ####
 INC_DIRS += -I /opt/COTS/defaults/boost/include \
             -I /opt/COTS/defaults/glog/include
 
 #### Objects to Build ####
-OBJS       = String.o
+OBJS       = String.o \
+			 Utility.o
 
 #### Targets ####
 all: $(OBJS)

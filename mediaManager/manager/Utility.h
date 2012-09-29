@@ -9,6 +9,13 @@
 
 /* Utility functions, constants, and classes used by other modules */
 
+
+// A macro to disallow the copy constructor and operator= functions
+#define DISALLOW_COPY_AND_ASSIGN(TypeName) \
+  TypeName(const TypeName&);               \
+  void operator=(const TypeName&)
+
+
 // a simple class for error exceptions - msg points to a C-string error message
 struct Error {
     explicit Error(const char * in_msg = "")

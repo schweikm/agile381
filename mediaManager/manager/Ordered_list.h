@@ -173,7 +173,7 @@ class Ordered_list {
             /* fill this in */
         }
 
-        Iterator operator++ (int) {  // NOLINT
+        Iterator operator++ (int) {  // NOLINT(readability/function)
             /* fill this in */
         }
 
@@ -274,7 +274,7 @@ class Ordered_list {
                                               Arg apply_arg) const;
 
     // interchange the member variable values of this list with the other list
-    void swap(Ordered_list & other); // NOLINT
+    void swap(Ordered_list & other);  // NOLINT(build/include_what_you_use)
 
   private:
     // *** this is the member variable declaration for the ordering function -

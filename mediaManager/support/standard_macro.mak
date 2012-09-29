@@ -191,9 +191,19 @@ C_WARN_CFLAGS   = -Wdeclaration-after-statement -Wbad-function-cast -Wc++-compat
 ## -Wold-style-cast:  Warn if an old-style (C-style) cast to a non-void type is used within a C++ program
 ## -Woverloaded-virtual:  Warn when a function declaration hides virtual functions from a base class
 ## -Wsign-promo:  Warn when overload resolution chooses a promotion from unsigned or enumerated type to a signed type
+## -fno-exceptions:  Disable exceptions
+## -fno-rtti:  Disable Run-time Type Information
 
 CXX_WARN_CFLAGS = -Wctor-dtor-privacy -Wnoexcept -Weffc++ -Wstrict-null-sentinel -Wold-style-cast \
-                  -Woverloaded-virtual -Wsign-promo
+                  -Woverloaded-virtual -Wsign-promo -fno-exceptions -fno-rtti
+
+
+#######################
+#### DEFINE MACROS ####
+#######################
+
+C_DEFINES =
+CXX_DEFINES = -DBOOST_NO_RTTI -DBOOST_NO_TYPEID -DBOOST_EXCEPTION_DISABLE -DBOOST_NO_EXCEPTIONS
 
 
 #####################
@@ -236,14 +246,14 @@ endif
 #### PLAFORM FLAGS ####
 #######################
 
-PLATFORM_CFLAGS     =
+PLATFORM_CFLAGS     = # unused right now
 PLATFORM_C_CFLAGS   = $(PLATFORM_CFLAGS)
 PLATFORM_C_CXXFLAGS = $(PLATFORM_CFLAGS)
 
 
 #### Build the combined flags ####
-BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_CFLAGS) $(PLATFORM_C_CFLAGS)
-BASE_CXXFLAGS = $(GENERIC_CFLAGS) $(CXX_WARN_CFLAGS) $(PLATFORM_C_CXXFLAGS)
+BASE_CFLAGS   = $(GENERIC_CFLAGS) $(C_WARN_CFLAGS) $(C_DEFINES) $(PLATFORM_C_CFLAGS)
+BASE_CXXFLAGS = $(GENERIC_CFLAGS) $(CXX_WARN_CFLAGS) $(CXX_DEFINES) $(PLATFORM_C_CXXFLAGS)
 
 CFLAGS   = -c $(BASE_CFLAGS)
 CXXFLAGS = -c $(BASE_CXXFLAGS)
