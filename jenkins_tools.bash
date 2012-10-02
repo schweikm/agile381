@@ -30,3 +30,17 @@ echo
 
 mediaManager/support/run_cpplint.pl
 echo Done!
+
+
+echo
+echo
+echo "========================="
+echo "==== Step 6: Doxygen ===="
+echo "========================="
+echo
+echo
+
+cd mediaManager
+doxygen support/Doxyfile
+cd ..
+echo Done!

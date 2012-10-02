@@ -43,7 +43,7 @@ class StringUnitTest : public testing::Test {
 
         // create the String instance
         String testStr;
-        ASSERT_EQ(OK, testStr.init(in_string.c_str()));
+        ASSERT_EQ(String::OK, testStr.init(in_string.c_str()));
 
         // verify everything is correct
         verifyStrings(in_string.c_str(),
@@ -150,7 +150,7 @@ TEST_F(StringUnitTest, Destructor) {
 
     {
         String test1;
-        ASSERT_EQ(OK, test1.init(test1Val.c_str()));
+        ASSERT_EQ(String::OK, test1.init(test1Val.c_str()));
         EXPECT_EQ(numStrings + 1, String::get_number());
         EXPECT_EQ(test1Val.length() + 1, totalAllocation +
                                            String::get_total_allocation());
@@ -171,20 +171,20 @@ TEST_F(StringUnitTest, Destructor) {
 TEST_F(StringUnitTest, Get) {
     const string a("all your base are belong to us");
     String b;
-    ASSERT_EQ(OK, b.init(a.c_str()));
+    ASSERT_EQ(String::OK, b.init(a.c_str()));
     char val;
 
     // normal case
     for (int i = 0; i < static_cast<int>(a.length()); i++) {
-        EXPECT_EQ(OK, b.get(i, &val));
+        EXPECT_EQ(String::OK, b.get(i, &val));
         EXPECT_EQ(a[static_cast<size_t>(i)], val);
     }
 
     // less than zero
-    EXPECT_EQ(ERROR, b.get(-1, &val));
+    EXPECT_EQ(String::ERROR, b.get(-1, &val));
 
     // greater than length
-    EXPECT_EQ(ERROR, b.get(static_cast<int>(a.length()) + 1, &val));
+    EXPECT_EQ(String::ERROR, b.get(static_cast<int>(a.length()) + 1, &val));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -201,13 +201,13 @@ TEST_F(StringUnitTest, Substring) {
     String test;
     String test2;
 
-    ASSERT_EQ(OK, test.init(fullString.c_str()));
-    EXPECT_EQ(OK, test.substring(4, subStringLen, &test2));
+    ASSERT_EQ(String::OK, test.init(fullString.c_str()));
+    EXPECT_EQ(String::OK, test.substring(4, subStringLen, &test2));
     compareStrings(subString, test2);
 
     // corner case, both zero
     String test4;
-    EXPECT_EQ(OK, test.substring(0, 0, &test4));
+    EXPECT_EQ(String::OK, test.substring(0, 0, &test4));
     compareStrings("", test4);
 
     //
@@ -217,23 +217,24 @@ TEST_F(StringUnitTest, Substring) {
     String test5;
 
     // index less than zero
-    EXPECT_EQ(ERROR, test2.substring(-1, 1, &test5));
+    EXPECT_EQ(String::ERROR, test2.substring(-1, 1, &test5));
 
     // index greater than size
-    EXPECT_EQ(ERROR, test2.substring(test.size() + 1, 1, &test5));
+    EXPECT_EQ(String::ERROR, test2.substring(test.size() + 1, 1, &test5));
 
     //
     // length
     //
 
     // length less than zero
-    EXPECT_EQ(ERROR, test2.substring(0, -1, &test5));
+    EXPECT_EQ(String::ERROR, test2.substring(0, -1, &test5));
 
     // length greater than size
-    EXPECT_EQ(ERROR, test2.substring(0, test.size() + 1, &test5));
+    EXPECT_EQ(String::ERROR, test2.substring(0, test.size() + 1, &test5));
 
     // index + length greater than size
-    EXPECT_EQ(ERROR, test2.substring(subStringLen, test.size() + 1, &test5));
+    EXPECT_EQ(String::ERROR,
+              test2.substring(subStringLen, test.size() + 1, &test5));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -243,7 +244,7 @@ TEST_F(StringUnitTest, Substring) {
 ///////////////////////////////////////////////////////////////////////////////
 TEST_F(StringUnitTest, Clear) {
     String test;
-    ASSERT_EQ(OK, test.init("trololololololo"));
+    ASSERT_EQ(String::OK, test.init("trololololololo"));
     test.clear();
     compareStrings("", test);
 }
@@ -258,8 +259,8 @@ TEST_F(StringUnitTest, Remove) {
     const string fullString = "All your base are belong to us";
     const string subString = "All your belong to us";
     String test;
-    ASSERT_EQ(OK, test.init(fullString.c_str()));
-    EXPECT_EQ(OK, test.remove(9, 9));
+    ASSERT_EQ(String::OK, test.init(fullString.c_str()));
+    EXPECT_EQ(String::OK, test.remove(9, 9));
     compareStringsWithAlloc(subString,
                             test,
                             static_cast<int>(fullString.length()) + 1);
@@ -267,16 +268,16 @@ TEST_F(StringUnitTest, Remove) {
     // normal case 2
     const string subString1 = "All your o us";
     String test1;
-    ASSERT_EQ(OK, test1.init(fullString.c_str()));
-    EXPECT_EQ(OK, test1.remove(9, 17));
+    ASSERT_EQ(String::OK, test1.init(fullString.c_str()));
+    EXPECT_EQ(String::OK, test1.remove(9, 17));
     compareStringsWithAlloc(subString1,
                             test1,
                             static_cast<int>(fullString.length()) + 1);
 
     // corner case, both zero
     String test2;
-    ASSERT_EQ(OK, test2.init(fullString.c_str()));
-    EXPECT_EQ(OK, test2.remove(0, 0));
+    ASSERT_EQ(String::OK, test2.init(fullString.c_str()));
+    EXPECT_EQ(String::OK, test2.remove(0, 0));
     compareStringsWithAlloc(fullString,
                             test2,
                             static_cast<int>(fullString.length()) + 1);
@@ -286,23 +287,23 @@ TEST_F(StringUnitTest, Remove) {
     //
 
     // index less than zero
-    EXPECT_EQ(ERROR, test2.remove(-1, 1));
+    EXPECT_EQ(String::ERROR, test2.remove(-1, 1));
 
     // index greater than size
-    EXPECT_EQ(ERROR, test2.remove(test2.size() + 1, 1));
+    EXPECT_EQ(String::ERROR, test2.remove(test2.size() + 1, 1));
 
     //
     // length
     //
 
     // length less than zero
-    EXPECT_EQ(ERROR, test2.remove(0, -1));
+    EXPECT_EQ(String::ERROR, test2.remove(0, -1));
 
     // length greater than size
-    EXPECT_EQ(ERROR, test2.remove(0, test2.size() + 1));
+    EXPECT_EQ(String::ERROR, test2.remove(0, test2.size() + 1));
 
     // index + length greater than size
-    EXPECT_EQ(ERROR, test2.remove(8, test2.size() + 1));
+    EXPECT_EQ(String::ERROR, test2.remove(8, test2.size() + 1));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -319,33 +320,33 @@ TEST_F(StringUnitTest, InsertBefore) {
     // normal case - from front
     String test1;
     String test2;
-    ASSERT_EQ(OK, test1.init(full1.c_str()));
-    ASSERT_EQ(OK, test2.init(full2.c_str()));
-    EXPECT_EQ(OK, test1.insert_before(0, test2));
+    ASSERT_EQ(String::OK, test1.init(full1.c_str()));
+    ASSERT_EQ(String::OK, test2.init(full2.c_str()));
+    EXPECT_EQ(String::OK, test1.insert_before(0, test2));
     compareStringsWithAlloc(full2 + full1, test1, alloc1);
 
     // normal case - from end
     String test3;
     String test4;
-    ASSERT_EQ(OK, test3.init(full1.c_str()));
-    ASSERT_EQ(OK, test4.init(full2.c_str()));
-    EXPECT_EQ(OK, test3.insert_before(test3.size(), test4));
+    ASSERT_EQ(String::OK, test3.init(full1.c_str()));
+    ASSERT_EQ(String::OK, test4.init(full2.c_str()));
+    EXPECT_EQ(String::OK, test3.insert_before(test3.size(), test4));
     compareStringsWithAlloc(full1 + full2, test3, alloc1);
 
     // normal case - from middle
     String test5;
     String test6;
-    ASSERT_EQ(OK, test5.init("alpha"));
-    ASSERT_EQ(OK, test6.init("beta"));
+    ASSERT_EQ(String::OK, test5.init("alpha"));
+    ASSERT_EQ(String::OK, test6.init("beta"));
     const int alloc2 = 2 * (test5.size() + test6.size() + 1);
-    EXPECT_EQ(OK, test5.insert_before(2, test6));
+    EXPECT_EQ(String::OK, test5.insert_before(2, test6));
     compareStringsWithAlloc("albetapha", test5, alloc2);
 
     // index less than zero
-    EXPECT_EQ(ERROR, test1.insert_before(-1, test2));
+    EXPECT_EQ(String::ERROR, test1.insert_before(-1, test2));
 
     // index greater than size
-    EXPECT_EQ(ERROR, test1.insert_before(test1.size() + 1, test2));
+    EXPECT_EQ(String::ERROR, test1.insert_before(test1.size() + 1, test2));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -357,8 +358,8 @@ TEST_F(StringUnitTest, Swap) {
     // make two different Strings
     String a;
     String b;
-    ASSERT_EQ(OK, a.init("alpha beta"));
-    ASSERT_EQ(OK, b.init("charlie delta"));
+    ASSERT_EQ(String::OK, a.init("alpha beta"));
+    ASSERT_EQ(String::OK, b.init("charlie delta"));
 
     // store the values of the member variables
     const char* const a_cstr = a.c_str();

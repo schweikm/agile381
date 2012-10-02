@@ -12,12 +12,21 @@
 #include "manager/Utility.h"
 
 
-/*
- * String class - a subset of the C++ Standard Library <string> class
- * String objects contain a C-string in a dynamically allocated piece of memory
- * and support input/output, comparisons, copy, assignment, and concatenation,
- * access to individual characters and substrings, and insertion and removal
- * of parts of the string.
+/**
+ * @file String.h
+ * @brief Declaration of String class.
+ */
+
+
+/**
+ * @class String String.h manager/String.h
+ *
+ * @brief A subset of the C++ Standard Library string class.
+ *
+ * @details String objects contain a C-string in a dynamically allocated piece
+ * of memory and supports input/output, comparisons, copy, assignment, and
+ * concatenation, access to individual characters and substrings, and insertion
+ * and removal of parts of the string.
  *
  * Individual characters in the string are indexed the same as an array, 0
  * through length - 1.  The "size" of the string is the length of the internal
@@ -66,99 +75,227 @@
  * Note that only these functions output the messages. Other mumber functions
  * may result in these messages being output, but only because they call a
  * Constructor, Destructor, or Assignment operator as part of their work.
+ *
+ * @author    Marc Schweikert
+ * @date      29-Sep-2012
+ * @version   1.0
+ * @copyright TBD
  */
-
-
-// enum values for signalling error
-enum StringStatus { OK, ERROR };
-
-
 class String {
   public:
-    // Default initialization is to contain an empty string; if a non-empty
-    // C-string is supplied, this String gets minimum allocation.
+    /**
+     * Enumeration that signals success or failure of ::String methods
+     */
+    enum Status {
+        OK,     /**< Method executed successfully. */
+        ERROR   /**< Method did not complete execution. */
+    };
+
+    /**
+     * Constructor that initializes all member variables and nothing else.
+     *
+     * @pre  None.
+     * @post All member variables have been initialized to sane values.
+     */
     String();
 
-    // method to perform complex initialization of constructor
-    StringStatus init(const char* const in_cstr = "");
+    /**
+     * Performs complex initialization of the object.
+     * Default initialization is to contain an empty string; if a non-empty
+     * C-string is supplied, this String gets minimum allocation.
+     *
+     * @pre  None.
+     * @post Internal C-String has been allocated and characters copied.
+     *
+     * @warning If this method fails, the program will LOG and terminate.
+     *
+     * @param in_cstr C-String to be initialized from
+     *
+     * @return String::OK if successful, does not return on failure.
+     */
+    Status init(const char* const in_cstr = "");
 
-    // destructor
+    /**
+     * Does not have to perform cleanup because of boost::shared_array.
+     * Decrements static members.
+     *
+     * @pre  None.
+     * @post Object has been destroyed.
+     */
     ~String();
 
-    // Accesssors
-    // Return a pointer to the internal C-string
+    /**
+     * @pre  None.
+     * @post Object remains unchanged.
+     *
+     * @return pointer to internal C-String
+     */
     char* c_str() const;
 
-    // Return size of internal C-string in this String
+    /**
+     * @pre  None.
+     * @post Object remains unchanged.
+     *
+     * @return size of internal C-string in this String
+     */
     int size() const;
 
-    // Return current allocation for this String
+    /**
+     * @pre  None.
+     * @post Object remains unchanged.
+     *
+     * @return current allocation for this String
+     */
     int get_allocation() const;
 
-    // Return a reference to character i in the string.
-    // Throw exception if 0 <= i < size is false.
-    StringStatus get(const int i, char* val) const;
+    /**
+     * Retrieves the character as position i.
+     * Acts as a replacement for operator[](const int).
+     *
+     * @pre  i >= 0
+     * @pre  i < this.size
+     * @post Object remains unchanged.
+     *
+     * @param i   Position of the string to get.
+     * @param val Pointer to char that stores the value.
+     *
+     * @return String::ERROR if i is out-of-bounds, otherwise String::OK
+     */
+    Status get(const int i,
+               char* val) const;
 
-    // Return a String starting with i and extending for len characters
-    // The substring must be contained within the string.
-    // Values of i and len for valid input are as follows:
-    // i >= 0 && len >= 0 && i <= size && (i + len) <= size.
-    // If both i = size and len = 0, the input is valid and the result is an
-    // empty string.
-    // Throw exception if the input is invalid.
-    StringStatus substring(const int i, const int len, String* str) const;
+    /**
+     * Gets a String starting with i and extending for len characters.
+     * If both i = size and len = 0, the input is valid and the result is an
+     * empty string.
+     *
+     * @pre  i >= 0
+     * @pre  i <= this.size
+     * @pre  len >= 0
+     * @pre  len < this.size
+     * @pre  (i + len) <= this.size
+     * @post Object remains unchanged.
+     *
+     * @param i   Starting position.
+     * @param len Length of substring to get.
+     * @param str Pointer to String to store result.
+     *
+     * @return String::ERROR if i and/or len is out-of-bounds. otherwise String::OK
+     */
+    Status substring(const int i,
+                     const int len,
+                     String* str) const;
 
-    // Modifiers
-    // Set to an empty string with minimum allocation by create/swap with an
-    // empty string.
+    /**
+     * Set to an empty string with minimum allocation by create/swap
+     * with an empty string.
+     *
+     * @pre  None.
+     * @post Object has default allocation.
+     */
     void clear();
 
-    // Remove the len characters starting at i; allocation is unchanged.
-    // The removed characters must be contained within the String.
-    // Valid values for i and len are the same as for substring.
-    StringStatus remove(const int i, const int len);
+    /**
+     * Remove the len characters starting at i; allocation is unchanged.
+     * The removed characters must be contained within the String.
+     *
+     * @pre  i >= 0
+     * @pre  i <= this.size
+     * @pre  len >= 0
+     * @pre  len < this.size
+     * @pre  (i + len) <= this.size
+     * @post Object retains memory allocation and requested chars are removed.
+     *
+     * @param i   Starting position.
+     * @param len Number of chars to remove.
+     *
+     * @return String::ERROR if i and/or len is out-of-bounds, otherwise String::OK
+     */
+    Status remove(const int i,
+                  const int len);
 
-    // Insert the supplied source String before character i
-    // Pushing the rest of the contents back, reallocating as needed.
-    // If i == size, the inserted string is added to the end of this String.
-    // This String retains the final allocation.
-    // Throw exception if 0 <= i <= size is false
-    StringStatus insert_before(const int i, const String& src);
+    /**
+     * Insert the supplied source String before character i
+     * pushing the rest of the contents back and reallocating as needed.
+     * If i == size, the inserted string is added to the end of this String.
+     * This String retains the final allocation.
+     *
+     * @pre  i >= 0
+     * @pre  i <= this.size
+     * @post Object has requested chars inserted.
+     *
+     * @param i   Position in current String to insert before.
+     * @param src Source String.
+     *
+     * @return String::ERROR if i is out-of-bounds, otherwise String::OK
+     */
+    Status insert_before(const int i,
+                         const String& src);
 
-    // Swap the contents of this String with another one.
-    // The member variable values are interchanged, along with the
-    // pointers to the allocated C-strings, but the two C-strings
-    // are neither copied nor modified. No memory allocation/deallocation is
-    // done.
+    /**
+     * Swap the contents of this String with another one.
+     * The member variable values are interchanged, along with the pointers to
+     * the allocated C-strings, but the two C-strings are neither copied nor
+     * modified. No memory allocation/deallocation is done.
+     *
+     * @pre  None.
+     * @post Member variables of two Strings are swapped.
+     *
+     * @param other String to swap contents with
+     */
     void swap(String& other);  // NOLINT(build/include_what_you_use)
 
-    // Return the total number of Strings in existence
+    /**
+     * @return the total number of Strings in existence
+     */
     static int get_number();
 
-    // Return total bytes allocated for all Strings in existence
+    /**
+     * @return total bytes allocated for all Strings in existence
+     */
     static int get_total_allocation();
 
   private:
-    // resize the internal c string
-    StringStatus resizeCStrBuffer(const int alloc);
+    /**
+     * Resize the internal C-String.
+     *
+     * @pre  alloc > this.allocation
+     * @post Internal C-String resized and chars retained.
+     *
+     * @param alloc New size of internal buffer.
+     *
+     * @return String::ERROR if new fails, otherwise String::OK
+     */
+    Status resizeCStrBuffer(const int alloc);
 
+    /**
+     * Internal C-String using Boost.
+     */
+    boost::shared_array<char> myCStr;
 
-    // internal C string
-    boost::shared_array<char> myInternalCStr;
+    /**
+     * Size of internal C-String.
+     */
+    int myCStrSize;
 
-    // size of internal C string
-    int myInternalCStrSize;
+    /**
+     * Total bytes allocated for the internal C-String.
+     */
+    int myCStrAllocation;
 
-    // total bytes allocated for the internal C string
-    int myInternalCStrAllocation;
-
-    // counts number of String objects in existence
+    /**
+     * Counts the number of String objects in existence.
+     */
     static int ourNumber;
 
-    // counts total amount of memory allocated
+    /**
+     * Counts the total amount of memory allocated.
+     */
     static int ourTotalAllocation;
 
-    // remove copy constructor and assignment operator
+    /**
+     * Remove copy constructor and assignment operator.
+     */
     DISALLOW_COPY_AND_ASSIGN(String);
 };
 
@@ -171,19 +308,19 @@ class String {
 inline char* String::c_str() const {
     VLOG(1) << "Method Entry:  String::c_str";
     VLOG(1) << "Method Exit :  String::c_str";
-    return myInternalCStr.get();
+    return myCStr.get();
 }
 
 inline int String::size() const {
     VLOG(1) << "Method Entry:  String::size";
     VLOG(1) << "Method Exit :  String::size";
-    return myInternalCStrSize;
+    return myCStrSize;
 }
 
 inline int String::get_allocation() const {
     VLOG(1) << "Method Entry:  String::get_allocation";
     VLOG(1) << "Method Exit :  String::get_allocation";
-    return myInternalCStrAllocation;
+    return myCStrAllocation;
 }
 
 inline int String::get_number() {

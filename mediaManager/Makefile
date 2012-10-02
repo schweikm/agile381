@@ -8,6 +8,7 @@ SUB_DIRS = manager test
 REP_DIR = reports
 BIN_DIR = bin
 LOG_DIR = log
+DOC_DIR = doc
 
 .PHONY: manager test
 
@@ -30,4 +31,5 @@ clean:
 	@$(RM)    $(REP_DIR)/*
 	@$(RMDIR) $(BIN_DIR)/$(UT_DIR)
 	@$(RM)    $(LOG_DIR)/*
+	@$(RMDIR) $(DOC_DIR)/*
 

@@ -120,6 +120,7 @@ printEnds
 printVersion "Boost" "$BOOSTVER"
 printVersion "Cpplint" "$CPPLINTVER"
 #printVersion "Cucumber" "$(cucumber --version)"
+printVersion "Doxygen" "$(doxygen --version)"
 printVersion "G++" "$(g++ --version | head -1)"
 printVersion "Gcov" "$(gcov --version | head -1)"
 printVersion "gcovr.py" "$(mediaManager/support/gcovr.py --version | head -1)"
