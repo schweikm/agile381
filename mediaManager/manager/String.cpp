@@ -27,8 +27,7 @@ int  String::ourTotalAllocation = 0;
 
 // constructor
 String::String()
-          : myCStr(0),
-            myCStrSize(0),
+          : myCStrSize(0),
             myCStrAllocation(0) {
     VLOG(1) << "Method Entry:  String::String";
     VLOG(1) << "Method Exit :  String::String";

@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-set -o errexit
+#!/bin/bash
 
 
 echo
@@ -10,6 +9,8 @@ echo "============================"
 echo
 echo
 
-cd mediaManager/support
+pushd mediaManager/support > /dev/null
+mkdir ../reports
 ./run_all_unit_tests.pl
-cd ../..
+popd > /dev/null
+

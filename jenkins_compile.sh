@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-set -o errexit
+#!/bin/bash
 
 
 echo
@@ -10,10 +9,11 @@ echo "==============================="
 echo
 echo
 
-cd mediaManager
+pushd mediaManager > /dev/null
 export DEBUG=on
 export RELEASE=off
 export COVERAGE=on
 export PROFILE=off
 make -wB |& tee reports/gcc-mediaManager.log
-cd ..
+popd > /dev/null
+

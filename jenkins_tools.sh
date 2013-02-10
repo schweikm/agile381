@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-set -o errexit
+#!/bin/bash
 
 
 echo
@@ -11,11 +10,11 @@ echo
 echo
 
 # set the root for code coverage
-cd mediaManager
+pushd mediaManager > /dev/null
 readonly ROOT=`pwd`
+popd > /dev/null
 
 # then run the tool
-cd ..
 mediaManager/support/gcovr.py --root=$ROOT --xml --output=mediaManager/reports/gcovr.xml
 echo Done!
 
@@ -40,7 +39,7 @@ echo "========================="
 echo
 echo
 
-cd mediaManager
+pushd mediaManager > /dev/null
 doxygen support/Doxyfile
-cd ..
+popd > /dev/null
 echo Done!

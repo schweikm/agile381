@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-set -o errexit
+#!/bin/bash
 
 
 ###############################################################################
@@ -62,10 +61,10 @@ GTESTVER=`head -1 $GTEST_DIR/CHANGES | cut -d ' ' -f 3`
 GTESTVER=${GTESTVER%?}  # remove last character
 
 ## Boost ##
-readonly BOOSTVER="1.51.0"
+readonly BOOSTVER="1.53.0"
 
 ## Cpplint ##
-readonly CPPLINTVER="google-styleguide - Revision 87"
+readonly CPPLINTVER="google-styleguide - Revision 99"
 
 
 # set the column widths
@@ -136,9 +135,10 @@ printVersion "Python" "$(python --version 2>&1 > /dev/null)"
 printEnds
 
 
-# farm the work out to sub scripts
-source jenkins_compile.bash
-source jenkins_test.bash
-source jenkins_tools.bash
+# farm the work out to other scripts
+./jenkins_compile.sh
+./jenkins_test.sh
+./jenkins_tools.sh
 echo
 echo
+
