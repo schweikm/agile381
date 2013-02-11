@@ -10,7 +10,6 @@ echo
 echo
 
 pushd mediaManager/support > /dev/null
-mkdir ../reports
 ./run_all_unit_tests.pl
 popd > /dev/null
 

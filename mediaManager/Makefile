@@ -13,10 +13,16 @@ DOC_DIR = doc
 .PHONY: manager test
 
 #### Targets ####
-all:
+all: make_dirs
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir all; \
 	done
+
+make_dirs:
+	@$(MKDIR) $(BIN_DIR)
+	@$(MKDIR) $(DOC_DIR)
+	@$(MKDIR) $(LOG_DIR)
+	@$(MKDIR) $(REP_DIR)
 
 manager:
 	$(MAKE) -C manager all
@@ -28,8 +34,8 @@ clean:
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
-	@$(RM)    $(REP_DIR)/*
-	@$(RMDIR) $(BIN_DIR)/$(UT_DIR)
-	@$(RM)    $(LOG_DIR)/*
-	@$(RMDIR) $(DOC_DIR)/*
+	@$(RMDIR) $(BIN_DIR)
+	@$(RMDIR) $(DOC_DIR)
+	@$(RMDIR) $(LOG_DIR)
+	@$(RMDIR) $(REP_DIR)
 
