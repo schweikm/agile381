@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_
-#define TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_
+#ifndef MEDIAMANAGER_MANAGER_UTILITY_H_
+#define MEDIAMANAGER_MANAGER_UTILITY_H_
 
 
 /*
@@ -26,4 +26,4 @@
 // two variables use in Ordered_list and String where convenient
 
 
-#endif  // TRUNK_MEDIAMANAGER_MANAGER_UTILITY_H_
+#endif  // MEDIAMANAGER_MANAGER_UTILITY_H_

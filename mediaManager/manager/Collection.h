@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
-#define TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
+#ifndef MEDIAMANAGER_MANAGER_COLLECTION_H_
+#define MEDIAMANAGER_MANAGER_COLLECTION_H_
 
 
 /*
@@ -74,4 +74,4 @@ class Collection {
 // Print the Collection data
 std::ostream& operator<< (std::ostream& os, const Collection& Collection);
 
-#endif  // TRUNK_MEDIAMANAGER_MANAGER_COLLECTION_H_
+#endif  // MEDIAMANAGER_MANAGER_COLLECTION_H_

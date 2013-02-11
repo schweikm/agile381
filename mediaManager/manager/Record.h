@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_MANAGER_RECORD_H_
-#define TRUNK_MEDIAMANAGER_MANAGER_RECORD_H_
+#ifndef MEDIAMANAGER_MANAGER_RECORD_H_
+#define MEDIAMANAGER_MANAGER_RECORD_H_
 
 
 /*
@@ -94,4 +94,4 @@ class Record {
 // of the rating.
 std::ostream& operator<< (std::ostream& os, const Record& record);
 
-#endif  // TRUNK_MEDIAMANAGER_MANAGER_RECORD_H_
+#endif  // MEDIAMANAGER_MANAGER_RECORD_H_

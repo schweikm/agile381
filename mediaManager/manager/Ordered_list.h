@@ -1,5 +1,5 @@
-#ifndef TRUNK_MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
-#define TRUNK_MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
+#ifndef MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
+#define MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
 
 
 /*
@@ -283,4 +283,4 @@ class Ordered_list {
     /* *** private member variables and functions are your choice. */
 };
 
-#endif  // TRUNK_MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
+#endif  // MEDIAMANAGER_MANAGER_ORDERED_LIST_H_
