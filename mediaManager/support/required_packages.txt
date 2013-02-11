@@ -1,0 +1,5 @@
+yum install doxygen\
+            perl\
+            perl-XML-Simple\
+            python\
+            valgrind
