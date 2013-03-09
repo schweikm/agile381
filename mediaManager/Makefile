@@ -1,4 +1,4 @@
-include support/standard_macro.mak
+include support/make/standard_macro.mak
 
 #### Objects to Build ####
 SUB_DIRS = manager test
@@ -13,16 +13,10 @@ DOC_DIR = doc
 .PHONY: manager test
 
 #### Targets ####
-all: make_dirs
+all:
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir all; \
 	done
-
-make_dirs:
-	@$(MKDIR) $(BIN_DIR)
-	@$(MKDIR) $(DOC_DIR)
-	@$(MKDIR) $(LOG_DIR)
-	@$(MKDIR) $(REP_DIR)
 
 manager:
 	$(MAKE) -C manager all
@@ -34,8 +28,8 @@ clean:
 	@for dir in $(SUB_DIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
-	@$(RMDIR) $(BIN_DIR)
-	@$(RMDIR) $(DOC_DIR)
-	@$(RMDIR) $(LOG_DIR)
-	@$(RMDIR) $(REP_DIR)
+	@$(RM_R) $(BIN_DIR)/*
+	@$(RM_R) $(DOC_DIR)/*
+	@$(RM_R) $(LOG_DIR)/*
+	@$(RM_R) $(REP_DIR)/*
 

@@ -1,4 +1,4 @@
-include ../support/standard_macro.mak
+include ../support/make/standard_macro.mak
 
 
 #### Module-specific Options ####
@@ -22,4 +22,4 @@ clean:
 	@$(RM) *.gcda
 
 
-include ../support/standard_rules.mak
+include ../support/make/standard_rules.mak

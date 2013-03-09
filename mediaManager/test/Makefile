@@ -1,7 +1,8 @@
-include ../support/standard_macro.mak
+include ../support/make/standard_macro.mak
 
 
 BIN_DIR      = ../bin
+UT_DIR       = $(BIN_DIR)/UnitTest
 GTEST_DIR    = /opt/COTS/defaults/gtest
 BOOST_DIR    = /opt/COTS/defaults/boost
 GLOG_DIR     = /opt/COTS/defaults/glog
@@ -22,7 +23,7 @@ LIBS        = -L $(GLOG_DIR)/lib -lglog
 GTEST_ALL   = gtest-all.o
 GTEST_MAIN  = gtest-main.o
 
-GTEST_STRING_EXE  = $(BIN_DIR)/$(UT_DIR)/String_UT.exe
+GTEST_STRING_EXE  = $(UT_DIR)/String_UT.exe
 GTEST_STRING_OBJS = $(SRC_DIR)/String.o \
                     $(SRC_DIR)/Utility.o \
                     $(GTEST_MAIN) \
@@ -48,7 +49,7 @@ $(GTEST_ALL): $(GTEST_DIR)/src/gtest-all.cc
 $(GTEST_STRING_EXE): $(GTEST_STRING_OBJS)
 	@$(ECHO)
 	@$(ECHO) "================================================================================"
-	@$(MKDIR) $(BIN_DIR)/$(UT_DIR)
+	@$(MKDIR) $(UT_DIR)
 	$(CXX) $(LXXFLAGS) $(GTEST_STRING_OBJS) $(LIBS) -o $@
 	@$(ECHO)
 	@$(ECHO) "Will store \"$(abspath $@)\""
@@ -65,4 +66,4 @@ clean:
 	@$(RM) *.gcda
 
 
-include ../support/standard_rules.mak
+include ../support/make/standard_rules.mak
