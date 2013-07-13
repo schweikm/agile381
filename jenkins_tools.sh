@@ -1,4 +1,5 @@
 #!/bin/bash
+set -o nounset
 
 
 echo
@@ -15,7 +16,7 @@ readonly ROOT=`pwd`
 popd > /dev/null
 
 # then run the tool
-mediaManager/support/gcovr.py --root=$ROOT --xml --output=mediaManager/reports/gcovr.xml
+mediaManager/support/gcovr.py --root=${ROOT} --xml --output=mediaManager/reports/gcovr.xml
 echo Done!
 
 
