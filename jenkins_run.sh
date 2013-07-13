@@ -47,6 +47,10 @@ fi
 
 
 #### Environment Variables ####
+if [[ -z ${LD_LIBRARY_PATH:-} ]]; then
+    export LD_LIBRARY_PATH=
+fi
+
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${BOOST_DIR}/lib
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${GLOG_DIR}/lib
 
