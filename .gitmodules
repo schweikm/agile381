@@ -1,3 +1,0 @@
-[submodule "mediaManager/support/make"]
-	path = mediaManager/support/make
-	url = git@git.assembla.com:schweikm_makefile.git
