@@ -3,9 +3,9 @@ include ../support/make/standard_macro.mak
 
 BIN_DIR      = ../bin
 UT_DIR       = $(BIN_DIR)/UnitTest
-GTEST_DIR    = /opt/COTS/defaults/gtest
-BOOST_DIR    = /opt/COTS/defaults/boost
-GLOG_DIR     = /opt/COTS/defaults/glog
+GTEST_DIR    = /mnt/data/Development/Linux/COTS/gtest-1.7.0
+BOOST_DIR    = /mnt/data/Development/Linux/COTS/boost_1_55_0
+GLOG_DIR     = /mnt/data/Development/Linux/COTS/glog-0.3.3
 
 
 #### Module-specific Options ####

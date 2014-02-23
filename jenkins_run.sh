@@ -34,16 +34,11 @@ while getopts ":v:" opt; do
 done
 
 
-#### These variables need to be defined for every machine ####
-BOOST_DIR=
-GLOG_DIR=
-GTEST_DIR=
-
-if [[ `hostname` == "megatron" ]]; then
-    BOOST_DIR=/opt/COTS/defaults/boost
-    GLOG_DIR=/opt/COTS/defaults/glog
-    GTEST_DIR=/opt/COTS/defaults/gtest
-fi
+#### COTS Products ####
+readonly COTS_BASE="/mnt/data/Development/Linux/COTS"
+readonly BOOST_DIR="${COTS_BASE}/boost_1_55_0"
+readonly GLOG_DIR="${COTS_BASE}/glog-0.3.3"
+readonly GTEST_DIR="${COTS_BASE}/gtest-1.7.0"
 
 
 #### Environment Variables ####
@@ -54,7 +49,7 @@ fi
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${BOOST_DIR}/lib
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${GLOG_DIR}/lib
 
-export GLOG_log_dir=`pwd`/mediaManager/log
+export GLOG_log_dir=$(pwd)/mediaManager/log
 export GLOG_v=${VLVL}
 
 
@@ -75,7 +70,7 @@ readonly COL2SIZE=86
 # table character
 readonly TABLECHAR="-"
 
-function printEnds {
+printEnds() {
     for((i = 0; i < ${COL1SIZE} + ${COL2SIZE} + 11; i++))
     do
         printf "%s" ${TABLECHAR}
@@ -83,7 +78,7 @@ function printEnds {
     printf "\n"
 }
 
-function printRemaining {
+printRemaining() {
     strLen=$1
     colSize=$2
     for((i = ${strLen}; i < ${colSize}; i++))
@@ -92,7 +87,7 @@ function printRemaining {
     done
 }
 
-function printVersion {
+printVersion() {
     name=$1
     nameLen=${#name}
     version=$2
@@ -131,6 +126,7 @@ printVersion "Make" "$(make --version | head -1)"
 printVersion "Perl" "$(perl --version | head -2 | tail -1)"
 printVersion "Python" "$(python --version 2>&1 > /dev/null)"
 #printVersion "Ruby" "$(ruby --version)"
+printVersion "valgrind" "$(valgrind --version)"
 
 # footer
 printEnds

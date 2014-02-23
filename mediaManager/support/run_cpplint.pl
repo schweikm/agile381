@@ -32,7 +32,7 @@ sub runCpplint {
 
     foreach my $file (@files) {
         if($file =~ m/[.]*$ext$/) {
-            system("$cpplint_exe $dir/$file >& $REP_DIR/cpplint-$file.log");
+            system("$cpplint_exe $dir/$file > $REP_DIR/cpplint-$file.log 2>&1");
         }
     } 
     closedir(DIR);
